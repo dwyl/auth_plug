@@ -34,11 +34,11 @@ defmodule AuthPlug.MixProject do
 
   defp package() do
     [
-      files: ["lib/quotes.ex", "mix.exs", "README.md", "quotes.json"],
-      name: "quotes",
+      files: ["lib", "mix.exs", "README.md", "LICENSE"],
+      name: "auth_plug",
       licenses: ["GNU GPL v2.0"],
       maintainers: ["dwyl"],
-      links: %{"GitHub" => "https://github.com/dwyl/quotes"}
+      links: %{"GitHub" => "https://github.com/dwyl/auth_plug"}
     ]
   end
 end
