@@ -1,5 +1,8 @@
 defmodule AuthPlug do
   import Plug.Conn
+  use Joken.Config
+
+  @signer Joken.Signer.create("HS256", "secret")
 
   def init(opts), do: opts
 
@@ -8,6 +11,7 @@ defmodule AuthPlug do
       conn.req_headers
       |> List.keyfind("authorization", 0)
       |> get_token_from_header()
+      # |> IO.inspect(label: "AuthPlug.call/2:14 jwt")
 
     validate_token(conn, jwt)
   end
@@ -25,9 +29,7 @@ defmodule AuthPlug do
   defp validate_token(conn, nil), do: unauthorized(conn)
 
   defp validate_token(conn, jwt) do
-
-  end
-    case AuthMvp.Token.verify_and_validate(jwt) do
+    case AuthPlug.Token.verify_and_validate(jwt, @signer) do
       {:ok, values} ->
         # convert map of string to atom: stackoverflow.com/questions/31990134
         claims = for {k, v} <- values, into: %{}, do: {String.to_atom(k), v}
