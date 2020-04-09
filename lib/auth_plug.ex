@@ -19,11 +19,20 @@ defmodule AuthPlug do
   defp get_token_from_header(nil), do: nil
 
   defp get_token_from_header({"authorization", value}) do
-    # regex check value start with Bearer follow by a space and any characters
-    case Regex.run(~r/^Bearer\s(.*)/, value) do
-      [_, jwt] -> jwt
-      _ -> nil
+    value = String.replace(value, "Bearer", "") |> String.trim()
+    if is_nil(value) do
+      nil
+
+    else # fast check for JWT format validity before slower verify:
+      case Enum.count(String.split(value, ".")) == 3 do
+        false ->
+          nil
+
+        true -> # appears to be valid JWT proceed to verifying it
+          value
+      end
     end
+
   end
 
   defp validate_token(conn, nil), do: unauthorized(conn)
