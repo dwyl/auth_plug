@@ -1,17 +1,8 @@
 defmodule AuthPlugTest do
   use ExUnit.Case
   use Plug.Test
-  # doctest AuthPlug
+  alias AuthPlug.Token
   @signer Joken.Signer.create("HS256", "secret")
-
-
-  test "greets the world" do
-    assert true == true # AuthPlug.hello() == :world
-  end
-# end
-
-# defmodule AuthPlugTest do
-  # use AuthMvpWeb.ConnCase
 
   test "Plug init function doesn't change params" do
     assert AuthPlug.init(%{}) == %{}
@@ -34,7 +25,7 @@ defmodule AuthPlugTest do
 
   test "Plug assigns claims to conn with valid jwt" do
     data = %{email: "person@dwyl.com", session: 1 }
-    jwt = AuthPlug.Token.generate_and_sign!(data, @signer)
+    jwt = Token.generate_and_sign!(data, @signer)
     conn = conn("/admin", "")
            |> put_req_header("authorization", "Bearer #{jwt}")
            |> AuthPlug.call(%{})
