@@ -4,12 +4,12 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
-      description: description(),
+      description: "Turnkey Auth Plug.",
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         coveralls: :test,
@@ -30,15 +30,13 @@ defmodule AuthPlug.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      # github.com/joken-elixir/joken
+      {:joken, "~> 2.2"},
 
       {:plug_cowboy, "~> 2.1", only: :test},
       {:excoveralls, "~> 0.12.3", only: :test},
       {:ex_doc, "~> 0.21.3", only: :dev}
     ]
-  end
-
-  defp description() do
-    "A plug that handles all your authentication needs."
   end
 
   defp package() do
