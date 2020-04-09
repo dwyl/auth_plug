@@ -11,7 +11,6 @@ defmodule AuthPlug do
       conn.req_headers
       |> List.keyfind("authorization", 0)
       |> get_token_from_header()
-      # |> IO.inspect(label: "AuthPlug.call/2:14 jwt")
 
     validate_token(conn, jwt)
   end
