@@ -32,9 +32,10 @@ defmodule AuthPlug.MixProject do
     [
       # github.com/joken-elixir/joken
       {:joken, "~> 2.2"},
-
+      # Test Deps:
       {:plug_cowboy, "~> 2.1", only: :test},
       {:excoveralls, "~> 0.12.3", only: :test},
+      # For publishing Hex.docs:
       {:ex_doc, "~> 0.21.3", only: :dev}
     ]
   end

@@ -13,15 +13,14 @@ The plug that seamlessly handles all your authentication/authorization needs.
 </div>
 <br />
 
+## Why?
 
 
 
-**TODO: Add description**
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `auth_plug` to your list of dependencies in `mix.exs`:
+Add `auth_plug` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
