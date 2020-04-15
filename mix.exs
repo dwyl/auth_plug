@@ -34,6 +34,8 @@ defmodule AuthPlug.MixProject do
       {:joken, "~> 2.2"},
       # Plug helper functions: github.com/elixir-plug/plug
       {:plug, "~> 1.10"},
+      # Phoenix for defining sessions (don't worry it gets deduped):
+      {:phoenix, "~> 1.4.16"},
       # Track coverage: github.com/parroty/excoveralls
       {:excoveralls, "~> 0.12.3", only: :test},
       # For publishing Hex.docs:
