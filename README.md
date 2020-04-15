@@ -30,13 +30,13 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/auth_plug](https://hexdocs.pm/auth_plug).
+Documentation can be found at
+[https://hexdocs.pm/auth_plug](https://hexdocs.pm/auth_plug).
 
 
 
 ## Recommended / Relevant Reading
 
-+ Testing Elixir Plugs:
-https://thoughtbot.com/blog/testing-elixir-plugs
+If you are new to Elixir Plug,
+we recommend following:
+[github.com/dwyl/elixir-plug-tutorial](https://github.com/dwyl/elixir-plug-tutorial).

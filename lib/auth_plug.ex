@@ -1,7 +1,5 @@
 defmodule AuthPlug do
   import Plug.Conn
-  use Joken.Config
-
   @signer Joken.Signer.create("HS256", "secret")
 
   def init(opts), do: opts
