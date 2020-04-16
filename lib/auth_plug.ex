@@ -4,7 +4,9 @@ defmodule AuthPlug do
 
   def init(opts), do: opts
 
-  def call(conn, _) do
+  def call(conn, params) do
+
+
     jwt =
       conn.req_headers
       |> List.keyfind("authorization", 0)
@@ -42,6 +44,11 @@ defmodule AuthPlug do
         assign(conn, :claims, claims)
       {:error, _} -> unauthorized(conn)
     end
+  end
+
+
+  def extract(conn, params) do
+    
   end
 
   defp unauthorized(conn) do
