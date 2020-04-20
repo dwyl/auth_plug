@@ -1,10 +1,23 @@
 defmodule AuthPlug do
   import Plug.Conn
+  import Phoenix.Controller
+
   @signer Joken.Signer.create("HS256", "secret")
+
 
   def init(opts), do: opts
 
-  def call(conn, params) do
+  def call(conn, _params) do
+
+    # check for Phoenix Session
+    conn = conn |> assign(:person, "alex")
+    # IO.inspect(conn.assigns[:person])
+    # conn = put_session(conn, :message, "new stuff we just set in the session")
+    # message = get_session(conn, :message)
+    # session = get_session(conn, :message)
+    # IO.inspect(session, label: "session")
+
+    # check for JWT in Headers:
 
 
     jwt =
@@ -47,9 +60,9 @@ defmodule AuthPlug do
   end
 
 
-  def extract(conn, params) do
-    
-  end
+  # def extract(conn, params) do
+  #
+  # end
 
   defp unauthorized(conn) do
     conn
