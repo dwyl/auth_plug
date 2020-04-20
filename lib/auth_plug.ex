@@ -1,6 +1,6 @@
 defmodule AuthPlug do
   import Plug.Conn
-  import Phoenix.Controller
+  # import Phoenix.Controller
 
   @signer Joken.Signer.create("HS256", "secret")
 
@@ -8,9 +8,10 @@ defmodule AuthPlug do
   def init(opts), do: opts
 
   def call(conn, _params) do
-
+#
     # check for Phoenix Session
     conn = conn |> assign(:person, "alex")
+
     # IO.inspect(conn.assigns[:person])
     # conn = put_session(conn, :message, "new stuff we just set in the session")
     # message = get_session(conn, :message)
@@ -25,7 +26,8 @@ defmodule AuthPlug do
       |> List.keyfind("authorization", 0)
       |> get_token_from_header()
 
-    validate_token(conn, jwt)
+    conn
+    # validate_token(conn, jwt)
   end
 
   defp get_token_from_header(nil), do: nil

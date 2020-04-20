@@ -5,9 +5,10 @@ defmodule AuthPlug.Router do
   # alias App.Plug.VerifyRequest
   @valid_secret String.duplicate("abcdef0123456789", 8)
 
+  plug Plug.Logger, log: :debug
   plug :put_secret_key_base
   plug Plug.Parsers, parsers: [:urlencoded, :multipart]
-  # plug VerifyRequest, fields: ["content", "mimetype"], paths: ["/upload"]
+  plug AuthPlug, paths: ["/admin"]
   plug :match
   plug :dispatch
 
@@ -28,8 +29,8 @@ defmodule AuthPlug.Router do
     send_resp(conn, 200, "Hello Elixir auth_plug!" <> foo)
   end
 
-  get "/upload" do
-    send_resp(conn, 201, "Uploaded")
+  get "/admin" do
+    send_resp(conn, 200, "Admin!")
   end
 
   match _ do

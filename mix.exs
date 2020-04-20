@@ -23,7 +23,9 @@ defmodule AuthPlug.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger],
+      # uncomment the following line to run the demo app: mix run --no-halt
+      mod: { AuthPlug.Application, [] }
     ]
   end
 
@@ -36,6 +38,7 @@ defmodule AuthPlug.MixProject do
       {:plug, "~> 1.10"},
       # Phoenix for defining sessions (don't worry it gets deduped):
       {:phoenix, "~> 1.4.16"},
+      {:plug_cowboy, "~> 2.1"},
       {:jason, "~> 1.2.0"},
       # Track coverage: github.com/parroty/excoveralls
       {:excoveralls, "~> 0.12.3", only: :test},
