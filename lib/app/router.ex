@@ -3,10 +3,10 @@ defmodule AuthPlug.Router do
   use Plug.Router
   use Plug.ErrorHandler
 
-  plug Plug.Logger, log: :debug
-  plug AuthPlug, paths: ["/admin"]
-  plug :match
-  plug :dispatch
+  plug(Plug.Logger, log: :debug)
+  plug(AuthPlug, paths: ["/admin"])
+  plug(:match)
+  plug(:dispatch)
 
   get "/" do
     send_resp(conn, 200, "Hello Elixir auth_plug!")

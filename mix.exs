@@ -25,7 +25,7 @@ defmodule AuthPlug.MixProject do
     [
       extra_applications: [:logger],
       # uncomment the following line to run the demo app: mix run --no-halt
-      mod: { AuthPlug.Application, [] }
+      mod: {AuthPlug.Application, []}
     ]
   end
 
@@ -34,12 +34,16 @@ defmodule AuthPlug.MixProject do
     [
       # JWT sign/verify: github.com/joken-elixir/joken
       {:joken, "~> 2.2"},
+
       # Plug helper functions: github.com/elixir-plug/plug
       {:plug, "~> 1.10"},
+
       # Track coverage: github.com/parroty/excoveralls
       {:excoveralls, "~> 0.12.3", only: :test},
+
       # See: github.com/dwyl/auth_plug_example
       {:plug_cowboy, "~> 2.1", only: :dev},
+
       # For publishing Hex.docs:
       {:ex_doc, "~> 0.21.3", only: :dev}
     ]

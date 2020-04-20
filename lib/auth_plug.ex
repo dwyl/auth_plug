@@ -10,11 +10,9 @@ defmodule AuthPlug do
     # Setup Plug.Session
     conn = setup_session(conn)
 
-    # Check for Person in Plug.Conn.assigns
-
+    #  Check for Person in Plug.Conn.assigns
 
     # Check for Session in Plug.Session
-
 
     # Check for JWT in Headers or URL
 
@@ -31,7 +29,6 @@ defmodule AuthPlug do
 
     # check for JWT in Headers:
 
-
     jwt =
       conn.req_headers
       |> List.keyfind("authorization", 0)
@@ -43,32 +40,40 @@ defmodule AuthPlug do
 
   defp setup_session(conn) do
     conn = put_in(conn.secret_key_base, System.get_env("SECRET_KEY_BASE"))
-    opts = Plug.Session.init(store: :cookie, key: "_auth_key",
-      secret_key_base: @secret, secret: @secret, signing_salt: @secret)
+
+    opts =
+      Plug.Session.init(
+        store: :cookie,
+        key: "_auth_key",
+        secret_key_base: @secret,
+        secret: @secret,
+        signing_salt: @secret
+      )
+
     conn
-      |> Plug.Session.call(opts)
-      |> fetch_session()
-      |> configure_session(renew: true)
-      |> put_session(:foo, "Alexa")
+    |> Plug.Session.call(opts)
+    |> fetch_session()
+    |> configure_session(renew: true)
+    |> put_session(:foo, "Alexa")
   end
 
   defp get_token_from_header(nil), do: nil
 
   defp get_token_from_header({"authorization", value}) do
     value = String.replace(value, "Bearer", "") |> String.trim()
+    # fast check for JWT format validity before slower verify:
     if is_nil(value) do
       nil
-
-    else # fast check for JWT format validity before slower verify:
+    else
       case Enum.count(String.split(value, ".")) == 3 do
         false ->
           nil
 
-        true -> # appears to be valid JWT proceed to verifying it
+        # appears to be valid JWT proceed to verifying it
+        true ->
           value
       end
     end
-
   end
 
   defp validate_token(conn, nil), do: unauthorized(conn)
@@ -79,10 +84,11 @@ defmodule AuthPlug do
         # convert map of string to atom: stackoverflow.com/questions/31990134
         claims = for {k, v} <- values, into: %{}, do: {String.to_atom(k), v}
         assign(conn, :claims, claims)
-      {:error, _} -> unauthorized(conn)
+
+      {:error, _} ->
+        unauthorized(conn)
     end
   end
-
 
   # def extract(conn, params) do
   #
