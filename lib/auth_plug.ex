@@ -1,14 +1,25 @@
 defmodule AuthPlug do
   import Plug.Conn
-  # import Phoenix.Controller
 
   @signer Joken.Signer.create("HS256", "secret")
-
+  @secret System.get_env("SECRET_KEY_BASE")
 
   def init(opts), do: opts
 
   def call(conn, _params) do
-#
+    # Setup Plug.Session
+    conn = setup_session(conn)
+
+    # Check for Person in Plug.Conn.assigns
+
+
+    # Check for Session in Plug.Session
+
+
+    # Check for JWT in Headers or URL
+
+    # Extract JWT
+
     # check for Phoenix Session
     conn = conn |> assign(:person, "alex")
 
@@ -28,6 +39,17 @@ defmodule AuthPlug do
 
     conn
     # validate_token(conn, jwt)
+  end
+
+  defp setup_session(conn) do
+    conn = put_in(conn.secret_key_base, System.get_env("SECRET_KEY_BASE"))
+    opts = Plug.Session.init(store: :cookie, key: "_auth_key",
+      secret_key_base: @secret, secret: @secret, signing_salt: @secret)
+    conn
+      |> Plug.Session.call(opts)
+      |> fetch_session()
+      |> configure_session(renew: true)
+      |> put_session(:foo, "Alexa")
   end
 
   defp get_token_from_header(nil), do: nil
