@@ -4,8 +4,8 @@ defmodule AuthPlug.Router do
   use Plug.ErrorHandler
 
   plug(Plug.Logger, log: :debug)
-  plug(AuthPlug, paths: ["/admin"])
   plug(:match)
+  plug(AuthPlug)
   plug(:dispatch)
 
   get "/" do

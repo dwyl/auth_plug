@@ -1,24 +1,30 @@
 defmodule AuthPlug do
   import Plug.Conn
 
-  @signer Joken.Signer.create("HS256", "secret")
   @secret System.get_env("SECRET_KEY_BASE")
+  @signer Joken.Signer.create("HS256", @secret)
 
-  def init(opts), do: opts
+  def init(opts) do
+    IO.inspect(opts, label: "opts")
+    opts
+  end
 
-  def call(conn, _params) do
+  def call(conn, params) do
     # Setup Plug.Session
     conn = setup_session(conn)
 
     #  Check for Person in Plug.Conn.assigns
 
+
     # Check for Session in Plug.Session
 
+
     # Check for JWT in Headers or URL
+    IO.inspect(params, label: "params")
 
     # Extract JWT
 
-    # check for Phoenix Session
+    # Ensure Person is set in Session
     conn = conn |> assign(:person, "alex")
 
     # IO.inspect(conn.assigns[:person])
@@ -34,8 +40,9 @@ defmodule AuthPlug do
       |> List.keyfind("authorization", 0)
       |> get_token_from_header()
 
-    conn
-    # validate_token(conn, jwt)
+    IO.inspect(jwt, label: "jwt:38")
+    # conn
+    validate_token(conn, jwt)
   end
 
   defp setup_session(conn) do
@@ -46,7 +53,7 @@ defmodule AuthPlug do
         store: :cookie,
         key: "_auth_key",
         secret_key_base: @secret,
-        secret: @secret,
+        # secret: @secret,
         signing_salt: @secret
       )
 
