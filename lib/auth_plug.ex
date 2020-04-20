@@ -14,20 +14,35 @@ defmodule AuthPlug do
     conn = setup_session(conn)
 
     #  Check for Person in Plug.Conn.assigns
+    # IO.inspect(conn.assigns, label: "conn.assigns")
+    jwt = cond do
+      Map.has_key?(conn.assigns, :person) ->
+        # IO.inspect(conn.assigns.person, label: "conn.assigns.person")
+        conn.assigns.person
+
+      # Check for Session in Plug.Session
+      get_session(conn, :person) ->
+        get_session(conn, :person)
+
+      true ->
+        nil
+
+    end
+    IO.inspect(jwt, label: "jwt:31")
 
 
-    # Check for Session in Plug.Session
 
 
     # Check for JWT in Headers or URL
-    IO.inspect(params, label: "params")
+    # IO.inspect(params, label: "params")
 
     # Extract JWT
 
-    # Ensure Person is set in Session
-    conn = conn |> assign(:person, "alex")
 
-    # IO.inspect(conn.assigns[:person])
+    # Ensure Person is set in Session
+    # conn = conn |> assign(:person, "alex")
+
+    #
     # conn = put_session(conn, :message, "new stuff we just set in the session")
     # message = get_session(conn, :message)
     # session = get_session(conn, :message)
@@ -40,7 +55,6 @@ defmodule AuthPlug do
       |> List.keyfind("authorization", 0)
       |> get_token_from_header()
 
-    IO.inspect(jwt, label: "jwt:38")
     # conn
     validate_token(conn, jwt)
   end
@@ -90,7 +104,7 @@ defmodule AuthPlug do
       {:ok, values} ->
         # convert map of string to atom: stackoverflow.com/questions/31990134
         claims = for {k, v} <- values, into: %{}, do: {String.to_atom(k), v}
-        assign(conn, :claims, claims)
+        assign(conn, :person, claims)
 
       {:error, _} ->
         unauthorized(conn)
