@@ -4,8 +4,9 @@ defmodule AuthPlug do
   @secret System.get_env("SECRET_KEY_BASE")
   @signer Joken.Signer.create("HS256", @secret)
 
-  def init(opts) do
-    opts
+  def init(options) do
+    IO.inspect(options, label: "options")
+    options
   end
 
   def call(conn, _params) do

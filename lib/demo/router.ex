@@ -5,7 +5,7 @@ defmodule AuthPlug.Router do
 
   plug(Plug.Logger, log: :debug)
   plug(:match)
-  plug(AuthPlug)
+  plug(AuthPlug, )
   plug(:dispatch)
 
   get "/" do
