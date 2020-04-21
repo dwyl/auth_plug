@@ -1,5 +1,5 @@
 defmodule AuthPlugTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Plug.Test
   alias AuthPlug.Token
   @secret System.get_env("SECRET_KEY_BASE")
@@ -17,7 +17,7 @@ defmodule AuthPlugTest do
 
   test "Plug return 401 wiht incorrect jwt header" do
     conn =
-      conn("/admin", "")
+      conn(:get, "/admin")
       |> put_req_header("authorization", "Bearer incorrect.jwt")
       |> AuthPlug.call(%{})
 
@@ -26,35 +26,31 @@ defmodule AuthPlugTest do
 
   test "Fail when authorization header token is invalid" do
     conn =
-      conn("/admin", "")
+      conn(:get, "/admin")
       |> put_req_header("authorization", "Bearer this.will.fail")
       |> AuthPlug.call(%{})
 
     assert conn.status == 401
   end
 
-  test "Conn.assign person" do
+  test "Conn.assign decoded (the verified JWT)" do
     data = %{email: "alex@dwyl.com", name: "Alex"}
     jwt = Token.generate_and_sign!(data, @signer)
-    # IO.inspect(jwt, label: "jwt:39")
 
-    conn =
-    conn("get", "/admin", "")
+    conn = conn(:get, "/admin")
       |> assign(:person, jwt)
+      # |> IO.inspect(label: "assigned")
       |> AuthPlug.call(%{})
+      # |> IO.inspect(label: "called")
 
-    # The JWT gets stored in the session for durability:
-    token = get_session(conn, :person)
-    {:ok, decoded} = AuthPlug.Token.verify_and_validate(token, @signer)
-
-    assert Map.get(decoded, "email") == "alex@dwyl.com"
+    assert conn.assigns.decoded.email == "alex@dwyl.com"
   end
 
   test "get_session(conn, :person)"do
     data = %{email: "alice@dwyl.com", name: "Alice"}
     jwt = Token.generate_and_sign!(data, @signer)
 
-    conn = conn("get", "/admin", "")
+    conn = conn(:get, "/admin")
       |> AuthPlug.setup_session()
       |> put_session(:person, jwt)
       |> AuthPlug.call(%{})
@@ -65,16 +61,29 @@ defmodule AuthPlugTest do
 
   end
 
-  test "Plug assigns claims to conn with valid jwt" do
+  test "Plug assigns person=jwt to conn with valid jwt" do
     data = %{email: "person@dwyl.com", session: 1}
     jwt = Token.generate_and_sign!(data, @signer)
-    IO.inspect(jwt, label: "jwt:39")
 
     conn =
-      conn("/admin", "")
+      conn(:get, "/admin")
       |> put_req_header("authorization", "Bearer #{jwt}")
       |> AuthPlug.call(%{})
 
-    assert conn.assigns.person.email == "person@dwyl.com"
+    token = conn.assigns.person
+    {:ok, person} = AuthPlug.Token.verify_and_validate(token, @signer)
+    assert person["email"] == "person@dwyl.com"
+  end
+
+  test "Extract JWT from URL" do
+    data = %{email: "person@dwyl.com", session: 1}
+    jwt = Token.generate_and_sign!(data, @signer)
+
+    conn = conn(:get, "/admin?jwt=" <> jwt)
+      |> AuthPlug.setup_session()
+      |> put_session(:person, nil)
+      |> AuthPlug.call(%{})
+
+    assert conn.assigns.decoded.email == "person@dwyl.com"
   end
 end

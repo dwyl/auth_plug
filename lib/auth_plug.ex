@@ -5,62 +5,61 @@ defmodule AuthPlug do
   @signer Joken.Signer.create("HS256", @secret)
 
   def init(opts) do
-    IO.inspect(opts, label: "opts")
+    # IO.inspect(opts, label: "opts")
     opts
   end
 
-  def call(conn, params) do
+  def call(conn, _params) do
+    # IO.inspect(conn, labels: "conn:13")
+    # IO.inspect(params, label: "params:14")
+    # IO.inspect(conn.query_string, label: "conn.query_string:15")
+    # IO.inspect(conn.query_string =~ "jwt", label: "=~")
+    # IO.inspect(conn.assigns, label: "conn.assigns:17")
+    # IO.inspect(conn.assigns.person, label: "conn.assigns.person:18")
+    # query = URI.decode_query(conn.query_string)
+    # IO.inspect(query, label: "query")
+    # IO.inspect(get_req_header(conn, "authorization"), label: "21")
+
     # Setup Plug.Session
     conn = setup_session(conn)
 
-    #  Check for Person in Plug.Conn.assigns
+    # Locate JWT so we can attempt to verify it:
     jwt = cond do
-      Map.has_key?(conn.assigns, :person) ->
-        # IO.inspect(conn.assigns.person, label: "conn.assigns.person")
+
+      #  Check for Person in Plug.Conn.assigns
+      Map.has_key?(conn.assigns, :person) && not is_nil(conn.assigns.person) ->
+        IO.inspect(conn.assigns.person, label: "conn.assigns.person")
         conn.assigns.person
 
-      # Check for Session in Plug.Session
-      get_session(conn, :person) ->
+      # Check for Session in Plug.Session:
+      not is_nil(get_session(conn, :person)) ->
+        IO.inspect(get_session(conn, :person), label: "get_session(conn, :person)")
         get_session(conn, :person)
+
+      # Check for JWT in URL Query String:
+      conn.query_string =~ "jwt" ->
+        query = URI.decode_query(conn.query_string)
+        IO.inspect(query, label: "query")
+        Map.get(query, "jwt")
+
+      # Check for JWT in Headers:
+      Enum.count(get_req_header(conn, "authorization")) > 0 ->
+        conn.req_headers
+          |> List.keyfind("authorization", 0)
+          |> get_token_from_header()
+
 
       # By default return nil so auth check fails
       true ->
+        IO.inspect("cond true:52")
         nil
 
     end
     IO.inspect(jwt, label: "jwt:31")
-
-
-
-
-    # Check for JWT in Headers or URL
-    # IO.inspect(params, label: "params")
-
-
-
-
-    # Ensure Person is set in Session
-    # conn = conn |> assign(:person, "alex")
-    conn = put_session(conn, :person, jwt)
-
-    #
-    # conn = put_session(conn, :message, "new stuff we just set in the session")
-    # message = get_session(conn, :message)
-    # session = get_session(conn, :message)
-    # IO.inspect(session, label: "session")
-
-    # check for JWT in Headers:
-
-    jwt =
-      conn.req_headers
-      |> List.keyfind("authorization", 0)
-      |> get_token_from_header()
-
-    # conn
     validate_token(conn, jwt)
   end
 
-  
+
   def setup_session(conn) do
     conn = put_in(conn.secret_key_base, System.get_env("SECRET_KEY_BASE"))
 
@@ -69,7 +68,6 @@ defmodule AuthPlug do
         store: :cookie,
         key: "_auth_key",
         secret_key_base: @secret,
-        # secret: @secret,
         signing_salt: @secret
       )
 
@@ -77,7 +75,6 @@ defmodule AuthPlug do
     |> Plug.Session.call(opts)
     |> fetch_session()
     |> configure_session(renew: true)
-    # |> put_session(:foo, "Alexa")
   end
 
   defp get_token_from_header(nil), do: nil
@@ -102,11 +99,15 @@ defmodule AuthPlug do
   defp validate_token(conn, nil), do: unauthorized(conn)
 
   defp validate_token(conn, jwt) do
+    IO.inspect(jwt, label: "jwt:105")
     case AuthPlug.Token.verify_and_validate(jwt, @signer) do
       {:ok, values} ->
         # convert map of string to atom: stackoverflow.com/questions/31990134
         claims = for {k, v} <- values, into: %{}, do: {String.to_atom(k), v}
-        assign(conn, :person, claims)
+        conn
+        |> assign(:decoded, claims)
+        |> assign(:person, jwt)
+        |> put_session(:person, jwt)
 
       {:error, _} ->
         unauthorized(conn)
