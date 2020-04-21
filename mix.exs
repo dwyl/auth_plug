@@ -25,7 +25,7 @@ defmodule AuthPlug.MixProject do
     [
       extra_applications: [:logger],
       # uncomment the following line to run the demo app: mix run --no-halt
-      mod: {AuthPlug.Application, []}
+      # mod: {AuthPlug.Application, []}
     ]
   end
 
