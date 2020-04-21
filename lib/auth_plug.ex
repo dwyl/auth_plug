@@ -1,16 +1,16 @@
 defmodule AuthPlug do
   import Plug.Conn
+  require Logger
 
   @secret System.get_env("SECRET_KEY_BASE")
   @signer Joken.Signer.create("HS256", @secret)
 
   def init(options) do
-    IO.inspect(options, label: "options:8")
-    options
+    options # return options unmodified
   end
 
   def call(conn, options) do
-    IO.inspect(options, label: "options:13")
+
     # Setup Plug.Session
     conn = setup_session(conn)
 
@@ -93,16 +93,18 @@ defmodule AuthPlug do
         |> put_session(:person, jwt)
 
       {:error, reason} ->
-        IO.inspect(reason, label: ":error reason:")
+        Logger.info("auth_plug:96 JWT Error: " <> Atom.to_string(reason))
         unauthorized(conn, opts)
     end
   end
 
   defp unauthorized(conn, opts) do
+    to = opts.auth_url <> "?redirect=" <> conn.request_path
+    status = 301 # gotta tell the browser to redirect to the auth_url with 301
+
     conn
-    |> put_resp_header("www-authenticate", "Bearer realm=\"Person access\"")
-    # |> send_resp(401, "unauthorized:124")
-    |> redirect(external: opts.auth_url)
+    |> put_resp_header("location", to)
+    |> resp(status, "unauthorized:116")
     |> halt()
   end
 end
