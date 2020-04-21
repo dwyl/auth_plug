@@ -3,8 +3,9 @@
     "minimum_coverage": 100
   },
   "skip_files": [
+    "test/",
     "lib/token.ex",
     "lib/demo/router.ex",
-    "test/"
+    "lib/demo/application.ex"
   ]
 }

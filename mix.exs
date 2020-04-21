@@ -4,7 +4,7 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "0.1.2",
+      version: "0.1.3",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -25,7 +25,7 @@ defmodule AuthPlug.MixProject do
     [
       extra_applications: [:logger],
       # uncomment the following line to run the demo app: mix run --no-halt
-      mod: {AuthPlug.Application, []}
+      # mod: {AuthPlug.Application, []}
     ]
   end
 
