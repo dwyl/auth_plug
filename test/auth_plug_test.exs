@@ -53,16 +53,16 @@ defmodule AuthPlugTest do
   test "get_session(conn, :person)"do
     data = %{email: "alice@dwyl.com", name: "Alice"}
     jwt = Token.generate_and_sign!(data, @signer)
-    # IO.inspect(jwt, label: "jwt:39")
 
     conn = conn("get", "/admin", "")
-      |> assign(:person, jwt)
+      |> AuthPlug.setup_session()
+      |> put_session(:person, jwt)
       |> AuthPlug.call(%{})
-
 
     token = get_session(conn, :person)
     {:ok, decoded} = AuthPlug.Token.verify_and_validate(token, @signer)
     assert Map.get(decoded, "email") == "alice@dwyl.com"
+
   end
 
   test "Plug assigns claims to conn with valid jwt" do

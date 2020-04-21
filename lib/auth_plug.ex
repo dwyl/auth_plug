@@ -14,7 +14,6 @@ defmodule AuthPlug do
     conn = setup_session(conn)
 
     #  Check for Person in Plug.Conn.assigns
-    # IO.inspect(conn.assigns, label: "conn.assigns")
     jwt = cond do
       Map.has_key?(conn.assigns, :person) ->
         # IO.inspect(conn.assigns.person, label: "conn.assigns.person")
@@ -24,6 +23,7 @@ defmodule AuthPlug do
       get_session(conn, :person) ->
         get_session(conn, :person)
 
+      # By default return nil so auth check fails
       true ->
         nil
 
@@ -60,7 +60,8 @@ defmodule AuthPlug do
     validate_token(conn, jwt)
   end
 
-  defp setup_session(conn) do
+  
+  def setup_session(conn) do
     conn = put_in(conn.secret_key_base, System.get_env("SECRET_KEY_BASE"))
 
     opts =
@@ -76,7 +77,7 @@ defmodule AuthPlug do
     |> Plug.Session.call(opts)
     |> fetch_session()
     |> configure_session(renew: true)
-    |> put_session(:foo, "Alexa")
+    # |> put_session(:foo, "Alexa")
   end
 
   defp get_token_from_header(nil), do: nil
