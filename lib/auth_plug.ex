@@ -28,18 +28,18 @@ defmodule AuthPlug do
 
       #  Check for Person in Plug.Conn.assigns
       Map.has_key?(conn.assigns, :person) && not is_nil(conn.assigns.person) ->
-        IO.inspect(conn.assigns.person, label: "conn.assigns.person")
+        # IO.inspect(conn.assigns.person, label: "conn.assigns.person")
         conn.assigns.person
 
       # Check for Session in Plug.Session:
       not is_nil(get_session(conn, :person)) ->
-        IO.inspect(get_session(conn, :person), label: "get_session(conn, :person)")
+        # IO.inspect(get_session(conn, :person), label: "get_session(conn, :person)")
         get_session(conn, :person)
 
       # Check for JWT in URL Query String:
       conn.query_string =~ "jwt" ->
         query = URI.decode_query(conn.query_string)
-        IO.inspect(query, label: "query")
+        # IO.inspect(query, label: "query")
         Map.get(query, "jwt")
 
       # Check for JWT in Headers:
@@ -51,11 +51,11 @@ defmodule AuthPlug do
 
       # By default return nil so auth check fails
       true ->
-        IO.inspect("cond true:52")
+        IO.inspect("cond true:54")
         nil
 
     end
-    IO.inspect(jwt, label: "jwt:31")
+    # IO.inspect(jwt, label: "jwt:31")
     validate_token(conn, jwt)
   end
 
@@ -99,7 +99,7 @@ defmodule AuthPlug do
   defp validate_token(conn, nil), do: unauthorized(conn)
 
   defp validate_token(conn, jwt) do
-    IO.inspect(jwt, label: "jwt:105")
+    # IO.inspect(jwt, label: "jwt:105")
     case AuthPlug.Token.verify_and_validate(jwt, @signer) do
       {:ok, values} ->
         # convert map of string to atom: stackoverflow.com/questions/31990134
