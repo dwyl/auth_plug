@@ -4,33 +4,35 @@ defmodule AuthPlugTest do
   alias AuthPlug.Token
   @secret System.get_env("SECRET_KEY_BASE")
   @signer Joken.Signer.create("HS256", @secret)
+  @opts AuthPlug.init(%{auth_url: "https://elixir-auth-google-demo.herokuapp.com"})
+  # IO.inspect(@opts, label: "@opts:8")
 
   test "Plug init function doesn't change params" do
     assert AuthPlug.init(%{}) == %{}
   end
 
   test "Plug return 401 wiht not Authorization Header" do
-    conn = AuthPlug.call(conn("/admin", ""), %{})
+    conn = AuthPlug.call(conn(:get, "/admin"), @opts)
 
-    assert conn.status == 401
+    assert conn.status == 301 # redirect when auth fails
   end
 
   test "Plug return 401 wiht incorrect jwt header" do
     conn =
       conn(:get, "/admin")
       |> put_req_header("authorization", "Bearer incorrect.jwt")
-      |> AuthPlug.call(%{})
+      |> AuthPlug.call(@opts)
 
-    assert conn.status == 401
+    assert conn.status == 301 # redirect when auth fails
   end
 
   test "Fail when authorization header token is invalid" do
     conn =
       conn(:get, "/admin")
       |> put_req_header("authorization", "Bearer this.will.fail")
-      |> AuthPlug.call(%{})
+      |> AuthPlug.call(@opts)
 
-    assert conn.status == 401
+    assert conn.status == 301 # redirect when auth fails
   end
 
   test "Conn.assign decoded (the verified JWT)" do
@@ -53,7 +55,7 @@ defmodule AuthPlugTest do
     conn = conn(:get, "/admin")
       |> AuthPlug.setup_session()
       |> put_session(:person, jwt)
-      |> AuthPlug.call(%{})
+      |> AuthPlug.call(@opts)
 
     token = get_session(conn, :person)
     {:ok, decoded} = AuthPlug.Token.verify_and_validate(token, @signer)
