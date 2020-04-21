@@ -36,11 +36,12 @@ defmodule AuthPlug do
     # Check for JWT in Headers or URL
     # IO.inspect(params, label: "params")
 
-    # Extract JWT
+
 
 
     # Ensure Person is set in Session
     # conn = conn |> assign(:person, "alex")
+    conn = put_session(conn, :person, jwt)
 
     #
     # conn = put_session(conn, :message, "new stuff we just set in the session")

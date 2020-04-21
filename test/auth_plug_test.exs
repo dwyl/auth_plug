@@ -40,27 +40,29 @@ defmodule AuthPlugTest do
 
     conn =
     conn("get", "/admin", "")
-      |> assign(:person, data)
+      |> assign(:person, jwt)
       |> AuthPlug.call(%{})
 
-    assert conn.assigns.person.email == "alex@dwyl.com"
+    # The JWT gets stored in the session for durability:
+    token = get_session(conn, :person)
+    {:ok, decoded} = AuthPlug.Token.verify_and_validate(token, @signer)
+
+    assert Map.get(decoded, "email") == "alex@dwyl.com"
   end
 
   test "get_session(conn, :person)"do
-    data = %{email: "alex@dwyl.com", name: "Alex"}
+    data = %{email: "alice@dwyl.com", name: "Alice"}
     jwt = Token.generate_and_sign!(data, @signer)
     # IO.inspect(jwt, label: "jwt:39")
 
     conn = conn("get", "/admin", "")
+      |> assign(:person, jwt)
       |> AuthPlug.call(%{})
-      
 
 
     token = get_session(conn, :person)
-
     {:ok, decoded} = AuthPlug.Token.verify_and_validate(token, @signer)
-
-    assert decoded.email == "alex@dwyl.com"
+    assert Map.get(decoded, "email") == "alice@dwyl.com"
   end
 
   test "Plug assigns claims to conn with valid jwt" do
