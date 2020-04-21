@@ -5,7 +5,7 @@ defmodule AuthPlug.Router do
 
   plug(Plug.Logger, log: :debug)
   plug(:match)
-  plug(AuthPlug, )
+  plug(AuthPlug, %{auth_url: "https://elixir-auth-google-demo.herokuapp.com"})
   plug(:dispatch)
 
   get "/" do

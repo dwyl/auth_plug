@@ -5,12 +5,12 @@ defmodule AuthPlug do
   @signer Joken.Signer.create("HS256", @secret)
 
   def init(options) do
-    IO.inspect(options, label: "options")
+    IO.inspect(options, label: "options:8")
     options
   end
 
-  def call(conn, _params) do
-
+  def call(conn, options) do
+    IO.inspect(options, label: "options:13")
     # Setup Plug.Session
     conn = setup_session(conn)
 
@@ -40,7 +40,7 @@ defmodule AuthPlug do
       true ->
         nil
     end
-    validate_token(conn, jwt)
+    validate_token(conn, jwt, options)
   end
 
 
@@ -80,9 +80,9 @@ defmodule AuthPlug do
     end
   end
 
-  defp validate_token(conn, nil), do: unauthorized(conn)
+  defp validate_token(conn, nil, opts), do: unauthorized(conn, opts)
 
-  defp validate_token(conn, jwt) do
+  defp validate_token(conn, jwt, opts) do
     case AuthPlug.Token.verify_and_validate(jwt, @signer) do
       {:ok, values} ->
         # convert map of string to atom: stackoverflow.com/questions/31990134
@@ -94,14 +94,15 @@ defmodule AuthPlug do
 
       {:error, reason} ->
         IO.inspect(reason, label: ":error reason:")
-        unauthorized(conn)
+        unauthorized(conn, opts)
     end
   end
 
-  defp unauthorized(conn) do
+  defp unauthorized(conn, opts) do
     conn
     |> put_resp_header("www-authenticate", "Bearer realm=\"Person access\"")
-    |> send_resp(401, "unauthorized:124")
+    # |> send_resp(401, "unauthorized:124")
+    |> redirect(external: opts.auth_url)
     |> halt()
   end
 end
