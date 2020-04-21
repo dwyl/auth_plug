@@ -2,7 +2,8 @@
 
 # `auth_plug`
 
-The plug that seamlessly handles all your authentication/authorization needs.
+The Elixir Plug that _seamlessly_ handles
+all your authentication/authorization needs.
 
 [![Build Status](https://img.shields.io/travis/dwyl/auth_plug/master.svg?style=flat-square)](https://travis-ci.org/dwyl/auth_plug)
 [![codecov.io](https://img.shields.io/codecov/c/github/dwyl/auth_plug/master.svg?style=flat-square)](http://codecov.io/github/dwyl/auth_plug?branch=master)
