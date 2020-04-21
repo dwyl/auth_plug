@@ -4,5 +4,5 @@ defmodule AuthPlug.Token do
   see https://hexdocs.pm/joken/configuration.html#module-approach
 
   """
-  use Joken.Config
+  use Joken.Config, default_signer: nil
 end

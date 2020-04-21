@@ -5,15 +5,14 @@ defmodule AuthPlug do
   @signer Joken.Signer.create("HS256", @secret)
 
   def init(opts) do
-    # IO.inspect(opts, label: "opts")
     opts
   end
 
   def call(conn, _params) do
     # IO.inspect(conn, labels: "conn:13")
     # IO.inspect(params, label: "params:14")
-    # IO.inspect(conn.query_string, label: "conn.query_string:15")
-    # IO.inspect(conn.query_string =~ "jwt", label: "=~")
+    IO.inspect(conn.query_string, label: "conn.query_string:15")
+    IO.inspect(conn.query_string =~ "jwt", label: "=~")
     # IO.inspect(conn.assigns, label: "conn.assigns:17")
     # IO.inspect(conn.assigns.person, label: "conn.assigns.person:18")
     # query = URI.decode_query(conn.query_string)
@@ -55,7 +54,7 @@ defmodule AuthPlug do
         nil
 
     end
-    # IO.inspect(jwt, label: "jwt:31")
+    IO.inspect(jwt, label: "jwt:31")
     validate_token(conn, jwt)
   end
 
@@ -99,7 +98,9 @@ defmodule AuthPlug do
   defp validate_token(conn, nil), do: unauthorized(conn)
 
   defp validate_token(conn, jwt) do
-    # IO.inspect(jwt, label: "jwt:105")
+    IO.inspect(jwt, label: "jwt:102")
+    IO.inspect(@signer, label: "@signer:103")
+    IO.inspect(AuthPlug.Token.verify(jwt, @signer), label: "verify:104")
     case AuthPlug.Token.verify_and_validate(jwt, @signer) do
       {:ok, values} ->
         # convert map of string to atom: stackoverflow.com/questions/31990134
@@ -109,7 +110,8 @@ defmodule AuthPlug do
         |> assign(:person, jwt)
         |> put_session(:person, jwt)
 
-      {:error, _} ->
+      {:error, reason} ->
+        IO.inspect(reason, label: ":error reason:")
         unauthorized(conn)
     end
   end
@@ -121,7 +123,7 @@ defmodule AuthPlug do
   defp unauthorized(conn) do
     conn
     |> put_resp_header("www-authenticate", "Bearer realm=\"Person access\"")
-    |> send_resp(401, "unauthorized")
+    |> send_resp(401, "unauthorized:124")
     |> halt()
   end
 end

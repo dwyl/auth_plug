@@ -43,6 +43,7 @@ defmodule AuthPlug.MixProject do
 
       # See: github.com/dwyl/auth_plug_example
       {:plug_cowboy, "~> 2.1", only: [:dev, :test]},
+      {:jason, "~> 1.2.0", only: [:dev, :test]},
 
       # For publishing Hex.docs:
       {:ex_doc, "~> 0.21.3", only: :dev}

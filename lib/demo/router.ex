@@ -13,8 +13,9 @@ defmodule AuthPlug.Router do
   end
 
   get "/admin" do
-    foo = get_session(conn, :foo)
-    send_resp(conn, 200, "Hello Admin " <> foo <> "!")
+    decoded = conn.assigns.decoded
+    send_resp(conn, 200, "Hello " <> decoded.name <> "! "
+    <> "You are logged in with email: " <> decoded.email)
   end
 
   match _ do
