@@ -52,7 +52,7 @@ defmodule AuthPlug.MixProject do
 
   defp package() do
     [
-      files: ~w(lib LICENSE mix.exs README.md),
+      files: ~w(lib/auth_plug.ex lib/token.ex LICENSE mix.exs README.md),
       name: "auth_plug",
       licenses: ["GNU GPL v2.0"],
       maintainers: ["dwyl"],
