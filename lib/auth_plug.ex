@@ -17,15 +17,9 @@ defmodule AuthPlug do
     # Locate JWT so we can attempt to verify it:
     jwt = cond do
 
-      #  Check for Person in Plug.Conn.assigns
-      Map.has_key?(conn.assigns, :person) && not is_nil(conn.assigns.person) ->
-        conn.assigns.person
-
-      # Check for Session in Plug.Session:
-      not is_nil(get_session(conn, :person)) ->
-        get_session(conn, :person)
-
-      # Check for JWT in URL Query String:
+      # First Check for JWT in URL Query String.
+      # We want a *new* session to supercede any expired session,
+      # so the check for JWT *before* anything else.
       conn.query_string =~ "jwt" ->
         query = URI.decode_query(conn.query_string)
         Map.get(query, "jwt")
@@ -35,6 +29,15 @@ defmodule AuthPlug do
         conn.req_headers
           |> List.keyfind("authorization", 0)
           |> get_token_from_header()
+
+
+      #  Check for Person in Plug.Conn.assigns
+      Map.has_key?(conn.assigns, :person) && not is_nil(conn.assigns.person) ->
+        conn.assigns.person
+
+      # Check for Session in Plug.Session:
+      not is_nil(get_session(conn, :person)) ->
+        get_session(conn, :person)
 
       # By default return nil so auth check fails
       true ->
