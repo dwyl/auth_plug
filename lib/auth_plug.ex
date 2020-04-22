@@ -101,7 +101,9 @@ defmodule AuthPlug do
 
   defp unauthorized(conn, opts) do
     baseurl = AuthPlug.Helpers.get_baseurl_from_conn(conn)
-    to = opts.auth_url <> "?redirect=" <> baseurl <> conn.request_path
+    to = opts.auth_url <> "?referer="
+      <> URI.encode(baseurl <> conn.request_path)
+      <> "&DWYL_API_KEY=" <> @secret
     status = 301 # gotta tell the browser to redirect to the auth_url with 301
 
     conn
