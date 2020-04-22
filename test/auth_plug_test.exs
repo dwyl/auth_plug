@@ -5,7 +5,6 @@ defmodule AuthPlugTest do
   @secret System.get_env("SECRET_KEY_BASE")
   @signer Joken.Signer.create("HS256", @secret)
   @opts AuthPlug.init(%{auth_url: "https://elixir-auth-google-demo.herokuapp.com"})
-  # IO.inspect(@opts, label: "@opts:8")
 
   test "Plug init function doesn't change params" do
     assert AuthPlug.init(%{}) == %{}

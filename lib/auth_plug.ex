@@ -1,6 +1,6 @@
 defmodule AuthPlug do
-  import Plug.Conn
-  require Logger
+  import Plug.Conn # https://hexdocs.pm/plug/readme.html#the-plug-conn-struct
+  require Logger # https://hexdocs.pm/logger/Logger.html
 
   @secret System.get_env("SECRET_KEY_BASE")
   @signer Joken.Signer.create("HS256", @secret)
@@ -45,7 +45,7 @@ defmodule AuthPlug do
 
 
   def setup_session(conn) do
-    conn = put_in(conn.secret_key_base, System.get_env("SECRET_KEY_BASE"))
+    conn = put_in(conn.secret_key_base, @secret)
 
     opts =
       Plug.Session.init(
@@ -61,6 +61,7 @@ defmodule AuthPlug do
     |> configure_session(renew: true)
   end
 
+  # fail fast if no JWT in auth header:
   defp get_token_from_header(nil), do: nil
 
   defp get_token_from_header({"authorization", value}) do
@@ -103,8 +104,8 @@ defmodule AuthPlug do
     status = 301 # gotta tell the browser to redirect to the auth_url with 301
 
     conn
-    |> put_resp_header("location", to)
-    |> resp(status, "unauthorized:116")
-    |> halt()
+    |> put_resp_header("location", to) # redirect to auth_url
+    |> resp(status, "unauthorized") # only our tests see this.
+    |> halt() # halt the conn so no further processing is done.
   end
 end
