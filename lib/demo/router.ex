@@ -1,4 +1,7 @@
 defmodule AuthPlug.Router do
+  # this is a basic router example so we can test the plug on localhost
+  # if you want to run it, uncomment the line that starts with "mod:" in mix.exs
+  # then run "mix run --no-halt"
   import Plug.Conn
   use Plug.Router
   use Plug.ErrorHandler
