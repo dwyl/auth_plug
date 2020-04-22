@@ -100,7 +100,8 @@ defmodule AuthPlug do
   end
 
   defp unauthorized(conn, opts) do
-    to = opts.auth_url <> "?redirect=" <> conn.request_path
+    baseurl = AuthPlug.Helpers.get_baseurl_from_conn(conn)
+    to = opts.auth_url <> "?redirect=" <> baseurl <> conn.request_path
     status = 301 # gotta tell the browser to redirect to the auth_url with 301
 
     conn
