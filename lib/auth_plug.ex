@@ -94,7 +94,7 @@ defmodule AuthPlug do
         |> put_session(:person, jwt)
 
       {:error, reason} ->
-        Logger.info("auth_plug:96 JWT Error: " <> Atom.to_string(reason))
+        Logger.error(Kernel.inspect(reason))
         unauthorized(conn, opts)
     end
   end
