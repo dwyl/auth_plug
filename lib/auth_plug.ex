@@ -1,15 +1,23 @@
 defmodule AuthPlug do
   import Plug.Conn # https://hexdocs.pm/plug/readme.html#the-plug-conn-struct
   require Logger # https://hexdocs.pm/logger/Logger.html
-
   @secret System.get_env("SECRET_KEY_BASE")
-  @signer Joken.Signer.create("HS256", @secret)
 
-
+  @doc """
+  `init/1` initialises the options passed in and makes them
+  available in the lifecycle of the `call/2` invokation (below).
+  We are passing in the `auth_url` key/value with the URL
+  of the Auth service to redirect to if session is invalid/expired.
+  """
   def init(options) do
     options # return options unmodified
   end
 
+  @doc """
+  `call/2` is invoked to handle each HTTP request which `auth_plug` protects.
+  If the `conn` contains a valid JWT then continue to the protected endpoint,
+  else redirect to the `auth_url` with the referer set as the continuation URL.
+  """
   def call(conn, options) do
 
     # Setup Plug.Session
@@ -49,6 +57,10 @@ defmodule AuthPlug do
   end
 
 
+  @doc """
+  `session_options/0` returns the list of Phoenix/Plug Session options.
+  This is useful if you need to check them or use them somewhere else.
+  """
   def session_options() do
   [
     store: :cookie,
@@ -58,6 +70,9 @@ defmodule AuthPlug do
   ]
   end
 
+  @doc """
+  `setup_session/1` configures the Phoenix/Plug Session.
+  """
   def setup_session(conn) do
     conn = put_in(conn.secret_key_base, @secret)
 
@@ -94,7 +109,7 @@ defmodule AuthPlug do
 
   # attempt to validate a valid-looking JWT:
   defp validate_token(conn, jwt, opts) do
-    case AuthPlug.Token.verify_and_validate(jwt, @signer) do
+    case AuthPlug.Token.verify_jwt(jwt) do
       {:ok, values} ->
         # convert map of string to atom: stackoverflow.com/questions/31990134
         claims = for {k, v} <- values, into: %{}, do: {String.to_atom(k), v}
