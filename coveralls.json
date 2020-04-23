@@ -4,7 +4,6 @@
   },
   "skip_files": [
     "test/",
-    "lib/token.ex",
     "lib/demo/router.ex",
     "lib/demo/application.ex"
   ]

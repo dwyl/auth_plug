@@ -5,6 +5,7 @@ defmodule AuthPlug do
   @secret System.get_env("SECRET_KEY_BASE")
   @signer Joken.Signer.create("HS256", @secret)
 
+
   def init(options) do
     options # return options unmodified
   end
@@ -42,21 +43,25 @@ defmodule AuthPlug do
       # By default return nil so auth check fails
       true ->
         nil
+
     end
     validate_token(conn, jwt, options)
   end
 
 
+  def session_options() do
+  [
+    store: :cookie,
+    key: "_auth_key",
+    secret_key_base: @secret,
+    signing_salt: @secret
+  ]
+  end
+
   def setup_session(conn) do
     conn = put_in(conn.secret_key_base, @secret)
 
-    opts =
-      Plug.Session.init(
-        store: :cookie,
-        key: "_auth_key",
-        secret_key_base: @secret,
-        signing_salt: @secret
-      )
+    opts = session_options() |> Plug.Session.init()
 
     conn
     |> Plug.Session.call(opts)
@@ -84,25 +89,28 @@ defmodule AuthPlug do
     end
   end
 
-  defp validate_token(conn, nil, opts), do: unauthorized(conn, opts)
+  # if jwt is nil fail fast
+  defp validate_token(conn, nil, opts), do: redirect_to_auth(conn, opts)
 
+  # attempt to validate a valid-looking JWT:
   defp validate_token(conn, jwt, opts) do
     case AuthPlug.Token.verify_and_validate(jwt, @signer) do
       {:ok, values} ->
         # convert map of string to atom: stackoverflow.com/questions/31990134
         claims = for {k, v} <- values, into: %{}, do: {String.to_atom(k), v}
-        conn
+        conn # return the conn
         |> assign(:decoded, claims)
         |> assign(:person, jwt)
         |> put_session(:person, jwt)
 
-      {:error, reason} ->
+      {:error, reason} -> # log the JWT verify error then redirect:
         Logger.error(Kernel.inspect(reason))
-        unauthorized(conn, opts)
+        redirect_to_auth(conn, opts)
     end
   end
 
-  defp unauthorized(conn, opts) do
+  # redirect to auth_url with referer to resume once authenticated:
+  defp redirect_to_auth(conn, opts) do
     baseurl = AuthPlug.Helpers.get_baseurl_from_conn(conn)
     to = opts.auth_url <> "?referer="
       <> URI.encode(baseurl <> conn.request_path)
