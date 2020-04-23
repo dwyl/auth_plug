@@ -1,7 +1,7 @@
 defmodule AuthPlug.Router do
   # this is a basic router example so we can test the plug on localhost
-  # if you want to run it, uncomment the line that starts with "mod:" in mix.exs
-  # then run "mix run --no-halt"
+  #  if you want to run it, uncomment the line that starts with "mod:" in mix.exs
+  #  then run "mix run --no-halt"
   import Plug.Conn
   use Plug.Router
   use Plug.ErrorHandler
@@ -17,8 +17,15 @@ defmodule AuthPlug.Router do
 
   get "/admin" do
     decoded = conn.assigns.decoded
-    send_resp(conn, 200, "Hello " <> decoded.name <> "! "
-    <> "You are logged in with email: " <> decoded.email)
+
+    send_resp(
+      conn,
+      200,
+      "Hello " <>
+        decoded.name <>
+        "! " <>
+        "You are logged in with email: " <> decoded.email
+    )
   end
 
   match _ do

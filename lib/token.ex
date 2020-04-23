@@ -10,7 +10,8 @@ defmodule AuthPlug.Token do
 
   @impl true
   def token_config do
-    default_claims(default_exp: 31_537_000 ) # ~ 1 year in seconds
+    # ~ 1 year in seconds
+    default_claims(default_exp: 31_537_000)
   end
 
   @doc """
@@ -18,8 +19,9 @@ defmodule AuthPlug.Token do
   claims are the data to be signed.
   """
   def generate_jwt!(claims) do
-    {:ok, token, _claims} = token_config()
-    |> Joken.generate_and_sign(claims, @signer)
+    {:ok, token, _claims} =
+      token_config()
+      |> Joken.generate_and_sign(claims, @signer)
 
     token
   end
@@ -38,9 +40,10 @@ defmodule AuthPlug.Token do
   where the claims are the original data that were signed.
   """
   def verify_jwt!(token) do
-    {:ok, claims} = token_config()
-    |> Joken.verify_and_validate(token, @signer)
+    {:ok, claims} =
+      token_config()
+      |> Joken.verify_and_validate(token, @signer)
+
     claims
   end
-
 end

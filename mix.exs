@@ -23,7 +23,7 @@ defmodule AuthPlug.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger]
       # uncomment the following line to run the demo app: mix run --no-halt
       # mod: {AuthPlug.Application, []}
     ]

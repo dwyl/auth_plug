@@ -1,6 +1,8 @@
 defmodule AuthPlug do
-  import Plug.Conn # https://hexdocs.pm/plug/readme.html#the-plug-conn-struct
-  require Logger # https://hexdocs.pm/logger/Logger.html
+  # https://hexdocs.pm/plug/readme.html#the-plug-conn-struct
+  import Plug.Conn
+  # https://hexdocs.pm/logger/Logger.html
+  require Logger
   @secret System.get_env("SECRET_KEY_BASE")
 
   @doc """
@@ -10,7 +12,8 @@ defmodule AuthPlug do
   to redirect to if session is invalid/expired.
   """
   def init(options) do
-    options # return options unmodified
+    # return options unmodified
+    options
   end
 
   @doc """
@@ -20,55 +23,52 @@ defmodule AuthPlug do
   else redirect to the `auth_url` with the referer set as the continuation URL.
   """
   def call(conn, options) do
-
     # Setup Plug.Session
     conn = setup_session(conn)
 
     # Locate JWT so we can attempt to verify it:
-    jwt = cond do
+    jwt =
+      cond do
+        # First Check for JWT in URL Query String.
+        # We want a *new* session to supercede any expired session,
+        #  so the check for JWT *before* anything else.
+        conn.query_string =~ "jwt" ->
+          query = URI.decode_query(conn.query_string)
+          Map.get(query, "jwt")
 
-      # First Check for JWT in URL Query String.
-      # We want a *new* session to supercede any expired session,
-      # so the check for JWT *before* anything else.
-      conn.query_string =~ "jwt" ->
-        query = URI.decode_query(conn.query_string)
-        Map.get(query, "jwt")
-
-      # Check for JWT in Headers:
-      Enum.count(get_req_header(conn, "authorization")) > 0 ->
-        conn.req_headers
+        # Check for JWT in Headers:
+        Enum.count(get_req_header(conn, "authorization")) > 0 ->
+          conn.req_headers
           |> List.keyfind("authorization", 0)
           |> get_token_from_header()
 
+        #  Check for Person in Plug.Conn.assigns
+        Map.has_key?(conn.assigns, :person) && not is_nil(conn.assigns.person) ->
+          conn.assigns.person
 
-      #  Check for Person in Plug.Conn.assigns
-      Map.has_key?(conn.assigns, :person) && not is_nil(conn.assigns.person) ->
-        conn.assigns.person
+        # Check for Session in Plug.Session:
+        not is_nil(get_session(conn, :person)) ->
+          get_session(conn, :person)
 
-      # Check for Session in Plug.Session:
-      not is_nil(get_session(conn, :person)) ->
-        get_session(conn, :person)
+        # By default return nil so auth check fails
+        true ->
+          nil
+      end
 
-      # By default return nil so auth check fails
-      true ->
-        nil
-
-    end
     validate_token(conn, jwt, options)
   end
-
 
   @doc """
   `session_options/0` returns the list of Phoenix/Plug Session options.
   This is useful if you need to check them or use them somewhere else.
   """
   def session_options() do
-  [
-    store: :cookie,
-    key: "_auth_key",
-    secret_key_base: @secret,
-    signing_salt: @secret
-  ]
+    [
+      store: :cookie,
+      key: "_auth_key",
+      secret_key_base: @secret,
+      signing_salt: @secret
+    ]
   end
 
   @doc """
@@ -85,7 +85,7 @@ defmodule AuthPlug do
     |> configure_session(renew: true)
   end
 
-  # fail fast if no JWT in auth header:
+  #  fail fast if no JWT in auth header:
   defp get_token_from_header(nil), do: nil
 
   defp get_token_from_header({"authorization", value}) do
@@ -114,12 +114,14 @@ defmodule AuthPlug do
       {:ok, values} ->
         # convert map of string to atom: stackoverflow.com/questions/31990134
         claims = for {k, v} <- values, into: %{}, do: {String.to_atom(k), v}
-        conn # return the conn
+        # return the conn
+        conn
         |> assign(:decoded, claims)
         |> assign(:person, jwt)
         |> put_session(:person, jwt)
 
-      {:error, reason} -> # log the JWT verify error then redirect:
+      # log the JWT verify error then redirect:
+      {:error, reason} ->
         Logger.error(Kernel.inspect(reason))
         redirect_to_auth(conn, opts)
     end
@@ -128,14 +130,22 @@ defmodule AuthPlug do
   # redirect to auth_url with referer to resume once authenticated:
   defp redirect_to_auth(conn, opts) do
     baseurl = AuthPlug.Helpers.get_baseurl_from_conn(conn)
-    to = opts.auth_url <> "?referer="
-      <> URI.encode(baseurl <> conn.request_path)
-      <> "&DWYL_API_KEY=" <> @secret
-    status = 301 # gotta tell the browser to redirect to the auth_url with 301
+
+    to =
+      opts.auth_url <>
+        "?referer=" <>
+        URI.encode(baseurl <> conn.request_path) <>
+        "&DWYL_API_KEY=" <> @secret
+
+    # gotta tell the browser to redirect to the auth_url with 301
+    status = 301
 
     conn
-    |> put_resp_header("location", to) # redirect to auth_url
-    |> resp(status, "unauthorized") # only our tests see this.
-    |> halt() # halt the conn so no further processing is done.
+    # redirect to auth_url
+    |> put_resp_header("location", to)
+    # only our tests see this.
+    |> resp(status, "unauthorized")
+    # halt the conn so no further processing is done.
+    |> halt()
   end
 end
