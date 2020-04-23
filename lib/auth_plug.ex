@@ -5,9 +5,9 @@ defmodule AuthPlug do
 
   @doc """
   `init/1` initialises the options passed in and makes them
-  available in the lifecycle of the `call/2` invokation (below).
-  We are passing in the `auth_url` key/value with the URL
-  of the Auth service to redirect to if session is invalid/expired.
+  available in the lifecycle of the `call/2` invocation (below).
+  We pass in the `auth_url` key/value with the URL of the Auth service
+  to redirect to if session is invalid/expired.
   """
   def init(options) do
     options # return options unmodified
@@ -15,7 +15,8 @@ defmodule AuthPlug do
 
   @doc """
   `call/2` is invoked to handle each HTTP request which `auth_plug` protects.
-  If the `conn` contains a valid JWT then continue to the protected endpoint,
+  If the `conn` contains a valid JWT in Authentication Headers,
+  jwt query parameter or Phoenix Session, then continue to the protected route,
   else redirect to the `auth_url` with the referer set as the continuation URL.
   """
   def call(conn, options) do

@@ -2,7 +2,7 @@ defmodule AuthPlugTest do
   use ExUnit.Case
   use Plug.Test
   alias AuthPlug.Token
-  @opts AuthPlug.init(%{auth_url: "https://elixir-auth-google-demo.herokuapp.com"})
+  @opts AuthPlug.init(%{auth_url: "https://dwylauth.herokuapp.com"})
 
   test "Plug init function doesn't change params" do
     assert AuthPlug.init(%{}) == %{}
