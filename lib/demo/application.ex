@@ -1,14 +1,10 @@
 defmodule AuthPlug.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
-
   use Application
   require Logger
-
-  @secret System.get_env("SECRET_KEY_BASE")
-  @signer Joken.Signer.create("HS256", @secret)
   @data %{email: "alexa@gmail.com", name: "Alexa"}
-  @jwt AuthPlug.Token.generate_and_sign!(@data, @signer)
+  @jwt AuthPlug.Token.generate_jwt!(@data)
 
   def start(_type, _args) do
     children = [
