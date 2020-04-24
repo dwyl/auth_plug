@@ -137,8 +137,8 @@ defmodule AuthPlug do
         URI.encode(baseurl <> conn.request_path) <>
         "&DWYL_API_KEY=" <> @secret
 
-    # gotta tell the browser to redirect to the auth_url with 301
-    status = 301
+    # gotta tell the browser to temporarily redirect to the auth_url with 302
+    status = 302
 
     conn
     # redirect to auth_url

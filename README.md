@@ -98,7 +98,7 @@ to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:auth_plug, "~> 0.7.0"}
+    {:auth_plug, "~> 0.8.0"}
   ]
 end
 ```
@@ -109,7 +109,7 @@ download the dependency with:
 mix deps.get
 ```
 
-### 2. Get Your API Key
+### 2. Get Your API Key 🔑
 
 
 
@@ -129,7 +129,9 @@ mix deps.get
 Documentation can be found at
 [https://hexdocs.pm/auth_plug](https://hexdocs.pm/auth_plug).
 
-
+If _anything_ is unclear,
+please open an issue:
+https://github.com/dwyl/auth_plug/issues
 
 
 
@@ -138,3 +140,7 @@ Documentation can be found at
 If you are new to Elixir Plug,
 we recommend following:
 [github.com/dwyl/elixir-plug-tutorial](https://github.com/dwyl/elixir-plug-tutorial).
+
+To understand JSON Web Tokens,
+read:
+[https://github.com/dwyl/learn-json-web-tokens](https://github.com/dwyl/learn-json-web-tokens).
