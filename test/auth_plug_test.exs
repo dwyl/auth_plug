@@ -12,7 +12,7 @@ defmodule AuthPlugTest do
     conn = AuthPlug.call(conn(:get, "/admin"), @opts)
 
     # redirect when auth fails
-    assert conn.status == 301
+    assert conn.status == 302
   end
 
   test "Plug return 401 wiht incorrect jwt header" do
@@ -22,7 +22,7 @@ defmodule AuthPlugTest do
       |> AuthPlug.call(@opts)
 
     # redirect when auth fails
-    assert conn.status == 301
+    assert conn.status == 302
   end
 
   test "Fail when authorization header token is invalid" do
@@ -32,7 +32,7 @@ defmodule AuthPlugTest do
       |> AuthPlug.call(@opts)
 
     # redirect when auth fails
-    assert conn.status == 301
+    assert conn.status == 302
   end
 
   test "Conn.assign decoded (the verified JWT)" do
