@@ -11,4 +11,14 @@ defmodule AuthPlugTokenTest do
     decoded = verify_jwt!(jwt, secret)
     assert data.email == Map.get(decoded, "email")
   end
+
+
+  test "verify_jwt/2 verifies a JWT with the given secret" do
+    secret = "secretcanbeanystringyouwant"
+    data = %{email: "alex@dwyl.com", name: "Alex"}
+    jwt = generate_jwt!(data, secret)
+
+    {:ok, decoded} = verify_jwt(jwt, secret)
+    assert data.email == Map.get(decoded, "email")
+  end
 end
