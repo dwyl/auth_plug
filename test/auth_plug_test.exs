@@ -91,11 +91,10 @@ defmodule AuthPlugTest do
   end
 
   test "create_session_mock/2" do
-    claims = %{email: "person@dwyl.com", session: 1}
+    claims = %{email: "person@dwyl.com", id: 1}
     conn =
       conn(:get, "/")
-      |> AuthPlug.create_session_mock(claims)
-      # |> IO.inspect()
+      |> AuthPlug.create_jwt_session(claims)
 
     assert conn.assigns.decoded == claims
   end

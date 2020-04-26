@@ -1,4 +1,8 @@
 defmodule AuthPlug do
+  @moduledoc """
+  `AuthPlug` handles all our auth needs in just a handful of lines of code.
+  Please see `README.md` for setup instructions.
+  """
   # https://hexdocs.pm/plug/readme.html#the-plug-conn-struct
   import Plug.Conn
   # https://hexdocs.pm/logger/Logger.html
@@ -85,6 +89,35 @@ defmodule AuthPlug do
     |> configure_session(renew: true)
   end
 
+  @doc """
+  `create_session/2` takes a `conn`, claims and a JWT
+  and creates the session using Phoenix Sessions
+  and the JWT as the value so that it can be checked
+  on each future request.
+  """
+  def create_session(conn, claims, jwt) do
+    conn
+    |> assign(:decoded, claims)
+    |> assign(:person, jwt)
+    |> put_session(:person, jwt)
+  end
+
+  @doc """
+  `create_jwt_session/3` recieves a `conn` and `claims`
+  e.g: `%{email: "person@dwyl.com", id: 1}` and
+  Signs a JWT which gets attached to the session.
+  This is super-useful in testing as we
+  can simply invoke
+  `create_session_mock(conn, %{email: "al@ex.co", id: 1})`
+  and continue the request pipeline with a valid session.
+  """
+  def create_jwt_session(conn, claims) do
+    jwt = AuthPlug.Token.generate_jwt!(claims)
+    conn
+    |> setup_session()
+    |> create_session(claims, jwt)
+  end
+
   #  fail fast if no JWT in auth header:
   defp get_token_from_header(nil), do: nil
 
@@ -122,20 +155,6 @@ defmodule AuthPlug do
         Logger.error(Kernel.inspect(reason))
         redirect_to_auth(conn, opts)
     end
-  end
-
-  def create_session(conn, claims, jwt) do
-    conn
-    |> assign(:decoded, claims)
-    |> assign(:person, jwt)
-    |> put_session(:person, jwt)
-  end
-
-  def create_session_mock(conn, claims) do
-    jwt = AuthPlug.Token.generate_jwt!(claims)
-    conn
-    |> setup_session()
-    |> create_session(claims, jwt)
   end
 
   # redirect to auth_url with referer to resume once authenticated:
