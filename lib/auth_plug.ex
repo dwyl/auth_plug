@@ -114,17 +114,28 @@ defmodule AuthPlug do
       {:ok, values} ->
         # convert map of string to atom: stackoverflow.com/questions/31990134
         claims = for {k, v} <- values, into: %{}, do: {String.to_atom(k), v}
-        # return the conn
-        conn
-        |> assign(:decoded, claims)
-        |> assign(:person, jwt)
-        |> put_session(:person, jwt)
+        # return the conn with the session
+        create_session(conn, claims, jwt)
 
       # log the JWT verify error then redirect:
       {:error, reason} ->
         Logger.error(Kernel.inspect(reason))
         redirect_to_auth(conn, opts)
     end
+  end
+
+  def create_session(conn, claims, jwt) do
+    conn
+    |> assign(:decoded, claims)
+    |> assign(:person, jwt)
+    |> put_session(:person, jwt)
+  end
+
+  def create_session_mock(conn, claims) do
+    jwt = AuthPlug.Token.generate_jwt!(claims)
+    conn
+    |> setup_session()
+    |> create_session(claims, jwt)
   end
 
   # redirect to auth_url with referer to resume once authenticated:

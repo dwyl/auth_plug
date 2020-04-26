@@ -89,4 +89,15 @@ defmodule AuthPlugTest do
 
     assert conn.assigns.decoded.email == "person@dwyl.com"
   end
+
+  test "create_session_mock/2" do
+    claims = %{email: "person@dwyl.com", session: 1}
+    conn =
+      conn(:get, "/")
+      |> AuthPlug.create_session_mock(claims)
+      # |> IO.inspect()
+
+    assert conn.assigns.decoded == claims
+  end
+
 end
