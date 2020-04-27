@@ -141,6 +141,14 @@ echo ".env" >> .gitignore
 
 ### 3. Protect a Route
 
+Open your project's `router.ex` file. e.g: 
+
+
+
+
+### (Optional) Update `endpoint.ex`
+
+
 
 
 
