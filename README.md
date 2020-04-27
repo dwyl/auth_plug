@@ -9,9 +9,7 @@ all your authentication/authorization needs.
 [![codecov.io](https://img.shields.io/codecov/c/github/dwyl/auth_plug/master.svg?style=flat-square)](http://codecov.io/github/dwyl/auth_plug?branch=master)
 [![Hex.pm](https://img.shields.io/hexpm/v/auth_plug?color=brightgreen&style=flat-square)](https://hex.pm/packages/auth_plug)
 [![Libraries.io dependency status](https://img.shields.io/librariesio/release/hex/auth_plug?logoColor=brightgreen&style=flat-square)](https://github.com/dwyl/auth_plug/blob/master/mix.exs)
-<!--
 [![HitCount](http://hits.dwyl.com/dwyl/auth_plug.svg)](http://hits.dwyl.com/dwyl/auth_plug)
--->
 </div>
 <br />
 
@@ -62,7 +60,7 @@ as the "users" of our own product.
 
 -->
 
-## What?
+## What? 🔐
 
 A plug
 a _complete_ beginner can use to add auth to a
@@ -109,17 +107,40 @@ download the dependency with:
 mix deps.get
 ```
 
-### 2. Get Your API Key 🔑
+### 2. Get Your `AUTH_API_KEY` 🔑
 
+Visit: https://dwylauth.herokuapp.com/profile/apikeys/new
+And create your `AUTH_API_KEY`.
+e.g:
+![new-api-key-form](https://user-images.githubusercontent.com/194400/80422785-b76d6480-88d6-11ea-9fbb-4acbc969aeac.png)
 
-
+![new-api-key](https://user-images.githubusercontent.com/194400/80422804-be947280-88d6-11ea-920e-17e810816f17.png)
 
 #### 2.1 Save it as an Environment Variable
 
+Create a file called `.env` in the root directory of your app
+and add the following line:
 
+```txt
+export AUTH_API_KEY=2cfxNaWUwJBq1F4nPndoEHZJ5YCCNqXbJ6GaSXj6BPNTjMSc4EV/2cfxNadrhMZk3iaT1L5k6Wt67c9ScbGNPz8BwLH1qvpDNAARQ9J
+```
+
+The run the following command in your terminal:
+```
+source .env
+```
+That will export the environment variable AUTH_API_KEY.
+
+
+Remember to add `.env` to your [`.gitignore`](https://github.com/dwyl/auth_plug/blob/1ebb60938487da7e740a79b2a4639b29f2ba44ac/.gitignore#L52) file.
+e.g:
+```
+echo ".env" >> .gitignore
+```
 
 
 ### 3. Protect a Route
+
 
 
 
