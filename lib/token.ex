@@ -4,7 +4,35 @@ defmodule AuthPlug.Token do
   see https://hexdocs.pm/joken/configuration.html#module-approach
   """
   use Joken.Config
-  @secret System.get_env("SECRET_KEY_BASE")
+
+  @doc """
+  `api_key/0` retrieves the API_KEY from environment variable.
+   API keys are a single environment variable which is comprised of two parts.
+   client_id/client_secret such that splitting on the "/" (forward slash)
+   gives us the `client_id` and `client_secret`
+   example:
+   2cfxNaWUwJBq1F4nPndoEHZJ5YCCNq9JDNAAR/2cfxNadrhMZk3iaT1L5k6Wt67c9ScbGNPz8Bw
+   see: https://github.com/dwyl/auth/issues/42#issuecomment-620247243
+  """
+  def api_key do
+    if not is_nil(System.get_env("DWYL_API_KEY")),
+    do: System.get_env("DWYL_API_KEY"),
+    else: System.get_env("AUTH_API_KEY")
+  end
+
+  @doc """
+  `client_id/0` returns the `client_id` (the first part of the AUTH_API_KEY)
+  """
+  def client_id do
+    List.first(String.split(api_key(), "/"))
+  end
+
+  @doc """
+  `client_id/0` returns the `client_secret` (the last part of the AUTH_API_KEY)
+  """
+  def client_secret do
+    List.last(String.split(api_key(), "/"))
+  end
 
   @doc """
   `create_signer/1` creates a signer for the given `secret` key.
@@ -28,7 +56,7 @@ defmodule AuthPlug.Token do
   Throws an error if anyting in the claims is invalid.
   """
   def generate_jwt!(claims) do
-    generate_jwt!(claims, @secret)
+    generate_jwt!(claims, client_secret())
   end
 
   @doc """
@@ -49,7 +77,7 @@ defmodule AuthPlug.Token do
   where the claims are the original data that were signed.
   """
   def verify_jwt(token) do
-    verify_jwt(token, @secret)
+    verify_jwt(token, client_secret())
   end
 
   @doc """
@@ -67,7 +95,7 @@ defmodule AuthPlug.Token do
   where the claims are the original data that were signed.
   """
   def verify_jwt!(token) do
-    verify_jwt!(token, @secret)
+    verify_jwt!(token, client_secret())
   end
 
   @doc """
