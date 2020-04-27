@@ -7,7 +7,6 @@ defmodule AuthPlug do
   import Plug.Conn
   # https://hexdocs.pm/logger/Logger.html
   require Logger
-  @secret System.get_env("SECRET_KEY_BASE")
 
   @doc """
   `init/1` initialises the options passed in and makes them
@@ -70,8 +69,8 @@ defmodule AuthPlug do
     [
       store: :cookie,
       key: "_auth_key",
-      secret_key_base: @secret,
-      signing_salt: @secret
+      secret_key_base: System.get_env("SECRET_KEY_BASE"),
+      signing_salt: AuthPlug.Token.client_secret
     ]
   end
 
@@ -79,7 +78,7 @@ defmodule AuthPlug do
   `setup_session/1` configures the Phoenix/Plug Session.
   """
   def setup_session(conn) do
-    conn = put_in(conn.secret_key_base, @secret)
+    conn = put_in(conn.secret_key_base, System.get_env("SECRET_KEY_BASE"))
 
     opts = session_options() |> Plug.Session.init()
 
@@ -165,7 +164,7 @@ defmodule AuthPlug do
       opts.auth_url <>
         "?referer=" <>
         URI.encode(baseurl <> conn.request_path) <>
-        "&DWYL_API_KEY=" <> @secret
+        "&client_id=" <> AuthPlug.Token.client_id
 
     # gotta tell the browser to temporarily redirect to the auth_url with 302
     status = 302
