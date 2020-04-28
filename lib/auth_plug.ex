@@ -111,9 +111,10 @@ defmodule AuthPlug do
   and continue the request pipeline with a valid session.
   """
   def create_jwt_session(conn, claims) do
-    jwt = claims
+    jwt = claims # delete %Auth.Person github.com/dwyl/auth_plug/issues/16
       |> Map.delete(:__meta__)
       |> Map.delete(:__struct__)
+      |> Map.delete(:statuses)
       |> AuthPlug.Token.generate_jwt!()
     conn
       |> setup_session()
