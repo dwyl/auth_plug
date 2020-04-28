@@ -102,12 +102,12 @@ defmodule AuthPlug do
   end
 
   @doc """
-  `create_jwt_session/3` recieves a `conn` and `claims`
-  e.g: `%{email: "person@dwyl.com", id: 1}` and
+  `create_jwt_session/2` recieves a `conn` (Plug.Conn) and `claims`
+  e.g: `%{email: "person@dwyl.com", id: 1}`.
   Signs a JWT which gets attached to the session.
   This is super-useful in testing as we
   can simply invoke
-  `create_session_mock(conn, %{email: "al@ex.co", id: 1})`
+  `create_jwt_session(conn, %{email: "al@ex.co", id: 1})`
   and continue the request pipeline with a valid session.
   """
   def create_jwt_session(conn, claims) do
@@ -164,7 +164,7 @@ defmodule AuthPlug do
       opts.auth_url <>
         "?referer=" <>
         URI.encode(baseurl <> conn.request_path) <>
-        "&client_id=" <> AuthPlug.Token.client_id
+        "&client_id=" <> AuthPlug.Token.client_id()
 
     # gotta tell the browser to temporarily redirect to the auth_url with 302
     status = 302

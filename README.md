@@ -25,15 +25,22 @@ We did too. So we built `auth_plug`.
 ***Frustrated*** by the **complexity**
 and **incomplete docs/tests**
 in **_existing_ auth solutions**,
-we built **`auth_plug`** to **simplify** our lives.
+we built **`auth_plug`** to **simplify** our lives. <br />
+
 We needed a way to ***minimise***
 the number of steps
 and amount of boilerplate **code** required
-to add auth in our app(s).
+to add auth to our app(s). <br />
 **`auth_plug`** allows us to **setup**
 auth in any Elixir/Phoenix
 App in **_less_ than 2 minutes**
-and only **7 lines** of code.
+with only **5 lines** of config/code
+and **_one_ environment variable**.
+
+![true](https://user-images.githubusercontent.com/194400/80473192-b1f73500-893d-11ea-87c1-edf4fec53da2.jpg)
+
+
+
 
 <!-- revisit or remove this section
 ### Pain 😧
@@ -62,20 +69,32 @@ as the "users" of our own product.
 
 ## What? 🔐
 
-A plug
-a _complete_ beginner can use to add auth to a
+An Elixir Plug (_HTTP Middleware_)
+that a _complete_ beginner can use to add auth to a
 Phoenix App
-and _understand_ how it works.
+and _understand_ how it works. <br />
 No macros/behaviours to `use` (_confuse_).
-No complex configuration.
-No genservers or extra OTP apps.
+No complex configuration or "implementation".
 Just a basic plug that uses Phoenix Sessions
 and standards-based JSON Web Tokens (JWT).
 Refreshingly simple. The way auth _should_ be done.
 
+`auth_plug` is just
+[57 lines](https://codecov.io/gh/dwyl/auth_plug/tree/master/lib)
+of (_significant_)
+[code](https://github.com/dwyl/auth_plug/tree/master/lib);
+the rest is comprehensive comments
+to help _everyone understand_ how it works.
+As with _all_ our code,
+it's meant to be as beginner-friendly as possible.
+If you get stuck or have any questions,
+please [ask!](https://github.com/dwyl/auth_plug/issues)
+
+
+
 ## Who? 👥
 
-We built this plug for use in our products/services.
+We built this plug for use in _our_ products/services.
 It does _exactly_ what we want it to and nothing more.
 It's tested, documented and open source the way _all_ our code is.
 It's **not _yet_** a **general purpose** auth solution
@@ -83,12 +102,12 @@ that _anyone_ can use.
 If after reading through this you feel that
 this is something you would like to have
 in your own Elixir/Phoenix project,
-let us know!
+let us [know!](https://github.com/dwyl/auth_plug/issues)
 
 
-## How? 💡
+# How? 💡
 
-### 1. Installation 📝
+## 1. Installation 📝
 
 Add **`auth_plug`**
 to your list of dependencies in `mix.exs`:
@@ -107,7 +126,7 @@ download the dependency with:
 mix deps.get
 ```
 
-### 2. Get Your `AUTH_API_KEY` 🔑
+## 2. Get Your `AUTH_API_KEY` 🔑
 
 Visit: https://dwylauth.herokuapp.com/profile/apikeys/new
 And create your `AUTH_API_KEY`.
@@ -116,7 +135,7 @@ e.g:
 
 ![new-api-key](https://user-images.githubusercontent.com/194400/80422804-be947280-88d6-11ea-920e-17e810816f17.png)
 
-#### 2.1 Save it as an Environment Variable
+### 2.1 Save it as an Environment Variable
 
 Create a file called `.env` in the root directory of your app
 and add the following line:
@@ -139,9 +158,12 @@ echo ".env" >> .gitignore
 ```
 
 
-### 3. Protect a Route
+## 3. _Protect_ a Route
 
-Open your project's `router.ex` file. e.g: 
+Open your project's `router.ex` file. e.g:
+
+
+
 
 
 
@@ -156,9 +178,9 @@ Open your project's `router.ex` file. e.g:
 ## Documentation
 
 Documentation can be found at
-[https://hexdocs.pm/auth_plug](https://hexdocs.pm/auth_plug).
-
-If _anything_ is unclear,
+[https://hexdocs.pm/auth_plug](https://hexdocs.pm/auth_plug). <br />
+All our code is commented,
+but if _anything_ is unclear,
 please open an issue:
 https://github.com/dwyl/auth_plug/issues
 
