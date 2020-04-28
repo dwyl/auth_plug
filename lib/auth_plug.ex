@@ -95,6 +95,7 @@ defmodule AuthPlug do
   on each future request.
   """
   def create_session(conn, claims, jwt) do
+    claims = AuthPlug.Helpers.strip_struct_metadata(claims)
     conn
     |> assign(:decoded, claims)
     |> assign(:person, jwt)
@@ -112,9 +113,7 @@ defmodule AuthPlug do
   """
   def create_jwt_session(conn, claims) do
     jwt = claims # delete %Auth.Person github.com/dwyl/auth_plug/issues/16
-      |> Map.delete(:__meta__)
-      |> Map.delete(:__struct__)
-      |> Map.delete(:statuses)
+      |> AuthPlug.Helpers.strip_struct_metadata()
       |> AuthPlug.Token.generate_jwt!()
     conn
       |> setup_session()

@@ -11,4 +11,11 @@ defmodule AuthPlug.Helpers do
   def get_baseurl_from_conn(%{host: h}) do
     "https://#{h}"
   end
+
+  def strip_struct_metadata(struct) do
+    struct
+    |> Map.delete(:__meta__)
+    |> Map.delete(:__struct__)
+    |> Map.delete(:statuses)
+  end
 end
