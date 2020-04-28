@@ -12,6 +12,12 @@ defmodule AuthPlug.Helpers do
     "https://#{h}"
   end
 
+
+  @doc """
+  `strip_struct_metadata/1` removes the Ecto Struct metadata from a struct.
+  This is essential before attempting to create a JWT as `Jason.encode/2`
+  chokes on any invalid data. See: github.com/dwyl/auth_plug/issues/16
+  """
   def strip_struct_metadata(struct) do
     struct
     |> Map.delete(:__meta__)
