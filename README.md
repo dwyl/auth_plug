@@ -28,9 +28,9 @@ in **_existing_ auth solutions**,
 we built **`auth_plug`** to **simplify** our lives. <br />
 
 We needed a way to ***minimise***
-the number of steps
-and amount of boilerplate **code** required
-to add auth to our app(s). <br />
+the steps
+and **code** required
+to add auth to our app(s).
 **`auth_plug`** allows us to **setup**
 auth in any Elixir/Phoenix
 App in **_less_ than 2 minutes**
@@ -89,11 +89,12 @@ Refreshingly simple. The way auth _should_ be done.
 Edit this diagram:
 [docs.google.com/presentation/d/1PUKzbRQOEgHaOmaEheU7T3AHQhRT8mhGuqVKotEJkM0](https://docs.google.com/presentation/d/1PUKzbRQOEgHaOmaEheU7T3AHQhRT8mhGuqVKotEJkM0/edit#slide=id.g841dc8bc44_0_5)
 
-`auth_plug` protects any routes that require authentication. <br />
+**`auth_plug`** protects any routes in your app
+that require authentication. <br />
 For more detail on how the `Auth` service works,
 please see: https://github.com/dwyl/auth
 
-`auth_plug` is just
+**`auth_plug`** is just
 [57 lines](https://codecov.io/gh/dwyl/auth_plug/tree/master/lib)
 of (_significant_)
 [code](https://github.com/dwyl/auth_plug/tree/master/lib);
@@ -102,7 +103,7 @@ to help _everyone understand_ how it works.
 As with _all_ our code,
 it's meant to be as beginner-friendly as possible.
 If you get stuck or have any questions,
-please [ask!](https://github.com/dwyl/auth_plug/issues)
+please [***ask***!](https://github.com/dwyl/auth_plug/issues)
 
 
 
@@ -116,7 +117,7 @@ that _anyone_ can use.
 If after reading through this you feel that
 this is something you would like to have
 in your own Elixir/Phoenix project,
-let us [know!](https://github.com/dwyl/auth_plug/issues)
+let us [***tell us***!](https://github.com/dwyl/auth_plug/issues)
 
 
 # How? 💡
