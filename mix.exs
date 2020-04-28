@@ -4,12 +4,12 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "0.11.0",
+      version: "0.12.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
-      description: "Turnkey Auth Plug.",
+      description: "Turnkey Auth Plug lets you protect any route in an Elixir/Phoenix App.",
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         coveralls: :test,
