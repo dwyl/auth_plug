@@ -79,7 +79,13 @@ Just a basic plug that uses Phoenix Sessions
 and standards-based JSON Web Tokens (JWT).
 Refreshingly simple. The way auth _should_ be done.
 
-![auth_plug-diagram](https://user-images.githubusercontent.com/194400/80484054-0060ff80-894f-11ea-80fc-537c1a9779a6.png)
+<div align="center">
+    <a href="https://travis-ci.com/">
+        <img src="https://user-images.githubusercontent.com/194400/80484054-0060ff80-894f-11ea-80fc-537c1a9779a6.png" alt="auth_plug diagram">
+    </a>
+</div>
+
+
 Edit this diagram:
 [docs.google.com/presentation/d/1PUKzbRQOEgHaOmaEheU7T3AHQhRT8mhGuqVKotEJkM0](https://docs.google.com/presentation/d/1PUKzbRQOEgHaOmaEheU7T3AHQhRT8mhGuqVKotEJkM0/edit#slide=id.g841dc8bc44_0_5)
 
