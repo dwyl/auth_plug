@@ -111,10 +111,13 @@ defmodule AuthPlug do
   and continue the request pipeline with a valid session.
   """
   def create_jwt_session(conn, claims) do
-    jwt = AuthPlug.Token.generate_jwt!(claims)
+    jwt = claims
+      |> Map.delete(:__meta__)
+      |> Map.delete(:__struct__)
+      |> AuthPlug.Token.generate_jwt!()
     conn
-    |> setup_session()
-    |> create_session(claims, jwt)
+      |> setup_session()
+      |> create_session(claims, jwt)
   end
 
   #  fail fast if no JWT in auth header:
