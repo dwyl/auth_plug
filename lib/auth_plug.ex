@@ -167,7 +167,7 @@ defmodule AuthPlug do
       opts.auth_url <>
         "?referer=" <>
         URI.encode(baseurl <> conn.request_path) <>
-        "&client_id=" <> AuthPlug.Token.client_id()
+        "&auth_client_id=" <> AuthPlug.Token.client_id()
 
     # gotta tell the browser to temporarily redirect to the auth_url with 302
     status = 302
