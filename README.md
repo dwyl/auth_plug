@@ -80,10 +80,9 @@ and standards-based JSON Web Tokens (JWT).
 Refreshingly simple. The way auth _should_ be done.
 
 <div align="center">
-    <a href="https://travis-ci.com/">
-        <img src="https://user-images.githubusercontent.com/194400/80484054-0060ff80-894f-11ea-80fc-537c1a9779a6.png" alt="auth_plug diagram" width="800">
-    </a>
-
+  <a href="https://travis-ci.com/">
+    <img src="https://user-images.githubusercontent.com/194400/80484054-0060ff80-894f-11ea-80fc-537c1a9779a6.png" alt="auth_plug diagram" width="800">
+  </a>
 
 Edit this diagram:
 [docs.google.com/presentation/d/1PUKzbRQOEgHaOmaEheU7T3AHQhRT8mhGuqVKotEJkM0](https://docs.google.com/presentation/d/1PUKzbRQOEgHaOmaEheU7T3AHQhRT8mhGuqVKotEJkM0/edit#slide=id.g841dc8bc44_0_5)
@@ -147,12 +146,11 @@ mix deps.get
 
 ## 2. Get Your `AUTH_API_KEY` 🔑
 
-Visit: https://dwylauth.herokuapp.com/profile/apikeys/new
+Visit: https://dwylauth.herokuapp.com/settings/apikeys/new
 And create your `AUTH_API_KEY`.
 e.g:
-![new-api-key-form](https://user-images.githubusercontent.com/194400/80422785-b76d6480-88d6-11ea-9fbb-4acbc969aeac.png)
 
-![new-api-key](https://user-images.githubusercontent.com/194400/80422804-be947280-88d6-11ea-920e-17e810816f17.png)
+![auth_plug_example_setup](https://user-images.githubusercontent.com/194400/80759455-3eb51500-8b2f-11ea-98fe-6e5154bfb349.gif)
 
 ### 2.1 Save it as an Environment Variable
 
@@ -177,10 +175,45 @@ echo ".env" >> .gitignore
 ```
 
 
-## 3. _Protect_ a Route
 
-Open your project's `router.ex` file. e.g:
+## 3. Add `AuthPlug` to Your `router.ex` file to Protect a Route
 
+Open the `lib/app_web/router.ex` file and locate the section:
+
+```elixir
+  scope "/", AppWeb do
+    pipe_through :browser
+
+    get "/", PageController, :index
+  end
+```
+
+Immediately below this add the following lines of code:
+
+```elixir
+  pipeline :auth, do: plug(AuthPlug, %{auth_url: "https://dwylauth.herokuapp.com"})
+
+  scope "/", AppWeb do
+    pipe_through :browser
+    pipe_through :auth
+    get "/admin", PageController, :admin
+  end
+```
+
+> E.g:
+[`/lib/app_web/router.ex#L23-L29`](https://github.com/dwyl/auth_plug_example/blob/8ce0f10e656b94a93b8f02af240b3897ce23c006/lib/app_web/router.ex#L23-L29)
+
+
+#### _Explanation_
+
+There are two parts to this code:
+
+1. Create a new pipeline called `:auth` which will execute the `AuthPlug`
+passing in the `auth_url` as an initialisation option.
+2. Create a new scope where we `pipe_through`
+both the `:browser` and `:auth` pipelines.
+
+This means that the `"/admin"` route is protected by `AuthPlug`.
 
 
 
