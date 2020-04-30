@@ -46,12 +46,12 @@ defmodule AuthPlug do
           |> get_token_from_header()
 
         #  Check for Person in Plug.Conn.assigns
-        Map.has_key?(conn.assigns, :person) && not is_nil(conn.assigns.person) ->
-          conn.assigns.person
+        Map.has_key?(conn.assigns, :jwt) && not is_nil(conn.assigns.jwt) ->
+          conn.assigns.jwt
 
         # Check for Session in Plug.Session:
-        not is_nil(get_session(conn, :person)) ->
-          get_session(conn, :person)
+        not is_nil(get_session(conn, :jwt)) ->
+          get_session(conn, :jwt)
 
         # By default return nil so auth check fails
         true ->
@@ -93,13 +93,15 @@ defmodule AuthPlug do
   and creates the session using Phoenix Sessions
   and the JWT as the value so that it can be checked
   on each future request.
+  Makes the decoded JWT available in conn.assigns
+  which means it can be used in templates. 
   """
   def create_session(conn, claims, jwt) do
     claims = AuthPlug.Helpers.strip_struct_metadata(claims)
     conn
-    |> assign(:decoded, claims)
-    |> assign(:person, jwt)
-    |> put_session(:person, jwt)
+    |> assign(:person, claims)
+    |> assign(:jwt, jwt)
+    |> put_session(:jwt, jwt)
   end
 
   @doc """

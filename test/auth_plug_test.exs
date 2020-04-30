@@ -41,23 +41,23 @@ defmodule AuthPlugTest do
 
     conn =
       conn(:get, "/admin")
-      |> assign(:person, jwt)
+      |> assign(:jwt, jwt)
       |> AuthPlug.call(%{})
 
-    assert conn.assigns.decoded.email == "alex@dwyl.com"
+    assert conn.assigns.person.email == "alex@dwyl.com"
   end
 
-  test "get_session(conn, :person)" do
+  test "get_session(conn, :jwt)" do
     data = %{email: "alice@dwyl.com", name: "Alice"}
     jwt = Token.generate_jwt!(data)
 
     conn =
       conn(:get, "/admin")
       |> AuthPlug.setup_session()
-      |> put_session(:person, jwt)
+      |> put_session(:jwt, jwt)
       |> AuthPlug.call(@opts)
 
-    token = get_session(conn, :person)
+    token = get_session(conn, :jwt)
     {:ok, decoded} = AuthPlug.Token.verify_jwt(token)
     assert Map.get(decoded, "email") == "alice@dwyl.com"
   end
@@ -71,7 +71,7 @@ defmodule AuthPlugTest do
       |> put_req_header("authorization", "Bearer #{jwt}")
       |> AuthPlug.call(%{})
 
-    token = conn.assigns.person
+    token = conn.assigns.jwt
     person = AuthPlug.Token.verify_jwt!(token)
 
     assert person["email"] == "person@dwyl.com"
@@ -84,10 +84,10 @@ defmodule AuthPlugTest do
     conn =
       conn(:get, "/admin?jwt=" <> jwt)
       |> AuthPlug.setup_session()
-      |> put_session(:person, nil)
+      |> put_session(:jwt, nil)
       |> AuthPlug.call(%{})
 
-    assert conn.assigns.decoded.email == "person@dwyl.com"
+    assert conn.assigns.person.email == "person@dwyl.com"
   end
 
   test "create_session_mock/2" do
@@ -96,7 +96,7 @@ defmodule AuthPlugTest do
       conn(:get, "/")
       |> AuthPlug.create_jwt_session(claims)
 
-    assert conn.assigns.decoded == claims
+    assert conn.assigns.person == claims
   end
 
 end
