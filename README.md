@@ -125,6 +125,11 @@ let us [***tell us***!](https://github.com/dwyl/auth_plug/issues)
 
 # How? 💡
 
+If you get stuck during setup,
+clone and run our fully working example:
+https://github.com/dwyl/auth_plug_example#how
+
+
 ## 1. Installation 📝
 
 Add **`auth_plug`**
@@ -215,17 +220,63 @@ both the `:browser` and `:auth` pipelines.
 
 This means that the `"/admin"` route is protected by `AuthPlug`.
 
+> **Note**: Ensure the route you are protecting works _without_ `AuthPlug`.
+If in doubt simply comment out the line `pipe_through :auth` to check.
+
+
+## 4. Attempt to view the protected route to test the authentication!
+
+Now that the `/admin` route is protected by **`auth_plug`**,
+attempt to view it in your browser e.g: http://localhost:4000/admin
+
+If you are not already authenticated,
+your browser will be redirected to:
+https://dwylauth.herokuapp.com/?referer=http://localhost:4000/admin&auth_client_id=etc
+
+Once you have successfully authenticated with your GitHub or Google account,
+you will be redirected back to `localhost:4000/admin`
+where the `/admin` route will be visible.
+
+![admin-route](https://user-images.githubusercontent.com/194400/80760439-d23b1580-8b30-11ea-8941-160ece8a4a5f.png)
+
+<br />
+
+## That's it!! 🎉
+
+You just setup auth in a brand new phoenix app using **`auth_plug`**!
+
+If you got stuck or have any questions,
+please
+[open an issue](https://github.com/dwyl/auth_plug/issues),
+we are here to help!
 
 
 
 
 
-### (Optional) Update `endpoint.ex`
+<br />
 
 
+### (_Optional+Recommended_) Update `endpoint.ex`
 
+Open your `endpoint.ex` file and update the line that reads:
 
+```elixir
+plug Plug.Session, @session_options
+```
 
+To:
+```elixir
+plug Plug.Session, AuthPlug.session_options
+```
+
+This will avoid noise in your server logs
+from the default Phoenix Session config,
+which **`auth_plug`** overrides to use JWTs.
+
+[`/lib/app_web/endpoint.ex#L45`](https://github.com/dwyl/auth_plug_example/blob/4730e3079d2cff375385cdc3b8f73e252f41883f/lib/app_web/endpoint.ex#L45)
+
+<br />
 
 ## Documentation
 
