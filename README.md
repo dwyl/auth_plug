@@ -146,7 +146,7 @@ If you get stuck during setup,
 clone and run our fully working example:
 https://github.com/dwyl/auth_plug_example#how
 
-
+<br />
 
 ## 1. Installation 📝
 
@@ -166,6 +166,8 @@ download the dependency with:
 ```sh
 mix deps.get
 ```
+
+<br />
 
 ## 2. Get Your `AUTH_API_KEY` 🔑
 
@@ -197,7 +199,7 @@ e.g:
 echo ".env" >> .gitignore
 ```
 
-
+<br />
 
 ## 3. Add `AuthPlug` to Your `router.ex` file to Protect a Route 🔒
 
@@ -241,6 +243,7 @@ This means that the `"/admin"` route is protected by `AuthPlug`.
 > **Note**: Ensure the route you are protecting works _without_ `AuthPlug`.
 If in doubt simply comment out the line `pipe_through :auth` to check.
 
+<br />
 
 ## 4. Attempt to view the protected route to test the authentication! 👩‍💻
 
@@ -261,7 +264,7 @@ where the `/admin` route will be visible.
 
 ## That's it!! 🎉
 
-You just setup auth in a brand new phoenix app using **`auth_plug`**!
+You just setup auth in a Phoenix app using **`auth_plug`**!
 
 If you got stuck or have any questions,
 please
