@@ -125,9 +125,18 @@ let us [***tell us***!](https://github.com/dwyl/auth_plug/issues)
 
 # How? 💡
 
+
+Before you attempt to use the **`auth_plug`**,
+try the Heroku example version so you know what to expect:
+https://auth-plug-example.herokuapp.com/admin
+
+![auth_plug_example](https://user-images.githubusercontent.com/194400/80765920-154eb600-8b3c-11ea-90d4-a64224d31a5b.png)
+
+
 If you get stuck during setup,
 clone and run our fully working example:
 https://github.com/dwyl/auth_plug_example#how
+
 
 
 ## 1. Installation 📝
