@@ -31,7 +31,7 @@ We needed a way to ***minimise***
 the steps
 and **code** required
 to add auth to our app(s).
-**`auth_plug`** allows us to **setup**
+With **`auth_plug`** we can **setup**
 auth in any Elixir/Phoenix
 App in **_less_ than 2 minutes**
 with only **5 lines** of config/code
@@ -89,13 +89,8 @@ Edit this diagram:
 
 </div>
 
-
-
-
 **`auth_plug`** protects any routes in your app
 that require authentication. <br />
-For more detail on how the `Auth` service works,
-please see: https://github.com/dwyl/auth
 
 **`auth_plug`** is just
 [57 lines](https://codecov.io/gh/dwyl/auth_plug/tree/master/lib)
@@ -120,17 +115,31 @@ that _anyone_ can use.
 If after reading through this you feel that
 this is something you would like to have
 in your own Elixir/Phoenix project,
-let us [***tell us***!](https://github.com/dwyl/auth_plug/issues)
+[***tell us***!](https://github.com/dwyl/auth_plug/issues)
 
 
 # How? 💡
 
 
-Before you attempt to use the **`auth_plug`**,
-try the Heroku example version so you know what to expect:
+
+_Before_ you attempt to use the **`auth_plug`**,
+try the Heroku example version so you know what to expect: <br />
 https://auth-plug-example.herokuapp.com/admin
 
 ![auth_plug_example](https://user-images.githubusercontent.com/194400/80765920-154eb600-8b3c-11ea-90d4-a64224d31a5b.png)
+
+Notice how when you first visit the
+[`auth-plug-example.herokuapp.com/admin`](https://auth-plug-example.herokuapp.com/admin)
+page, your browser is _redirected_ to:
+https://dwylauth.herokuapp.com/?referer=https://auth-plug-example.herokuapp.com/admin&auth_client_id=etc.
+The the auth service handles the actual authentication
+and then transparently redirects back to
+[`auth-plug-example.herokuapp.com/admin?jwt=etc.`](https://auth-plug-example.herokuapp.com/admin)
+with a JWT session.
+
+For more detail on how the `Auth` service works,
+please see: https://github.com/dwyl/auth
+
 
 
 If you get stuck during setup,
@@ -172,7 +181,7 @@ Create a file called `.env` in the root directory of your app
 and add the following line:
 
 ```txt
-export AUTH_API_KEY=2cfxNaWUwJBq1F4nPndoEHZJ5YCCNqXbJ6GaSXj6BPNTjMSc4EV/2cfxNadrhMZk3iaT1L5k6Wt67c9ScbGNPz8BwLH1qvpDNAARQ9J
+export AUTH_API_KEY=2cfxNaWUwJBq1F4nPndoEHZJ5YCCNqXbJ6Ga/2cfxNadrhMZk3iaT1L5k6Wt67c9ScbGNPz8BwLH1
 ```
 
 The run the following command in your terminal:
@@ -190,7 +199,7 @@ echo ".env" >> .gitignore
 
 
 
-## 3. Add `AuthPlug` to Your `router.ex` file to Protect a Route
+## 3. Add `AuthPlug` to Your `router.ex` file to Protect a Route 🔒
 
 Open the `lib/app_web/router.ex` file and locate the section:
 
@@ -233,7 +242,7 @@ This means that the `"/admin"` route is protected by `AuthPlug`.
 If in doubt simply comment out the line `pipe_through :auth` to check.
 
 
-## 4. Attempt to view the protected route to test the authentication!
+## 4. Attempt to view the protected route to test the authentication! 👩‍💻
 
 Now that the `/admin` route is protected by **`auth_plug`**,
 attempt to view it in your browser e.g: http://localhost:4000/admin
