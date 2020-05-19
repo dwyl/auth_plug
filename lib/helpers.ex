@@ -23,6 +23,7 @@ defmodule AuthPlug.Helpers do
     |> Map.delete(:__meta__)
     |> Map.delete(:__struct__)
     |> Map.delete(:statuses) # association
+    |> Map.delete(:login_logs) # association
     |> Map.delete(:email_hash) # binary
   end
 end
