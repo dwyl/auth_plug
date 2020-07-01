@@ -290,10 +290,10 @@ By default using the dwylauth.herokuapp.com authentication service,
 ```
 jwt :: string()
 person :: %{
+  id :: integer() # This stays unique across providers
   auth_provider :: string()
   email :: string()
-  givenName :: string()
-  id :: integer()
+  givenName :: string() 
   picture :: string()
   
   # Also includes standard jwt metadata you may find useful:
