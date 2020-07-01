@@ -283,6 +283,23 @@ but if _anything_ is unclear,
 please open an issue:
 https://github.com/dwyl/auth_plug/issues
 
+### Availiable infomation
+By default using the dwylauth.herokuapp.com authentication service,
+`auth_plug` makes the following infomation availiable in `conn.assigns`:
+
+```
+jwt :: string()
+person :: %{
+  auth_provider :: string()
+  email :: string()
+  givenName :: string()
+  id :: integer()
+  picture :: string()
+  
+  # Also includes standard jwt metadata you may find useful:
+  aud, exp, iat, iss
+}
+```
 
 
 ## Recommended / Relevant Reading
