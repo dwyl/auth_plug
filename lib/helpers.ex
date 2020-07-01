@@ -26,4 +26,11 @@ defmodule AuthPlug.Helpers do
     |> Map.delete(:login_logs) # association
     |> Map.delete(:email_hash) # binary
   end
+
+  def check_environment_vars do
+    key = AuthPlug.Token.api_key()
+    if is_nil(key) do
+      raise "No AUTH_API_KEY set, find out how at https://github.com/dwyl/auth_plug#2-get-your-auth_api_key-"
+    end
+  end
 end
