@@ -272,31 +272,6 @@ please
 we are here to help!
 
 
-
-
-
-<br />
-
-
-### (_Optional+Recommended_) Update `endpoint.ex`
-
-Open your `endpoint.ex` file and update the line that reads:
-
-```elixir
-plug Plug.Session, @session_options
-```
-
-To:
-```elixir
-plug Plug.Session, AuthPlug.session_options
-```
-
-This will avoid noise in your server logs
-from the default Phoenix Session config,
-which **`auth_plug`** overrides to use JWTs.
-
-[`/lib/app_web/endpoint.ex#L45`](https://github.com/dwyl/auth_plug_example/blob/4730e3079d2cff375385cdc3b8f73e252f41883f/lib/app_web/endpoint.ex#L45)
-
 <br />
 
 ## Documentation

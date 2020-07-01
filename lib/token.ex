@@ -76,6 +76,11 @@ defmodule AuthPlug.Token do
   `verify_jwt/1` verifies the given JWT and returns {:ok, claims}
   where the claims are the original data that were signed.
   """
+  def verify_jwt(nil) do
+    # Fail fast on a nil token
+    {:error, "No jwt provided"}
+  end
+
   def verify_jwt(token) do
     verify_jwt(token, client_secret())
   end

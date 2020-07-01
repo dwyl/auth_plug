@@ -27,66 +27,54 @@ defmodule AuthPlug do
   else redirect to the `auth_url` with the referer set as the continuation URL.
   """
   def call(conn, options) do
-    # Setup Plug.Session
-    conn = setup_session(conn)
 
-    # Locate JWT so we can attempt to verify it:
-    jwt =
-      cond do
-        # First Check for JWT in URL Query String.
-        # We want a *new* session to supercede any expired session,
-        #  so the check for JWT *before* anything else.
-        conn.query_string =~ "jwt" ->
-          query = URI.decode_query(conn.query_string)
-          Map.get(query, "jwt")
+    jwt = get_jwt(conn)
 
-        # Check for JWT in Headers:
-        Enum.count(get_req_header(conn, "authorization")) > 0 ->
-          conn.req_headers
-          |> List.keyfind("authorization", 0)
-          |> get_token_from_header()
+    case AuthPlug.Token.verify_jwt(jwt) do
+      {:ok, values} ->
+        put_current_token(conn, jwt, values)
 
-        #  Check for Person in Plug.Conn.assigns
-        Map.has_key?(conn.assigns, :jwt) && not is_nil(conn.assigns.jwt) ->
-          conn.assigns.jwt
-
-        # Check for Session in Plug.Session:
-        not is_nil(get_session(conn, :jwt)) ->
-          get_session(conn, :jwt)
-
-        # By default return nil so auth check fails
-        true ->
-          nil
-      end
-
-    validate_token(conn, jwt, options)
+      # log the JWT verify error then redirect:
+      {:error, reason} ->
+        Logger.error(Kernel.inspect(reason))
+        redirect_to_auth(conn, options)
+    end
   end
 
-  @doc """
-  `session_options/0` returns the list of Phoenix/Plug Session options.
-  This is useful if you need to check them or use them somewhere else.
-  """
-  def session_options() do
-    [
-      store: :cookie,
-      key: "_auth_key",
-      secret_key_base: System.get_env("SECRET_KEY_BASE"),
-      signing_salt: AuthPlug.Token.client_secret
-    ]
+  defp get_jwt(conn) do
+    cond do
+      # First Check for JWT in URL Query String.
+      # We want a *new* session to supercede any expired session,
+      #  so the check for JWT *before* anything else.
+      conn.query_string =~ "jwt" ->
+        query = URI.decode_query(conn.query_string)
+        Map.get(query, "jwt")
+
+      # Check for JWT in Headers:
+      Enum.count(get_req_header(conn, "authorization")) > 0 ->
+        conn.req_headers
+        |> List.keyfind("authorization", 0)
+        |> get_token_from_header()
+
+      #  Check for Person in Plug.Conn.assigns
+      Map.has_key?(conn.assigns, :jwt) && not is_nil(conn.assigns.jwt) ->
+        conn.assigns.jwt
+
+      # Check for Session in Plug.Session:
+      not is_nil(get_session(conn, :jwt)) ->
+        get_session(conn, :jwt)
+
+      # By default return nil so auth check fails
+      true ->
+        nil
+    end
   end
 
-  @doc """
-  `setup_session/1` configures the Phoenix/Plug Session.
-  """
-  def setup_session(conn) do
-    conn = put_in(conn.secret_key_base, System.get_env("SECRET_KEY_BASE"))
-
-    opts = session_options() |> Plug.Session.init()
-
-    conn
-    |> Plug.Session.call(opts)
-    |> fetch_session()
-    |> configure_session(renew: true)
+  def put_current_token(conn, jwt, values) do
+    # convert map of string to atom: stackoverflow.com/questions/31990134
+    claims = for {k, v} <- values, into: %{}, do: {String.to_atom(k), v}
+    # return the conn with the session
+    create_session(conn, claims, jwt)
   end
 
   @doc """
@@ -95,7 +83,7 @@ defmodule AuthPlug do
   and the JWT as the value so that it can be checked
   on each future request.
   Makes the decoded JWT available in conn.assigns
-  which means it can be used in templates. 
+  which means it can be used in templates.
   """
   def create_session(conn, claims, jwt) do
     claims = AuthPlug.Helpers.strip_struct_metadata(claims)
@@ -103,6 +91,7 @@ defmodule AuthPlug do
     |> assign(:person, claims)
     |> assign(:jwt, jwt)
     |> put_session(:jwt, jwt)
+    |> configure_session(renew: true)
   end
 
   @doc """
@@ -118,9 +107,8 @@ defmodule AuthPlug do
     jwt = claims # delete %Auth.Person github.com/dwyl/auth_plug/issues/16
       |> AuthPlug.Helpers.strip_struct_metadata()
       |> AuthPlug.Token.generate_jwt!()
-    conn
-      |> setup_session()
-      |> create_session(claims, jwt)
+
+    create_session(conn, claims, jwt)
   end
 
   #  fail fast if no JWT in auth header:
@@ -129,7 +117,7 @@ defmodule AuthPlug do
   defp get_token_from_header({"authorization", value}) do
     value = String.replace(value, "Bearer", "") |> String.trim()
     # fast check for JWT format validity before slower verify:
-    if is_nil(value) do
+    if is_nil(value) do # Does this ever eval to true?
       nil
     else
       case Enum.count(String.split(value, ".")) == 3 do
@@ -140,25 +128,6 @@ defmodule AuthPlug do
         true ->
           value
       end
-    end
-  end
-
-  # if jwt is nil fail fast
-  defp validate_token(conn, nil, opts), do: redirect_to_auth(conn, opts)
-
-  # attempt to validate a valid-looking JWT:
-  defp validate_token(conn, jwt, opts) do
-    case AuthPlug.Token.verify_jwt(jwt) do
-      {:ok, values} ->
-        # convert map of string to atom: stackoverflow.com/questions/31990134
-        claims = for {k, v} <- values, into: %{}, do: {String.to_atom(k), v}
-        # return the conn with the session
-        create_session(conn, claims, jwt)
-
-      # log the JWT verify error then redirect:
-      {:error, reason} ->
-        Logger.error(Kernel.inspect(reason))
-        redirect_to_auth(conn, opts)
     end
   end
 
