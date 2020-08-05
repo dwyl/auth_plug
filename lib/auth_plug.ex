@@ -16,6 +16,7 @@ defmodule AuthPlug do
   """
   def init(options) do
     # return options unmodified
+    AuthPlug.Helpers.check_environment_vars()
     options
   end
 
