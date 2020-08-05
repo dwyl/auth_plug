@@ -30,7 +30,7 @@ defmodule AuthPlug.Helpers do
   def check_environment_vars do
     key = AuthPlug.Token.api_key()
     if is_nil(key) do
-      raise "No AUTH_API_KEY set, find out how at https://github.com/dwyl/auth_plug#2-get-your-auth_api_key-"
+      raise "No AUTH_API_KEY set, find out how at: https://git.io/JJ6sS"
     end
   end
 end
