@@ -1,5 +1,4 @@
 defmodule AuthPlug.Helpers do
-  use HTTPoison.Base
   @doc """
   `get_baseurl_from_conn/1` derives the base URL from the conn struct
   e.g: http://localhost:4000 or https://app.dwyl.com
