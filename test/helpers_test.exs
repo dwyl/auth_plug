@@ -19,4 +19,21 @@ defmodule AuthPlugHelpersTest do
 
     assert get_baseurl_from_conn(conn) == "https://dwyl.com"
   end
+
+  test "check_environment_vars/0 without AUTH_API_KEY throws" do
+    auth_api_key = System.get_env("AUTH_API_KEY")
+    # set the AUTH_API_KEY to empty string to rais the error:
+    System.put_env("AUTH_API_KEY", "")
+
+    try do
+      check_environment_vars()
+    rescue
+      e in RuntimeError ->
+        assert e.message ==
+          "No AUTH_API_KEY set, find out how at: https://git.io/JJ6sS"
+    end
+
+    # reset the AUTH_API_KEY to the original value:
+    System.put_env("AUTH_API_KEY", auth_api_key)
+  end
 end
