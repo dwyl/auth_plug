@@ -20,20 +20,20 @@ defmodule AuthPlugHelpersTest do
     assert get_baseurl_from_conn(conn) == "https://dwyl.com"
   end
 
-  test "check_environment_vars/0 without AUTH_API_KEY throws" do
-    auth_api_key = System.get_env("AUTH_API_KEY")
-    # set the AUTH_API_KEY to empty string to rais the error:
-    System.put_env("AUTH_API_KEY", "")
+  test "check_environment_vars raises error if AUTH_API_KEY is not set" do
+    key = System.get_env("AUTH_API_KEY")
+    # delete the environment variable:
+    System.delete_env("AUTH_API_KEY")
 
-    try do
+    # confirm that the correct error is raised:
+    assert_raise RuntimeError,
+    "No AUTH_API_KEY set, find out how at: https://git.io/JJ6sS",
+    fn ->
       check_environment_vars()
-    rescue
-      e in RuntimeError ->
-        assert e.message ==
-          "No AUTH_API_KEY set, find out how at: https://git.io/JJ6sS"
     end
+    # see: til.hashrocket.com/posts/0b1f205523-assert-an-exception-is-raised
 
-    # reset the AUTH_API_KEY to the original value:
-    System.put_env("AUTH_API_KEY", auth_api_key)
+    # restore the environment variable:
+    System.put_env("AUTH_API_KEY", key)
   end
 end
