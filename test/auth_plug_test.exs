@@ -9,7 +9,7 @@ defmodule AuthPlugTest do
   end
 
   describe "test admin endpoint" do
-    setup %{} do
+    setup %{endpoint: endpoint} do
       test_conn =
         conn(:get, endpoint)
         |> init_test_session(%{})
