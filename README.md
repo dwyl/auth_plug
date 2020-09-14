@@ -171,11 +171,13 @@ mix deps.get
 
 ## 2. Get Your `AUTH_API_KEY` 🔑
 
-Visit: https://dwylauth.herokuapp.com/settings/apikeys/new
-And create your `AUTH_API_KEY`.
+Visit: https://dwylauth.herokuapp.com
+and create a **New App**.
+Once you have an App, 
+you can export an `AUTH_API_KEY` environment variable.
 e.g:
 
-![auth_plug_example_setup](https://user-images.githubusercontent.com/194400/80759455-3eb51500-8b2f-11ea-98fe-6e5154bfb349.gif)
+![dwyl-auth-app-api-key-setup](https://user-images.githubusercontent.com/194400/93143513-0712c800-f6e0-11ea-9020-c253805d66df.gif)
 
 ### 2.1 Save it as an Environment Variable
 

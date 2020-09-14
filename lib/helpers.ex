@@ -1,4 +1,5 @@
 defmodule AuthPlug.Helpers do
+  use HTTPoison.Base
   @doc """
   `get_baseurl_from_conn/1` derives the base URL from the conn struct
   e.g: http://localhost:4000 or https://app.dwyl.com
@@ -25,5 +26,14 @@ defmodule AuthPlug.Helpers do
     |> Map.delete(:statuses) # association
     |> Map.delete(:login_logs) # association
     |> Map.delete(:email_hash) # binary
+  end
+
+  def check_environment_vars do
+    key = AuthPlug.Token.api_key()
+    if is_nil(key) do
+      raise "No AUTH_API_KEY set, find out how at: https://git.io/JJ6sS"
+    else
+      key
+    end
   end
 end
