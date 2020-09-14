@@ -16,9 +16,7 @@ defmodule AuthPlug do
   """
   def init(options) do
     # return options unmodified
-    IO.inspect(options, label: "options")
     AuthPlug.Helpers.check_environment_vars()
-    AuthPlug.Helpers.get_approles(options)
     options
   end
 
