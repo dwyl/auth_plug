@@ -33,7 +33,7 @@ defmodule AuthPlug.Helpers do
   """
   def check_environment_vars do
     key = AuthPlug.Token.api_key()
-    if is_nil(key) || String.length(key) == 0 do
+    if is_nil(key) do
       raise "No AUTH_API_KEY set, find out how at: https://git.io/JJ6sS"
     else
       key
