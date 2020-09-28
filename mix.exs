@@ -33,20 +33,20 @@ defmodule AuthPlug.MixProject do
   defp deps do
     [
       # JWT sign/verify: github.com/joken-elixir/joken
-      {:joken, "~> 2.2.0"},
+      {:joken, "~> 2.3.0"},
 
       # Plug helper functions: github.com/elixir-plug/plug
       {:plug, "~> 1.10.4"},
 
       # Track coverage: github.com/parroty/excoveralls
-      {:excoveralls, "~> 0.13.1", only: :test},
+      {:excoveralls, "~> 0.13.2", only: :test},
 
       # See: github.com/dwyl/auth_plug_example
       {:plug_cowboy, "~> 2.3", only: [:dev, :test]},
       {:jason, "~> 1.2.2", only: [:dev, :test]},
 
       # For publishing Hex.docs:
-      {:ex_doc, "~> 0.22.4", only: :dev}
+      {:ex_doc, "~> 0.22.6", only: :dev}
     ]
   end
 
