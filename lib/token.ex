@@ -151,19 +151,12 @@ defmodule AuthPlug.Token do
     end
   end
 
-  def put_current_token(conn, jwt, values) do
-    # convert map of string to atom: stackoverflow.com/questions/31990134
-    claims = for {k, v} <- values, into: %{}, do: {String.to_atom(k), v}
-    # return the conn with the session
-    create_session(conn, claims, jwt)
-  end
-
   @doc """
   `create_session/2` takes a `conn`, claims and a JWT
   and creates the session using Phoenix Sessions
   and the JWT as the value so that it can be checked
   on each future request.
-  Makes the decoded JWT available in conn.assigns
+  Makes the decoded JWT available in conn.assigns.person
   which means it can be used in templates.
   """
   def create_session(conn, claims, jwt) do
@@ -173,6 +166,17 @@ defmodule AuthPlug.Token do
     |> assign(:jwt, jwt)
     |> put_session(:jwt, jwt)
     |> configure_session(renew: true)
+  end
+
+  @doc """
+  `put_current_token/3` takes a `conn`, JWT and values (decoded JWT)
+  and creates the session using `create_session/2` defined above.
+  """
+  def put_current_token(conn, jwt, values) do
+    # convert map of string to atom: stackoverflow.com/questions/31990134
+    claims = for {k, v} <- values, into: %{}, do: {String.to_atom(k), v}
+    # return the conn with the session
+    create_session(conn, claims, jwt)
   end
 
   @doc """

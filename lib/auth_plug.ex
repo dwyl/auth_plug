@@ -36,7 +36,7 @@ defmodule AuthPlug do
 
       # log the JWT verify error then redirect:
       {:error, reason} ->
-        Logger.error(Kernel.inspect(reason))
+        Logger.error("AuthPlug: " <> Kernel.inspect(reason))
         redirect_to_auth(conn, options)
     end
   end
