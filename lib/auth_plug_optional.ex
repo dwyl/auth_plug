@@ -16,8 +16,8 @@ defmodule AuthPlugOptional do
   @doc """
   `call/2` is invoked to handle each HTTP request which `auth_plug` protects.
   If the `conn` contains a valid JWT in Authentication Headers, URL or Cookie,
-  then continue to the optionally protected route,
-  else redirect to the `auth_url` with the referer set as the continuation URL.
+  then continue to the optionally protected route with the conn.assigns.person
+  defined so that the controller can determine what content to show the person.
   NOTE: this plug does NOT set the HTTP Status on a request, that is left to you.
   """
   def call(conn, _options) do

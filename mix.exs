@@ -4,7 +4,7 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "1.2.2",
+      version: "1.2.3",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -52,7 +52,7 @@ defmodule AuthPlug.MixProject do
 
   defp package() do
     [
-      files: ~w(lib/auth_plug.ex lib/helpers.ex lib/token.ex LICENSE mix.exs README.md),
+      files: ~w(lib/auth_plug.ex lib/auth_plug_optional.ex lib/helpers.ex lib/token.ex LICENSE mix.exs README.md),
       name: "auth_plug",
       licenses: ["GNU GPL v2.0"],
       maintainers: ["dwyl"],
