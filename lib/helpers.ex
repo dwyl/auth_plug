@@ -12,7 +12,6 @@ defmodule AuthPlug.Helpers do
     "https://#{h}"
   end
 
-
   @doc """
   `strip_struct_metadata/1` removes the Ecto Struct metadata from a struct.
   This is essential before attempting to create a JWT as `Jason.encode/2`
@@ -22,9 +21,12 @@ defmodule AuthPlug.Helpers do
     struct
     |> Map.delete(:__meta__)
     |> Map.delete(:__struct__)
-    |> Map.delete(:statuses) # association
-    |> Map.delete(:login_logs) # association
-    |> Map.delete(:email_hash) # binary
+    # association
+    |> Map.delete(:statuses)
+    # association
+    |> Map.delete(:login_logs)
+    # binary
+    |> Map.delete(:email_hash)
   end
 
   @doc """
@@ -33,6 +35,7 @@ defmodule AuthPlug.Helpers do
   """
   def check_environment_vars do
     key = AuthPlug.Token.api_key()
+
     if is_nil(key) do
       raise "No AUTH_API_KEY set, find out how at: https://git.io/JJ6sS"
     else

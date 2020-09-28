@@ -6,7 +6,6 @@ defmodule AuthPlugTokenTest do
     assert api_key() == System.get_env("AUTH_API_KEY")
   end
 
-
   test "generate_jwt!/2 creates a JWT with the given data and secret" do
     secret = "secretcanbeanystringyouwant"
     data = %{email: "alex@dwyl.com", name: "Alex"}
@@ -16,7 +15,6 @@ defmodule AuthPlugTokenTest do
     decoded = verify_jwt!(jwt, secret)
     assert data.email == Map.get(decoded, "email")
   end
-
 
   test "verify_jwt/2 verifies a JWT with the given secret" do
     secret = "secretcanbeanystringyouwant"

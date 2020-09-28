@@ -27,7 +27,6 @@ defmodule AuthPlug do
   else redirect to the `auth_url` with the referer set as the continuation URL.
   """
   def call(conn, options) do
-
     jwt = AuthPlug.Token.get_jwt(conn)
 
     case AuthPlug.Token.verify_jwt(jwt) do

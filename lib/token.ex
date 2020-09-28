@@ -3,7 +3,9 @@ defmodule AuthPlug.Token do
   Token module to create and validate jwt.
   see https://hexdocs.pm/joken/configuration.html#module-approach
   """
-  import Plug.Conn, only: [assign: 3, configure_session: 2, get_req_header: 2, get_session: 2, put_session: 3]
+  import Plug.Conn,
+    only: [assign: 3, configure_session: 2, get_req_header: 2, get_session: 2, put_session: 3]
+
   use Joken.Config
 
   @doc """
@@ -17,8 +19,8 @@ defmodule AuthPlug.Token do
   """
   def api_key do
     if not is_nil(System.get_env("DWYL_API_KEY")),
-    do: System.get_env("DWYL_API_KEY"),
-    else: System.get_env("AUTH_API_KEY")
+      do: System.get_env("DWYL_API_KEY"),
+      else: System.get_env("AUTH_API_KEY")
   end
 
   @doc """
@@ -66,6 +68,7 @@ defmodule AuthPlug.Token do
   """
   def generate_jwt!(claims, secret) do
     signer = create_signer(secret)
+
     {:ok, token, _claims} =
       token_config()
       |> Joken.generate_and_sign(claims, signer)
@@ -92,6 +95,7 @@ defmodule AuthPlug.Token do
   """
   def verify_jwt(token, secret) do
     signer = create_signer(secret)
+
     token_config()
     |> Joken.verify_and_validate(token, signer)
   end
@@ -111,6 +115,7 @@ defmodule AuthPlug.Token do
   """
   def verify_jwt!(token, secret) do
     signer = create_signer(secret)
+
     {:ok, claims} =
       token_config()
       |> Joken.verify_and_validate(token, signer)
@@ -161,6 +166,7 @@ defmodule AuthPlug.Token do
   """
   def create_session(conn, claims, jwt) do
     claims = AuthPlug.Helpers.strip_struct_metadata(claims)
+
     conn
     |> assign(:person, claims)
     |> assign(:jwt, jwt)
@@ -189,7 +195,9 @@ defmodule AuthPlug.Token do
   and continue the request pipeline with a valid session.
   """
   def create_jwt_session(conn, claims) do
-    jwt = claims # delete %Auth.Person github.com/dwyl/auth_plug/issues/16
+    # delete %Auth.Person github.com/dwyl/auth_plug/issues/16
+    jwt =
+      claims
       |> AuthPlug.Helpers.strip_struct_metadata()
       |> AuthPlug.Token.generate_jwt!()
 
@@ -202,7 +210,8 @@ defmodule AuthPlug.Token do
   defp get_token_from_header({"authorization", value}) do
     value = String.replace(value, "Bearer", "") |> String.trim()
     # fast check for JWT format validity before slower verify:
-    if is_nil(value) do # Does this ever eval to true?
+    # Does this ever eval to true?
+    if is_nil(value) do
       nil
     else
       case Enum.count(String.split(value, ".")) == 3 do
@@ -215,5 +224,4 @@ defmodule AuthPlug.Token do
       end
     end
   end
-
 end
