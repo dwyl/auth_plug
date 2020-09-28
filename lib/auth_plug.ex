@@ -4,7 +4,7 @@ defmodule AuthPlug do
   Please see `README.md` for setup instructions.
   """
   # https://hexdocs.pm/plug/readme.html#the-plug-conn-struct
-  import Plug.Conn
+  import Plug.Conn, only: [halt: 1, put_resp_header: 3, resp: 3]
   # https://hexdocs.pm/logger/Logger.html
   require Logger
 
@@ -28,106 +28,16 @@ defmodule AuthPlug do
   """
   def call(conn, options) do
 
-    jwt = get_jwt(conn)
+    jwt = AuthPlug.Token.get_jwt(conn)
 
     case AuthPlug.Token.verify_jwt(jwt) do
       {:ok, values} ->
-        put_current_token(conn, jwt, values)
+        AuthPlug.Token.put_current_token(conn, jwt, values)
 
       # log the JWT verify error then redirect:
       {:error, reason} ->
         Logger.error(Kernel.inspect(reason))
         redirect_to_auth(conn, options)
-    end
-  end
-
-  defp get_jwt(conn) do
-    cond do
-      # First Check for JWT in URL Query String.
-      # We want a *new* session to supercede any expired session,
-      #  so the check for JWT *before* anything else.
-      conn.query_string =~ "jwt" ->
-        query = URI.decode_query(conn.query_string)
-        Map.get(query, "jwt")
-
-      # Check for JWT in Headers:
-      Enum.count(get_req_header(conn, "authorization")) > 0 ->
-        conn.req_headers
-        |> List.keyfind("authorization", 0)
-        |> get_token_from_header()
-
-      #  Check for Person in Plug.Conn.assigns
-      Map.has_key?(conn.assigns, :jwt) && not is_nil(conn.assigns.jwt) ->
-        conn.assigns.jwt
-
-      # Check for Session in Plug.Session:
-      not is_nil(get_session(conn, :jwt)) ->
-        get_session(conn, :jwt)
-
-      # By default return nil so auth check fails
-      true ->
-        nil
-    end
-  end
-
-  def put_current_token(conn, jwt, values) do
-    # convert map of string to atom: stackoverflow.com/questions/31990134
-    claims = for {k, v} <- values, into: %{}, do: {String.to_atom(k), v}
-    # return the conn with the session
-    create_session(conn, claims, jwt)
-  end
-
-  @doc """
-  `create_session/2` takes a `conn`, claims and a JWT
-  and creates the session using Phoenix Sessions
-  and the JWT as the value so that it can be checked
-  on each future request.
-  Makes the decoded JWT available in conn.assigns
-  which means it can be used in templates.
-  """
-  def create_session(conn, claims, jwt) do
-    claims = AuthPlug.Helpers.strip_struct_metadata(claims)
-    conn
-    |> assign(:person, claims)
-    |> assign(:jwt, jwt)
-    |> put_session(:jwt, jwt)
-    |> configure_session(renew: true)
-  end
-
-  @doc """
-  `create_jwt_session/2` recieves a `conn` (Plug.Conn) and `claims`
-  e.g: `%{email: "person@dwyl.com", id: 1}`.
-  Signs a JWT which gets attached to the session.
-  This is super-useful in testing as we
-  can simply invoke
-  `create_jwt_session(conn, %{email: "al@ex.co", id: 1})`
-  and continue the request pipeline with a valid session.
-  """
-  def create_jwt_session(conn, claims) do
-    jwt = claims # delete %Auth.Person github.com/dwyl/auth_plug/issues/16
-      |> AuthPlug.Helpers.strip_struct_metadata()
-      |> AuthPlug.Token.generate_jwt!()
-
-    create_session(conn, claims, jwt)
-  end
-
-  #  fail fast if no JWT in auth header:
-  defp get_token_from_header(nil), do: nil
-
-  defp get_token_from_header({"authorization", value}) do
-    value = String.replace(value, "Bearer", "") |> String.trim()
-    # fast check for JWT format validity before slower verify:
-    if is_nil(value) do # Does this ever eval to true?
-      nil
-    else
-      case Enum.count(String.split(value, ".")) == 3 do
-        false ->
-          nil
-
-        # appears to be valid JWT proceed to verifying it
-        true ->
-          value
-      end
     end
   end
 
@@ -151,5 +61,10 @@ defmodule AuthPlug do
     |> resp(status, "unauthorized")
     # halt the conn so no further processing is done.
     |> halt()
+  end
+
+  # Proxy function for to avoid breaking existing apps that rely on this:
+  def create_jwt_session(conn, claims) do
+    AuthPlug.Token.create_jwt_session(conn, claims)
   end
 end
