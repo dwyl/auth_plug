@@ -273,14 +273,58 @@ please
 [open an issue](https://github.com/dwyl/auth_plug/issues),
 we are here to help!
 
+# _Optional_ Auth
+
+The use case shown above is protecting an endpoint 
+that you don't want people to see if they haven't authenticated.
+If you're building an app that has routes 
+where you want to show generic content to people who have _not_ authenticated,
+but then show more detail/custom actions to people who _have_ authenticated,
+that's where _Optional_ Auth comes in. 
+
+To use _optional_ auth it's even _easier_ than required auth.
+
+Open your `lib/app_web/router.ex` file and add the following line 
+above the routes you want show optional data on:
+
+```elixir
+pipeline :authoptional, do: plug(AuthPlugOptional, %{})
+```
+
+e.g:
+[`/lib/app_web/router.ex#L13`](https://github.com/dwyl/auth_plug_example/blob/f4c79e540ed8ef2d4c587647b31e93fec9855f59/lib/app_web/router.ex#L13)
+
+
+Then add the following line to your main router scope:
+
+```elixir
+pipe_through :authoptional
+```
+
+e.g: 
+[`/lib/app_web/router.ex#L17`](https://github.com/dwyl/auth_plug_example/blob/f4c79e540ed8ef2d4c587647b31e93fec9855f59/lib/app_web/router.ex#L17)
+
+
+That's it now you can check for `conn.assigns.person` in your templates
+and display relevant info/actions to the person if they are logged in.
+
+```html
+<%= if Map.has_key?(@conn.assigns, :person) do %>
+  Hello <%= @conn.assigns.person.givenName %>!
+<% end %>
+```
+
+e.g: 
+[`/lib/app_web/templates/page/optional.html.eex#L2-L3`](https://github.com/dwyl/auth_plug_example/blob/f4c79e540ed8ef2d4c587647b31e93fec9855f59/lib/app_web/templates/page/optional.html.eex#L2-L3)
 
 <br />
 
 ## Documentation
 
-Documentation can be found at
-[https://hexdocs.pm/auth_plug](https://hexdocs.pm/auth_plug). <br />
-All our code is commented,
+Function docs are available at:
+https://hexdocs.pm/auth_plug. <br />
+
+As always, we attempt to comment our code as much as possible,
 but if _anything_ is unclear,
 please open an issue:
 https://github.com/dwyl/auth_plug/issues
