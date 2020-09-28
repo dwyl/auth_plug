@@ -8,6 +8,7 @@ defmodule AuthPlug.Router do
 
   plug(Plug.Logger, log: :debug)
   plug(:match)
+  plug(AuthPlugOptional, %{})
   plug(AuthPlug, %{auth_url: "https://elixir-auth-google-demo.herokuapp.com"})
   plug(:dispatch)
 
@@ -25,6 +26,17 @@ defmodule AuthPlug.Router do
         decoded.name <>
         "! " <>
         "You are logged in with email: " <> decoded.email
+    )
+  end
+
+  get "/optional" do
+    person = conn.assigns.person
+    msg = if is_nil(person.name), do: "Hello Stranger!", else: "Hello #{person.name}!"
+
+    send_resp(
+      conn,
+      200,
+      "Hello " <> msg
     )
   end
 
