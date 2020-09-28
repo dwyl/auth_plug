@@ -18,7 +18,7 @@ defmodule AuthPlugTest do
     end
 
     @tag endpoint: "/admin"
-    test "Plug return 401 wiht not Authorization Header", %{conn: conn} do
+    test "Plug return 401 when no Authorization Header", %{conn: conn} do
       # conn = AuthPlug.call(conn(:get, "/admin"), @opts)
       # fetch_session(conn)
       # redirect when auth fails
