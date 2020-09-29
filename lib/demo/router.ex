@@ -17,21 +17,21 @@ defmodule AuthPlug.Router do
   end
 
   get "/admin" do
-    decoded = conn.assigns.decoded
+    person = conn.assigns.person
 
     send_resp(
       conn,
       200,
       "Hello " <>
-        decoded.name <>
+        person.name <>
         "! " <>
-        "You are logged in with email: " <> decoded.email
+        "You are logged in with email: " <> person.email
     )
   end
 
   get "/optional" do
     person = conn.assigns.person
-    msg = if is_nil(person.name), do: "Hello Stranger!", else: "Hello #{person.name}!"
+    msg = if is_nil(person.name), do: "Hello Stranger!", else: "Hello #{person.givenName}!"
 
     send_resp(
       conn,
