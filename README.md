@@ -318,6 +318,7 @@ e.g:
 [`/lib/app_web/templates/page/optional.html.eex#L2-L3`](https://github.com/dwyl/auth_plug_example/blob/f4c79e540ed8ef2d4c587647b31e93fec9855f59/lib/app_web/templates/page/optional.html.eex#L2-L3)
 
 
+<br />
 Try it: http://auth-plug-example.herokuapp.com/optional
 
 
