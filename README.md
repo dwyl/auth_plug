@@ -156,7 +156,7 @@ to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:auth_plug, "~> 1.1.0"}
+    {:auth_plug, "~> 1.3.0"}
   ]
 end
 ```
@@ -335,6 +335,7 @@ please open an issue:
 https://github.com/dwyl/auth_plug/issues
 
 ### Availiable infomation
+
 By default using the dwylauth.herokuapp.com authentication service,
 `auth_plug` makes the following infomation availiable in `conn.assigns`:
 
