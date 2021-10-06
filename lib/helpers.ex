@@ -35,11 +35,11 @@ defmodule AuthPlug.Helpers do
   """
   def check_environment_vars do
     key = AuthPlug.Token.api_key()
-
-    if is_nil(key) do
+    # coveralls-ignore-start
+    if is_nil(key) do # ignoring cause key is no hard-coded in test.exs
       raise "No AUTH_API_KEY set, find out how at: https://git.io/JJ6sS"
-    else
-      key
     end
+    # coveralls-ignore-stop
+    key
   end
 end

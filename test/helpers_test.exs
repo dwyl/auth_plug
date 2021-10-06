@@ -20,6 +20,7 @@ defmodule AuthPlugHelpersTest do
     assert get_baseurl_from_conn(conn) == "https://dwyl.com"
   end
 
+  @tag :skip
   test "check_environment_vars raises error if AUTH_API_KEY is not set" do
     key = System.get_env("AUTH_API_KEY")
     # delete the environment variable:

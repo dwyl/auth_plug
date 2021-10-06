@@ -6,7 +6,9 @@ defmodule AuthPlug.MixProject do
       app: :auth_plug,
       version: "1.3.0",
       elixir: "~> 1.12",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
+      aliases: aliases(),
       deps: deps(),
       package: package(),
       description: "Turnkey Auth Plug lets you protect any route in an Elixir/Phoenix App.",
@@ -20,12 +22,18 @@ defmodule AuthPlug.MixProject do
     ]
   end
 
+  # defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
+
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger],
       # uncomment the following line to run the demo app: mix run --no-halt
       # mod: {AuthPlug.Application, []}
+      env: [
+        api_key: System.get_env("AUTH_API_KEY")
+      ]
     ]
   end
 
@@ -57,6 +65,12 @@ defmodule AuthPlug.MixProject do
       licenses: ["GNU GPL v2.0"],
       maintainers: ["dwyl"],
       links: %{"GitHub" => "https://github.com/dwyl/auth_plug"}
+    ]
+  end
+
+  defp aliases do
+    [
+      c: ["coveralls.html"]
     ]
   end
 end
