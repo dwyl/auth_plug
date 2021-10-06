@@ -4,8 +4,8 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "1.2.3",
-      elixir: "~> 1.10",
+      version: "1.3.0",
+      elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
@@ -33,20 +33,20 @@ defmodule AuthPlug.MixProject do
   defp deps do
     [
       # JWT sign/verify: github.com/joken-elixir/joken
-      {:joken, "~> 2.3.0"},
+      {:joken, "~> 2.4.0"},
 
       # Plug helper functions: github.com/elixir-plug/plug
-      {:plug, "~> 1.10.4"},
+      {:plug, "~> 1.12.1"},
 
       # Track coverage: github.com/parroty/excoveralls
-      {:excoveralls, "~> 0.13.2", only: :test},
+      {:excoveralls, "~> 0.14.3", only: :test},
 
       # See: github.com/dwyl/auth_plug_example
-      {:plug_cowboy, "~> 2.3", only: [:dev, :test]},
+      {:plug_cowboy, "~> 2.5.2", only: [:dev, :test]},
       {:jason, "~> 1.2.2", only: [:dev, :test]},
 
       # For publishing Hex.docs:
-      {:ex_doc, "~> 0.22.6", only: :dev}
+      {:ex_doc, "~> 0.25.3", only: :dev}
     ]
   end
 
