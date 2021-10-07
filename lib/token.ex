@@ -18,23 +18,21 @@ defmodule AuthPlug.Token do
    see: https://github.com/dwyl/auth/issues/42#issuecomment-620247243
   """
   def api_key do
-    if not is_nil(System.get_env("DWYL_API_KEY")),
-      do: System.get_env("DWYL_API_KEY"),
-      else: System.get_env("AUTH_API_KEY")
+    Application.fetch_env!(:auth_plug, :api_key)
   end
 
   @doc """
   `client_id/0` returns the `client_id` (the first part of the AUTH_API_KEY)
   """
   def client_id do
-    List.first(String.split(api_key(), "/"))
+    api_key() |> String.split("/") |> List.first()
   end
 
   @doc """
   `client_id/0` returns the `client_secret` (the last part of the AUTH_API_KEY)
   """
   def client_secret do
-    List.last(String.split(api_key(), "/"))
+    api_key() |> String.split("/") |> List.last()
   end
 
   @doc """
