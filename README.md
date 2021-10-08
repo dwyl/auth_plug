@@ -132,7 +132,7 @@ Notice how when you first visit the
 [`auth-plug-example.herokuapp.com/admin`](https://auth-plug-example.herokuapp.com/admin)
 page, your browser is _redirected_ to:
 https://dwylauth.herokuapp.com/?referer=https://auth-plug-example.herokuapp.com/admin&auth_client_id=etc.
-The the auth service handles the actual authentication
+The auth service handles the actual authentication
 and then transparently redirects back to
 [`auth-plug-example.herokuapp.com/admin?jwt=etc.`](https://auth-plug-example.herokuapp.com/admin)
 with a JWT session.
@@ -334,10 +334,10 @@ but if _anything_ is unclear,
 please open an issue:
 https://github.com/dwyl/auth_plug/issues
 
-### Availiable infomation
+### Available information
 
 By default using the dwylauth.herokuapp.com authentication service,
-`auth_plug` makes the following infomation availiable in `conn.assigns`:
+`auth_plug` makes the following information available in `conn.assigns`:
 
 ```
 jwt :: string()
