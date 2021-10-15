@@ -141,7 +141,7 @@ defmodule AuthPlug.Token do
         |> get_token_from_header()
 
       #  Check for Person in Plug.Conn.assigns
-      Map.has_key?(conn.assigns, :jwt) && not is_nil(conn.assigns.jwt) ->
+      not is_nil(conn.assigns[:jwt]) ->
         conn.assigns.jwt
 
       # Check for Session in Plug.Session:
@@ -205,16 +205,16 @@ defmodule AuthPlug.Token do
   # check JWT format by counting number of "." is equal to 3
   # see https://en.wikipedia.org/wiki/JSON_Web_Token#Structure
   defp get_token_from_header({"authorization", value}) do
-    value =
+    token =
       value
       |> String.replace("Bearer", "")
       |> String.trim()
 
     jwt_valid_format =
-      value
+      token
       |> String.split(".")
       |> Enum.count() == 3
 
-    if jwt_valid_format, do: value, else: nil
+    if jwt_valid_format, do: token, else: nil
   end
 end
