@@ -11,6 +11,8 @@ jobs:
 
     name: Build and test
     runs-on: ubuntu-latest
+    env:
+      AUTH_API_KEY: ${{ secrets.AUTH_API_KEY }}
 
     steps:
     - uses: actions/checkout@v2
