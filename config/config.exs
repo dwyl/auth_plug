@@ -27,8 +27,4 @@ use Mix.Config
 # Configuration from the imported file will override the ones defined
 # here (which is why it is important to import them last).
 
-config :auth_plug,
-  api_key: System.get_env("AUTH_API_KEY")
-
-#
 if Mix.env() == :test, do: import_config("#{Mix.env()}.exs")
