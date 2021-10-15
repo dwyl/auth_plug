@@ -137,7 +137,7 @@ defmodule AuthPlug.Token do
       # Check for JWT in Headers:
       Enum.count(get_req_header(conn, "authorization")) > 0 ->
         conn.req_headers
-        |> List.keyfind("authorization", 0)
+        |> List.keyfind("authorization", 0, "")
         |> get_token_from_header()
 
       #  Check for Person in Plug.Conn.assigns
@@ -202,24 +202,19 @@ defmodule AuthPlug.Token do
     AuthPlug.Token.create_session(conn, claims, jwt)
   end
 
-  #  fail fast if no JWT in auth header:
-  defp get_token_from_header(nil), do: nil
-
+  # check JWT format by counting number of "." is equal to 3
+  # see https://en.wikipedia.org/wiki/JSON_Web_Token#Structure
   defp get_token_from_header({"authorization", value}) do
-    value = String.replace(value, "Bearer", "") |> String.trim()
-    # fast check for JWT format validity before slower verify:
-    # Does this ever eval to true?
-    if is_nil(value) do
-      nil
-    else
-      case Enum.count(String.split(value, ".")) == 3 do
-        false ->
-          nil
+    value =
+      value
+      |> String.replace("Bearer", "")
+      |> String.trim()
 
-        # appears to be valid JWT proceed to verifying it
-        true ->
-          value
-      end
-    end
+    jwt_valid_format =
+      value
+      |> String.split(".")
+      |> Enum.count() == 3
+
+    if jwt_valid_format, do: value, else: nil
   end
 end

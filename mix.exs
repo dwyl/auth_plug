@@ -4,7 +4,7 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "1.3.1",
+      version: "1.3.2",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -54,7 +54,9 @@ defmodule AuthPlug.MixProject do
       {:jason, "~> 1.2.2", only: [:dev, :test]},
 
       # For publishing Hex.docs:
-      {:ex_doc, "~> 0.25.3", only: :dev}
+      {:ex_doc, "~> 0.25.3", only: :dev},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.1", only: [:dev], runtime: false},
     ]
   end
 
