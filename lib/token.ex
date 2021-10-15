@@ -141,7 +141,7 @@ defmodule AuthPlug.Token do
         |> get_token_from_header()
 
       #  Check for Person in Plug.Conn.assigns
-      Map.has_key?(conn.assigns, :jwt) && not is_nil(conn.assigns.jwt) ->
+      not is_nil(conn.assigns[:jwt]) ->
         conn.assigns.jwt
 
       # Check for Session in Plug.Session:
