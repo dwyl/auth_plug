@@ -147,7 +147,7 @@ defmodule AuthPlugTest do
       conn_logged_out = AuthPlug.logout(conn)
 
       # should no longer be logged in:
-      assert conn_logged_out.assigns == %{jwt: "", person: %{}}
+      assert conn_logged_out.assigns == %{jwt: nil, person: nil}
 
       # attempt to access "/admin" endpoint
       conn_end =
