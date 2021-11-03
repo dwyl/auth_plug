@@ -82,8 +82,8 @@ defmodule AuthPlug do
   """
   def logout(conn) do
     conn
-    |> assign(:person, %{}) # empty map
-    |> assign(:jwt, "") # empty string
+    |> assign(:person, nil) # empty map
+    |> assign(:jwt, nil) # empty string
     |> delete_session(:jwt) # hexdocs.pm/plug/Plug.Conn.html#delete_session/2
     |> clear_session() # hexdocs.pm/plug/Plug.Conn.html#clear_session/1
   end
