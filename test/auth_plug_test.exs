@@ -2,7 +2,8 @@ defmodule AuthPlugTest do
   use ExUnit.Case, async: true
   use Plug.Test
   alias AuthPlug.Token
-  @opts AuthPlug.init(%{auth_url: "https://dwylauth.herokuapp.com"})
+  @url "https://dwylauth.herokuapp.com"
+  @opts AuthPlug.init(%{auth_url: @url})
 
   test "Plug init function doesn't change params" do
     assert AuthPlug.init(%{}) == %{}
@@ -115,5 +116,47 @@ defmodule AuthPlugTest do
       |> AuthPlug.call(%{})
 
     assert conn.assigns.person.email == "person@dwyl.com"
+  end
+
+  describe "Test logout/1" do
+
+    setup %{endpoint: endpoint} do
+      test_conn =
+        conn(:get, endpoint)
+        |> init_test_session(%{})
+
+      {:ok, conn: test_conn}
+    end
+
+    @tag endpoint: "/admin"
+    test "logout", %{conn: conn} do
+      data = %{email: "alice@dwyl.com", name: "Alice"}
+      jwt = AuthPlug.Token.generate_jwt!(data)
+
+      conn =
+        conn
+        |> put_session(:jwt, jwt)
+        |> AuthPlug.call(@opts)
+
+
+      token = get_session(conn, :jwt)
+      {:ok, decoded} = AuthPlug.Token.verify_jwt(token)
+      assert Map.get(decoded, "email") == "alice@dwyl.com"
+
+      # logout:
+      conn_logged_out = AuthPlug.logout(conn)
+
+      # should no longer be logged in:
+      assert conn_logged_out.assigns == %{jwt: "", person: %{}}
+
+      # attempt to access "/admin" endpoint
+      conn_end =
+        conn_logged_out
+        |> AuthPlug.call(@opts)
+
+      # should redirect as no longer authenticated/authorized:
+      assert conn_end.request_path == "/admin"
+      assert conn_end.status == 302
+    end
   end
 end

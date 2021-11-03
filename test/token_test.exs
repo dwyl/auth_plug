@@ -1,6 +1,8 @@
 defmodule AuthPlugTokenTest do
   use ExUnit.Case, async: false
   import AuthPlug.Token
+  use Plug.Test
+  @opts AuthPlug.init(%{auth_url: "https://dwylauth.herokuapp.com"})
 
   test "api_key/0 with AUTH_API_KEY" do
     assert api_key() == System.get_env("AUTH_API_KEY")
