@@ -7,6 +7,7 @@ defmodule AuthPlug do
   import Plug.Conn, only: [
     # assign: 3,
     clear_session: 1,
+    configure_session: 2,
     delete_session: 2,
     halt: 1,
     put_resp_header: 3,
@@ -88,6 +89,7 @@ defmodule AuthPlug do
     conn
     |> delete_session(:jwt) # hexdocs.pm/plug/Plug.Conn.html#delete_session/2
     |> clear_session() # hexdocs.pm/plug/Plug.Conn.html#clear_session/1
+    |> configure_session(drop: true) # stackoverflow.com/questions/30999176
     |> resp(302, "logged out")
   end
 end
