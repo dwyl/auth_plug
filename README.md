@@ -156,7 +156,7 @@ to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:auth_plug, "~> 1.3.0"}
+    {:auth_plug, "~> 1.3.6"}
   ]
 end
 ```
@@ -173,7 +173,7 @@ mix deps.get
 
 Visit: https://dwylauth.herokuapp.com
 and create a **New App**.
-Once you have an App, 
+Once you have an App,
 you can export an `AUTH_API_KEY` environment variable.
 e.g:
 
@@ -274,16 +274,16 @@ we are here to help!
 
 # _Optional_ Auth
 
-The use case shown above is protecting an endpoint 
+The use case shown above is protecting an endpoint
 that you don't want people to see if they haven't authenticated.
-If you're building an app that has routes 
+If you're building an app that has routes
 where you want to show generic content to people who have _not_ authenticated,
 but then show more detail/custom actions to people who _have_ authenticated,
-that's where _Optional_ Auth comes in. 
+that's where _Optional_ Auth comes in.
 
 To use _optional_ auth it's even _easier_ than required auth.
 
-Open your `lib/app_web/router.ex` file and add the following line 
+Open your `lib/app_web/router.ex` file and add the following line
 above the routes you want show optional data on:
 
 ```elixir
@@ -300,7 +300,7 @@ Then add the following line to your main router scope:
 pipe_through :authoptional
 ```
 
-e.g: 
+e.g:
 [`/lib/app_web/router.ex#L17`](https://github.com/dwyl/auth_plug_example/blob/f4c79e540ed8ef2d4c587647b31e93fec9855f59/lib/app_web/router.ex#L17)
 
 
@@ -313,7 +313,7 @@ and display relevant info/actions to the person if they are logged in.
 <% end %>
 ```
 
-e.g: 
+e.g:
 [`/lib/app_web/templates/page/optional.html.eex#L2-L3`](https://github.com/dwyl/auth_plug_example/blob/f4c79e540ed8ef2d4c587647b31e93fec9855f59/lib/app_web/templates/page/optional.html.eex#L2-L3)
 
 
@@ -344,9 +344,9 @@ person :: %{
   id :: integer() # This stays unique across providers
   auth_provider :: string()
   email :: string()
-  givenName :: string() 
+  givenName :: string()
   picture :: string()
-  
+
   # Also includes standard jwt metadata you may find useful:
   aud, exp, iat, iss
 }

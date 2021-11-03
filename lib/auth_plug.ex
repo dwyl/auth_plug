@@ -5,7 +5,7 @@ defmodule AuthPlug do
   """
   # https://hexdocs.pm/plug/readme.html#the-plug-conn-struct
   import Plug.Conn, only: [
-    assign: 3,
+    # assign: 3,
     clear_session: 1,
     delete_session: 2,
     halt: 1,
@@ -82,10 +82,12 @@ defmodule AuthPlug do
   This is super-useful in testing as we can easily reset a session.
   """
   def logout(conn) do
+    # https://stackoverflow.com/questions/42325996/delete-assigns
+    conn = update_in(conn.assigns, &Map.drop(&1, [:jwt, :person]))
+
     conn
-    |> assign(:person, nil) # empty map
-    |> assign(:jwt, nil) # empty string
     |> delete_session(:jwt) # hexdocs.pm/plug/Plug.Conn.html#delete_session/2
     |> clear_session() # hexdocs.pm/plug/Plug.Conn.html#clear_session/1
+    |> resp(302, "logged out")
   end
 end
