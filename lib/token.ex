@@ -4,7 +4,15 @@ defmodule AuthPlug.Token do
   see https://hexdocs.pm/joken/configuration.html#module-approach
   """
   import Plug.Conn,
-    only: [assign: 3, configure_session: 2, get_req_header: 2, get_session: 2, put_session: 3]
+    only: [
+      assign: 3,
+      # clear_session: 1,
+      configure_session: 2,
+      # delete_session: 2,
+      get_req_header: 2,
+      get_session: 2,
+      put_session: 3
+    ]
 
   use Joken.Config
 

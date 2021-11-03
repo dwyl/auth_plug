@@ -4,7 +4,14 @@ defmodule AuthPlug do
   Please see `README.md` for setup instructions.
   """
   # https://hexdocs.pm/plug/readme.html#the-plug-conn-struct
-  import Plug.Conn, only: [halt: 1, put_resp_header: 3, resp: 3]
+  import Plug.Conn, only: [
+    assign: 3,
+    clear_session: 1,
+    delete_session: 2,
+    halt: 1,
+    put_resp_header: 3,
+    resp: 3
+  ]
   # https://hexdocs.pm/logger/Logger.html
   require Logger
 
@@ -66,5 +73,19 @@ defmodule AuthPlug do
   # Proxy function for to avoid breaking existing apps that rely on this:
   def create_jwt_session(conn, claims) do
     AuthPlug.Token.create_jwt_session(conn, claims)
+  end
+
+
+  @doc """
+  `logout/1` does exactly what you expect; logs the person out of your app.
+  recieves a `conn` (Plug.Conn) and unsets the session.
+  This is super-useful in testing as we can easily reset a session.
+  """
+  def logout(conn) do
+    conn
+    |> assign(:person, %{}) # empty map
+    |> assign(:jwt, "") # empty string
+    |> delete_session(:jwt) # hexdocs.pm/plug/Plug.Conn.html#delete_session/2
+    |> clear_session() # hexdocs.pm/plug/Plug.Conn.html#clear_session/1
   end
 end
