@@ -119,46 +119,19 @@ defmodule AuthPlugTest do
   end
 
   describe "Test logout/1" do
-
-    setup %{endpoint: endpoint} do
-      test_conn =
-        conn(:get, endpoint)
-        |> init_test_session(%{})
-
-      {:ok, conn: test_conn}
-    end
-
-    @tag endpoint: "/admin"
-    test "logout", %{conn: conn} do
+    test "logout" do
       data = %{email: "alice@dwyl.com", name: "Alice"}
       jwt = AuthPlug.Token.generate_jwt!(data)
 
-      conn =
-        conn
+      # Call the Plug with "/logout" path expect logout/1 to be called.
+      conn = conn(:get, "/logout") 
+        |> init_test_session(%{}) 
         |> put_session(:jwt, jwt)
-        |> AuthPlug.call(@opts)
+        |> AuthPlug.call(@opts) 
 
-
-      token = get_session(conn, :jwt)
-      {:ok, decoded} = AuthPlug.Token.verify_jwt(token)
-      assert Map.get(decoded, "email") == "alice@dwyl.com"
-
-      # logout:
-      conn_logged_out = AuthPlug.logout(conn)
-
-      # should no longer be logged in:
-      assert conn_logged_out.assigns == %{}
-
-      # attempt to access "/admin" endpoint
-      conn_end =
-        conn_logged_out
-        |> AuthPlug.call(@opts)
-
-      # should redirect as no longer authenticated/authorized:
-      assert conn_end.request_path == "/admin"
-      assert conn_end.status == 302
-
-      # IO.inspect(conn_end, label: "conn_end")
+      assert conn.status == 200
+      assert conn.resp_body == "logged out"
+      assert conn.assigns == %{state: "logout"}
     end
   end
 end
