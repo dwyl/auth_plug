@@ -5,7 +5,7 @@ defmodule AuthPlug do
   """
   # https://hexdocs.pm/plug/readme.html#the-plug-conn-struct
   import Plug.Conn, only: [
-    # assign: 3,
+    assign: 3,
     clear_session: 1,
     configure_session: 2,
     delete_session: 2,
@@ -36,15 +36,25 @@ defmodule AuthPlug do
   """
   def call(conn, options) do
     jwt = AuthPlug.Token.get_jwt(conn)
+    IO.inspect(jwt, label: "39 jwt")
+    IO.inspect(conn.request_path, label: "req_path")
+    {:ok, decoded} = AuthPlug.Token.verify_jwt(jwt)
+    IO.inspect(decoded, label: "decoded")
 
-    case AuthPlug.Token.verify_jwt(jwt) do
-      {:ok, values} ->
-        AuthPlug.Token.put_current_token(conn, jwt, values)
+    case conn.request_path == "/logout" do
+      true ->
+        logout(conn)
 
-      # log the JWT verify error then redirect:
-      {:error, reason} ->
-        Logger.error("AuthPlug: " <> Kernel.inspect(reason))
-        redirect_to_auth(conn, options)
+      false ->
+        case AuthPlug.Token.verify_jwt(jwt) do
+          {:ok, values} ->
+            AuthPlug.Token.put_current_token(conn, jwt, values)
+
+          # log the JWT verify error then redirect:
+          {:error, reason} ->
+            Logger.error("AuthPlug: " <> Kernel.inspect(reason))
+            redirect_to_auth(conn, options)
+        end
     end
   end
 
@@ -82,13 +92,21 @@ defmodule AuthPlug do
   This is super-useful in testing as we can easily reset a session.
   """
   def logout(conn) do
+
+
     # https://stackoverflow.com/questions/42325996/delete-assigns
     conn = update_in(conn.assigns, &Map.drop(&1, [:jwt, :person]))
 
     conn
-    |> delete_session(:jwt) # hexdocs.pm/plug/Plug.Conn.html#delete_session/2
+    |> delete_session(:jwt) # hexdocs.pm/plug/Plug.Conn.html#delete_session/2,
     |> clear_session() # hexdocs.pm/plug/Plug.Conn.html#clear_session/1
     |> configure_session(drop: true) # stackoverflow.com/questions/30999176
-    |> resp(302, "logged out")
+    |> assign(:state, "logout")
+    |> resp(200, "logged out")
+  end
+
+  # Call the options.auth_url to request end of session:
+  defp end_session(conn, options) do
+    
   end
 end

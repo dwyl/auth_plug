@@ -41,18 +41,23 @@ defmodule AuthPlug.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      # Httpoison for HTTP Requests: hex.pm/packages/httpoison
+      {:httpoison, "~> 1.8.0"},
+
       # JWT sign/verify: github.com/joken-elixir/joken
-      {:joken, "~> 2.4.0"},
+      {:joken, "~> 2.4.1"},
 
       # Plug helper functions: github.com/elixir-plug/plug
       {:plug, "~> 1.12.1"},
+
+      # Decoding JSON data: https://hex.pm/packages/jason
+      {:jason, "~> 1.2.2"},
 
       # Track coverage: github.com/parroty/excoveralls
       {:excoveralls, "~> 0.14.3", only: :test},
 
       # See: github.com/dwyl/auth_plug_example
       {:plug_cowboy, "~> 2.5.2", only: [:dev, :test]},
-      {:jason, "~> 1.2.2", only: [:dev, :test]},
 
       # For publishing Hex.docs:
       {:ex_doc, "~> 0.25.3", only: :dev},

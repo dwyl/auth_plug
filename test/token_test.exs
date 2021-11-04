@@ -1,5 +1,5 @@
 defmodule AuthPlugTokenTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   import AuthPlug.Token
 
   test "api_key/0 with AUTH_API_KEY" do
