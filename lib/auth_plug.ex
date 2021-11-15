@@ -26,7 +26,7 @@ defmodule AuthPlug do
   jwt query parameter or Phoenix Session, then continue to the protected route,
   else redirect to the `auth_url` with the referer set as the continuation URL.
   """
-  def call(conn, options) do
+  def call(conn, _options) do
     jwt = AuthPlug.Token.get_jwt(conn)
 
     case AuthPlug.Token.verify_jwt(jwt) do
@@ -36,16 +36,17 @@ defmodule AuthPlug do
       # log the JWT verify error then redirect:
       {:error, reason} ->
         Logger.error("AuthPlug: " <> Kernel.inspect(reason))
-        redirect_to_auth(conn, options)
+        redirect_to_auth(conn)
     end
   end
 
   # redirect to auth_url with referer to resume once authenticated:
-  defp redirect_to_auth(conn, opts) do
+  defp redirect_to_auth(conn) do
     baseurl = AuthPlug.Helpers.get_baseurl_from_conn(conn)
+    auth_url = AuthPlug.Token.auth_url()
 
     to =
-      opts.auth_url <>
+      auth_url <>
         "?referer=" <>
         URI.encode(baseurl <> conn.request_path) <>
         "&auth_client_id=" <> AuthPlug.Token.client_id()

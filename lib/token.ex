@@ -14,7 +14,7 @@ defmodule AuthPlug.Token do
    client_id/client_secret such that splitting on the "/" (forward slash)
    gives us the `client_id` and `client_secret`
    example:
-   2cfxNaWUwJBq1F4nPndoEHZJ5YCCNq9JDNAAR/2cfxNadrhMZk3iaT1L5k6Wt67c9ScbGNPz8Bw
+   2cfxNaWUwJBq1F4nPndoEHZJ5YCCNq9JDNAAR/2cfxNadrhMZk3iaT1L5k6Wt67c9ScbGNPz8Bw-https://dwylauth.herokuapp.com
    see: https://github.com/dwyl/auth/issues/42#issuecomment-620247243
   """
   def api_key do
@@ -29,10 +29,25 @@ defmodule AuthPlug.Token do
   end
 
   @doc """
-  `client_id/0` returns the `client_secret` (the last part of the AUTH_API_KEY)
+  `client_secret/0` returns the `client_secret` (the middle part of the AUTH_API_KEY)
   """
   def client_secret do
-    api_key() |> String.split("/") |> List.last()
+    api_key()
+    |> String.split("/")
+    |> List.last()
+    |> String.split("-")
+    |> List.first()
+  end
+
+  @doc """
+  `auth_url/0` returns the `auth_url` (the last part of the AUTH_API_KEY)
+  """
+  def auth_url do
+    api_key()
+    |> String.split("/")
+    |> List.last()
+    |> String.split("-")
+    |> List.last()
   end
 
   @doc """

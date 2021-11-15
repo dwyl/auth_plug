@@ -218,7 +218,7 @@ Open the `lib/app_web/router.ex` file and locate the section:
 Immediately below this add the following lines of code:
 
 ```elixir
-  pipeline :auth, do: plug(AuthPlug, %{auth_url: "https://dwylauth.herokuapp.com"})
+  pipeline :auth, do: plug(AuthPlug)
 
   scope "/", AppWeb do
     pipe_through :browser
@@ -235,8 +235,7 @@ Immediately below this add the following lines of code:
 
 There are two parts to this code:
 
-1. Create a new pipeline called `:auth` which will execute the `AuthPlug`
-passing in the `auth_url` as an initialisation option.
+1. Create a new pipeline called `:auth` which will execute the `AuthPlug`.
 2. Create a new scope where we `pipe_through`
 both the `:browser` and `:auth` pipelines.
 
