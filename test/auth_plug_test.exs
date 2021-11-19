@@ -2,8 +2,6 @@ defmodule AuthPlugTest do
   use ExUnit.Case, async: true
   use Plug.Test
   alias AuthPlug.Token
-  @url "https://dwylauth.herokuapp.com"
-  @opts AuthPlug.init(%{auth_url: @url})
 
   test "Plug init function doesn't change params" do
     assert AuthPlug.init(%{}) == %{}
@@ -20,10 +18,8 @@ defmodule AuthPlugTest do
 
     @tag endpoint: "/admin"
     test "Plug return 401 when no Authorization Header", %{conn: conn} do
-      # conn = AuthPlug.call(conn(:get, "/admin"), @opts)
-      # fetch_session(conn)
       # redirect when auth fails
-      conn = AuthPlug.call(conn, @opts)
+      conn = AuthPlug.call(conn, %{})
       assert conn.status == 302
     end
 
@@ -32,7 +28,7 @@ defmodule AuthPlugTest do
       conn =
         conn
         |> put_req_header("authorization", "Bearer incorrect.jwt")
-        |> AuthPlug.call(@opts)
+        |> AuthPlug.call(%{})
 
       # redirect when auth fails
       assert conn.status == 302
@@ -43,7 +39,7 @@ defmodule AuthPlugTest do
       conn =
         conn
         |> put_req_header("authorization", "Bearer this.will.fail")
-        |> AuthPlug.call(@opts)
+        |> AuthPlug.call(%{})
 
       # redirect when auth fails
       assert conn.status == 302
@@ -70,7 +66,7 @@ defmodule AuthPlugTest do
       conn =
         conn
         |> put_session(:jwt, jwt)
-        |> AuthPlug.call(@opts)
+        |> AuthPlug.call(%{})
 
       token = get_session(conn, :jwt)
       {:ok, decoded} = AuthPlug.Token.verify_jwt(token)
@@ -127,7 +123,7 @@ defmodule AuthPlugTest do
       conn = conn(:get, "/logout") 
         |> init_test_session(%{}) 
         |> put_session(:jwt, jwt)
-        |> AuthPlug.call(@opts) 
+        |> AuthPlug.call(%{}) 
 
       assert conn.status == 200
       assert conn.resp_body == "logged out"

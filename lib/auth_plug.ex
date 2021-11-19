@@ -36,10 +36,8 @@ defmodule AuthPlug do
   """
   def call(conn, _options) do
     jwt = AuthPlug.Token.get_jwt(conn)
-    IO.inspect(jwt, label: "39 jwt")
-    IO.inspect(conn.request_path, label: "req_path")
-    {:ok, decoded} = AuthPlug.Token.verify_jwt(jwt)
-    IO.inspect(decoded, label: "decoded")
+    # IO.inspect(jwt, label: "39 jwt")
+    # IO.inspect(conn.request_path, label: "req_path")
 
     case conn.request_path == "/logout" do
       true ->
@@ -53,7 +51,7 @@ defmodule AuthPlug do
           # log the JWT verify error then redirect:
           {:error, reason} ->
             Logger.error("AuthPlug: " <> Kernel.inspect(reason))
-            redirect_to_auth(conn, options)
+            redirect_to_auth(conn)
         end
     end
   end
@@ -94,7 +92,6 @@ defmodule AuthPlug do
   """
   def logout(conn) do
 
-
     # https://stackoverflow.com/questions/42325996/delete-assigns
     conn = update_in(conn.assigns, &Map.drop(&1, [:jwt, :person]))
 
@@ -107,7 +104,7 @@ defmodule AuthPlug do
   end
 
   # Call the options.auth_url to request end of session:
-  defp end_session(conn, options) do
+  # defp end_session(conn, options) do
     
-  end
+  # end
 end
