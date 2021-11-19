@@ -14,25 +14,43 @@ defmodule AuthPlug.Token do
    client_id/client_secret such that splitting on the "/" (forward slash)
    gives us the `client_id` and `client_secret`
    example:
-   2cfxNaWUwJBq1F4nPndoEHZJ5YCCNq9JDNAAR/2cfxNadrhMZk3iaT1L5k6Wt67c9ScbGNPz8Bw
+   2cfxNaWUwJBq1F4nPndoEHZJ5YCCNq9JDNAAR/2cfxNadrhMZk3iaT1L5k6Wt67c9ScbGNPz8Bw/dwylauth.herokuapp.com
    see: https://github.com/dwyl/auth/issues/42#issuecomment-620247243
   """
   def api_key do
     Application.fetch_env!(:auth_plug, :api_key)
   end
 
+  #  The regex group the 3 part of the env (id, secret and auth_url)
+  #  - (.*) match any characters multiple time
+  #  - \/ escape the /
+
+  defp split_env() do
+    Regex.run(~r/^(.*)\/(.*)\/(.*)$/, api_key())
+  end
+
   @doc """
   `client_id/0` returns the `client_id` (the first part of the AUTH_API_KEY)
   """
   def client_id do
-    api_key() |> String.split("/") |> List.first()
+    [_all, id, _secret, _auth_url] = split_env()
+    id
   end
 
   @doc """
-  `client_id/0` returns the `client_secret` (the last part of the AUTH_API_KEY)
+  `client_secret/0` returns the `client_secret` (the middle part of the AUTH_API_KEY)
   """
   def client_secret do
-    api_key() |> String.split("/") |> List.last()
+    [_all, _id, secret, _auth_url] = split_env()
+    secret
+  end
+
+  @doc """
+  `auth_url/0` returns the `auth_url` (the last part of the AUTH_API_KEY)
+  """
+  def auth_url do
+    [_all, _id, _secret, auth_url] = split_env()
+    "https://" <> auth_url
   end
 
   @doc """

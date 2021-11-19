@@ -4,7 +4,7 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "1.3.3",
+      version: "1.4.0",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -56,13 +56,14 @@ defmodule AuthPlug.MixProject do
       # For publishing Hex.docs:
       {:ex_doc, "~> 0.25.3", only: :dev},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.1", only: [:dev], runtime: false},
+      {:dialyxir, "~> 1.1", only: [:dev], runtime: false}
     ]
   end
 
   defp package() do
     [
-      files: ~w(lib/auth_plug.ex lib/auth_plug_optional.ex lib/helpers.ex lib/token.ex LICENSE mix.exs README.md),
+      files:
+        ~w(lib/auth_plug.ex lib/auth_plug_optional.ex lib/helpers.ex lib/token.ex LICENSE mix.exs README.md),
       name: "auth_plug",
       licenses: ["GNU GPL v2.0"],
       maintainers: ["dwyl"],
