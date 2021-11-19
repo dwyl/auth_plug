@@ -123,11 +123,7 @@ defmodule AuthPlugTest do
       conn = conn(:get, "/logout") 
         |> init_test_session(%{}) 
         |> put_session(:jwt, jwt)
-<<<<<<< HEAD
         |> AuthPlug.call(%{}) 
-=======
-        |> AuthPlug.call(@opts) 
->>>>>>> 59874ebabea5a15402010c6eff3fee717ec378bc
 
       assert conn.status == 200
       assert conn.resp_body == "logged out"
