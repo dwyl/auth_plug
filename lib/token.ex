@@ -14,7 +14,7 @@ defmodule AuthPlug.Token do
    client_id/client_secret such that splitting on the "/" (forward slash)
    gives us the `client_id` and `client_secret`
    example:
-   2cfxNaWUwJBq1F4nPndoEHZJ5YCCNq9JDNAAR/2cfxNadrhMZk3iaT1L5k6Wt67c9ScbGNPz8Bw-https://dwylauth.herokuapp.com
+   2cfxNaWUwJBq1F4nPndoEHZJ5YCCNq9JDNAAR/2cfxNadrhMZk3iaT1L5k6Wt67c9ScbGNPz8Bw/dwylauth.herokuapp.com
    see: https://github.com/dwyl/auth/issues/42#issuecomment-620247243
   """
   def api_key do
