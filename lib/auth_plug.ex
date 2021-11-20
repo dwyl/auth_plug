@@ -93,7 +93,7 @@ defmodule AuthPlug do
     |> delete_session(:jwt) # hexdocs.pm/plug/Plug.Conn.html#delete_session/2,
     |> clear_session() # hexdocs.pm/plug/Plug.Conn.html#clear_session/1
     |> configure_session(drop: true) # stackoverflow.com/questions/30999176
-    |> end_session()
+    |> end_session() # see below
     |> assign(:state, "logout")
     |> resp(200, "logged out")
   end
@@ -112,6 +112,8 @@ defmodule AuthPlug do
   to end the session. This in turn makes the update on the auth app
   to update the session.end so the owner of the "consumer" app
   knows when the person logged out.
+  `end_session/1` is invoked by `AuthPlug.logout/1` (above) 
+  which will likely be the function called in practice.
   """
   def end_session(conn) do
     auth_url = AuthPlug.Token.auth_url()
@@ -121,9 +123,11 @@ defmodule AuthPlug do
     {:ok, claims_strs} = AuthPlug.Token.verify_jwt(jwt)
     claims = Useful.atomize_map_keys(claims_strs)
 
+    # Make the actual HTTP Requet to auth_url/end_session/etc:
     {:ok, response} = 
-    @httpoison.get("#{auth_url}/end_session/#{client_id}/#{claims.id}/#{claims.app_id}")
-    |> parse_body_response()
+      "#{auth_url}/end_session/#{client_id}/#{claims.id}/#{claims.app_id}"
+      |> @httpoison.get()
+      |> parse_body_response()
 
     conn
     |> resp(200, response.message)
