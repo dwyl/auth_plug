@@ -185,7 +185,7 @@ Create a file called `.env` in the root directory of your app
 and add the following line:
 
 ```txt
-export AUTH_API_KEY=2cfxNaWUwJBq1F4nPndoEHZJ5YCCNqXbJ6Ga/2cfxNadrhMZk3iaT1L5k6Wt67c9ScbGNPz8BwLH1
+export AUTH_API_KEY=2cfxNaWUwJBq1F4nPndoEHZJ5Y/2cfxNadrhMZk3iaT1L5k6Wt67c9ScbGNP/dwylauth.herokuapp.com
 ```
 
 The run the following command in your terminal:

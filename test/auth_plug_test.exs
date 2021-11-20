@@ -75,7 +75,7 @@ defmodule AuthPlugTest do
 
     @tag endpoint: "/admin"
     test "Plug assigns person=jwt to conn with valid jwt", %{conn: conn} do
-      data = %{email: "person@dwyl.com", session: 1}
+      data = %{email: "person@dwyl.com", sid: 1}
       jwt = Token.generate_jwt!(data)
 
       conn =
@@ -99,6 +99,38 @@ defmodule AuthPlugTest do
 
       assert conn.assigns.person == claims
     end
+
+    @tag endpoint: "/logout"
+    test "logout/1" do
+      data = %{email: "alice@dwyl.com", name: "Alice", id: 1, app_id: 1}
+      jwt = AuthPlug.Token.generate_jwt!(data)
+
+      # Call the Plug with "/logout" path expect logout/1 to be called.
+      conn = conn(:get, "/logout?jwt=#{jwt}") 
+        |> init_test_session(%{}) 
+        # |> put_session(:jwt, jwt)
+        |> AuthPlug.Token.create_jwt_session(data)
+        |> AuthPlug.logout() 
+
+      assert conn.status == 200
+      assert conn.resp_body == "logged out"
+      assert conn.assigns == %{state: "logout"}
+    end
+
+    @tag endpoint: "/logout"
+    test "end_session/1 should end the session on auth_url/end_session", %{conn: conn} do
+
+      data = %{email: "alexa@dwyl.com", name: "Alice", id: 1, app_id: 1}
+      jwt = AuthPlug.Token.generate_jwt!(data)
+
+      conn = conn
+      |> init_test_session(%{}) 
+      |> put_session(:jwt, jwt)
+      |> AuthPlug.end_session() 
+
+      assert conn.status == 200
+      assert conn.resp_body == "session ended"
+    end
   end
 
   test "Extract JWT from URL" do
@@ -114,20 +146,6 @@ defmodule AuthPlugTest do
     assert conn.assigns.person.email == "person@dwyl.com"
   end
 
-  describe "Test logout/1" do
-    test "logout" do
-      data = %{email: "alice@dwyl.com", name: "Alice"}
-      jwt = AuthPlug.Token.generate_jwt!(data)
-
-      # Call the Plug with "/logout" path expect logout/1 to be called.
-      conn = conn(:get, "/logout") 
-        |> init_test_session(%{}) 
-        |> put_session(:jwt, jwt)
-        |> AuthPlug.call(%{}) 
-
-      assert conn.status == 200
-      assert conn.resp_body == "logged out"
-      assert conn.assigns == %{state: "logout"}
-    end
-  end
+  # describe "Test logout/1" do
+  # end
 end

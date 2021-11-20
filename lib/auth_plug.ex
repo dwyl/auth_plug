@@ -16,6 +16,9 @@ defmodule AuthPlug do
   # https://hexdocs.pm/logger/Logger.html
   require Logger
 
+  # Moch HTTPoison requests in Dev/Test, see: https://github.com/dwyl/elixir-auth-google/issues/35
+  @httpoison Application.get_env(:auth_plug, :httpoison_mock) && AuthPlug.HTTPoisonMock || HTTPoison
+
   @doc """
   `init/1` initialises the options passed in and makes them
   available in the lifecycle of the `call/2` invocation (below).
@@ -36,23 +39,15 @@ defmodule AuthPlug do
   """
   def call(conn, _options) do
     jwt = AuthPlug.Token.get_jwt(conn)
-    # IO.inspect(jwt, label: "39 jwt")
-    # IO.inspect(conn.request_path, label: "req_path")
 
-    case conn.request_path == "/logout" do
-      true ->
-        logout(conn)
+    case AuthPlug.Token.verify_jwt(jwt) do
+      {:ok, values} ->
+        AuthPlug.Token.put_current_token(conn, jwt, values)
 
-      false ->
-        case AuthPlug.Token.verify_jwt(jwt) do
-          {:ok, values} ->
-            AuthPlug.Token.put_current_token(conn, jwt, values)
-
-          # log the JWT verify error then redirect:
-          {:error, reason} ->
-            Logger.error("AuthPlug: " <> Kernel.inspect(reason))
-            redirect_to_auth(conn)
-        end
+      # log the JWT verify error then redirect:
+      {:error, reason} ->
+        Logger.error("AuthPlug: " <> Kernel.inspect(reason))
+        redirect_to_auth(conn)
     end
   end
 
@@ -91,7 +86,6 @@ defmodule AuthPlug do
   This is super-useful in testing as we can easily reset a session.
   """
   def logout(conn) do
-
     # https://stackoverflow.com/questions/42325996/delete-assigns
     conn = update_in(conn.assigns, &Map.drop(&1, [:jwt, :person]))
 
@@ -99,12 +93,43 @@ defmodule AuthPlug do
     |> delete_session(:jwt) # hexdocs.pm/plug/Plug.Conn.html#delete_session/2,
     |> clear_session() # hexdocs.pm/plug/Plug.Conn.html#clear_session/1
     |> configure_session(drop: true) # stackoverflow.com/questions/30999176
+    |> end_session()
     |> assign(:state, "logout")
     |> resp(200, "logged out")
   end
+  
+  # `parse_body_response/1` parses the REST HTTP response
+  # so your app can use the resulting JSON.
+  # defp parse_body_response({:error, err}), do: {:error, err}
 
-  # Call the options.auth_url to request end of session:
-  # defp end_session(conn, options) do
-    
-  # end
+  defp parse_body_response({:ok, response}) do
+    body = Map.get(response, :body)
+    {:ok, str_key_map} = Jason.decode(body)
+
+    {:ok, Useful.atomize_map_keys(str_key_map)}
+  end
+
+  @doc """
+  `inject_poison/0` injects a TestDouble of HTTPoison in Test
+  so that we don't have duplicate mock in consuming apps.
+  see: https://github.com/dwyl/elixir-auth-google/issues/35
+  """
+  # def inject_poison(), do: @httpoison
+
+  # Call the auth_url to request end of session:
+  def end_session(conn) do
+    auth_url = AuthPlug.Token.auth_url()
+    client_id = AuthPlug.Token.client_id()
+    jwt = AuthPlug.Token.get_jwt(conn)
+
+    {:ok, claims_strs} = AuthPlug.Token.verify_jwt(jwt)
+    claims = Useful.atomize_map_keys(claims_strs)
+
+    {:ok, response} = 
+    @httpoison.get("#{auth_url}/end_session/#{client_id}/#{claims.id}/#{claims.app_id}")
+    |> parse_body_response()
+
+    conn
+    |> resp(200, response.message)
+  end
 end
