@@ -100,8 +100,6 @@ defmodule AuthPlug do
   
   # `parse_body_response/1` parses the REST HTTP response
   # so your app can use the resulting JSON.
-  # defp parse_body_response({:error, err}), do: {:error, err}
-
   defp parse_body_response({:ok, response}) do
     body = Map.get(response, :body)
     {:ok, str_key_map} = Jason.decode(body)
@@ -110,13 +108,11 @@ defmodule AuthPlug do
   end
 
   @doc """
-  `inject_poison/0` injects a TestDouble of HTTPoison in Test
-  so that we don't have duplicate mock in consuming apps.
-  see: https://github.com/dwyl/elixir-auth-google/issues/35
+  `end_session/1` makes an HTTP Request to the auth_url 
+  to end the session. This in turn makes the update on the auth app
+  to update the session.end so the owner of the "consumer" app
+  knows when the person logged out.
   """
-  # def inject_poison(), do: @httpoison
-
-  # Call the auth_url to request end of session:
   def end_session(conn) do
     auth_url = AuthPlug.Token.auth_url()
     client_id = AuthPlug.Token.client_id()
