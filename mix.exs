@@ -41,7 +41,7 @@ defmodule AuthPlug.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # Httpoison for HTTP Requests: hex.pm/packages/httpoison
+      # Httpoison for outbound HTTP Requests: hex.pm/packages/httpoison
       {:httpoison, "~> 1.8.0"},
 
       # JWT sign/verify: github.com/joken-elixir/joken
@@ -58,6 +58,9 @@ defmodule AuthPlug.MixProject do
 
       # See: github.com/dwyl/auth_plug_example
       {:plug_cowboy, "~> 2.5.2", only: [:dev, :test]},
+
+      # See: https://github.com/dwyl/useful
+      {:useful, "~> 0.4.0"},
 
       # For publishing Hex.docs:
       {:ex_doc, "~> 0.25.3", only: :dev},
