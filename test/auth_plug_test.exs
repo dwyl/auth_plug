@@ -145,7 +145,4 @@ defmodule AuthPlugTest do
 
     assert conn.assigns.person.email == "person@dwyl.com"
   end
-
-  # describe "Test logout/1" do
-  # end
 end
