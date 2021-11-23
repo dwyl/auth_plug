@@ -90,10 +90,10 @@ defmodule AuthPlug do
     conn = update_in(conn.assigns, &Map.drop(&1, [:jwt, :person]))
 
     conn
+    |> end_session() # see below. makes REST API req to auth_url/end_session
     |> delete_session(:jwt) # hexdocs.pm/plug/Plug.Conn.html#delete_session/2,
     |> clear_session() # hexdocs.pm/plug/Plug.Conn.html#clear_session/1
     |> configure_session(drop: true) # stackoverflow.com/questions/30999176
-    |> end_session() # see below
     |> assign(:state, "logout")
     |> resp(200, "logged out")
   end
