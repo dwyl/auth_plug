@@ -102,7 +102,7 @@ defmodule AuthPlugTest do
 
     @tag endpoint: "/logout"
     test "logout/1" do
-      data = %{email: "alice@dwyl.com", name: "Alice", id: 1, app_id: 1}
+      data = %{email: "alice@dwyl.com", name: "Alice", id: 1, app_id: 1, sid: 123}
       jwt = AuthPlug.Token.generate_jwt!(data)
 
       # Call the Plug with "/logout" path expect logout/1 to be called.
@@ -120,7 +120,7 @@ defmodule AuthPlugTest do
     @tag endpoint: "/logout"
     test "end_session/1 should end the session on auth_url/end_session", %{conn: conn} do
 
-      data = %{email: "alexa@dwyl.com", name: "Alice", id: 1, app_id: 1}
+      data = %{email: "alexa@dwyl.com", name: "Alice", id: 1, app_id: 1, sid: 234}
       jwt = AuthPlug.Token.generate_jwt!(data)
 
       conn = conn

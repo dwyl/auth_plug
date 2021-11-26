@@ -125,8 +125,7 @@ defmodule AuthPlug do
 
     # Make the actual HTTP Requet to auth_url/end_session/etc:
     {:ok, response} = 
-      "#{auth_url}/end_session/#{client_id}/#{claims.id}/"
-      |> IO.inspect(label: "GET: ")
+      "#{auth_url}/end_session/#{client_id}/#{claims.sid}/"
       |> @httpoison.get()
       |> parse_body_response()
 
