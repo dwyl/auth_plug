@@ -4,7 +4,7 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "1.4.0",
+      version: "1.4.6",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -17,7 +17,8 @@ defmodule AuthPlug.MixProject do
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
-        "coveralls.html": :test
+        "coveralls.html": :test,
+        c: :test
       ]
     ]
   end
@@ -40,18 +41,26 @@ defmodule AuthPlug.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      # Httpoison for outbound HTTP Requests: hex.pm/packages/httpoison
+      {:httpoison, "~> 1.8.0"},
+
       # JWT sign/verify: github.com/joken-elixir/joken
-      {:joken, "~> 2.4.0"},
+      {:joken, "~> 2.4.1"},
 
       # Plug helper functions: github.com/elixir-plug/plug
       {:plug, "~> 1.12.1"},
+
+      # Decoding JSON data: https://hex.pm/packages/jason
+      {:jason, "~> 1.2.2"},
 
       # Track coverage: github.com/parroty/excoveralls
       {:excoveralls, "~> 0.14.3", only: :test},
 
       # See: github.com/dwyl/auth_plug_example
       {:plug_cowboy, "~> 2.5.2", only: [:dev, :test]},
-      {:jason, "~> 1.2.2", only: [:dev, :test]},
+
+      # See: https://github.com/dwyl/useful
+      {:useful, "~> 0.4.0"},
 
       # For publishing Hex.docs:
       {:ex_doc, "~> 0.25.3", only: :dev},
@@ -63,7 +72,7 @@ defmodule AuthPlug.MixProject do
   defp package() do
     [
       files:
-        ~w(lib/auth_plug.ex lib/auth_plug_optional.ex lib/helpers.ex lib/token.ex LICENSE mix.exs README.md),
+        ~w(lib/auth_plug.ex lib/auth_plug_optional.ex lib/helpers.ex lib/httpoison_mock.ex lib/token.ex LICENSE mix.exs README.md),
       name: "auth_plug",
       licenses: ["GNU GPL v2.0"],
       maintainers: ["dwyl"],
