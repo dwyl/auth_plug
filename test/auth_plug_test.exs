@@ -136,7 +136,6 @@ defmodule AuthPlugTest do
     @tag endpoint: "/"
     test "get_auth_url", %{conn: conn} do
       conn = AuthPlug.call(conn, %{})
-      auth_url = AuthPlug.get_auth_url(conn)
       url1 = "https://dwylauth.herokuapp.com?referer=https://www.example.com/&auth_client_id="
 
       url2 =
