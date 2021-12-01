@@ -4,20 +4,23 @@ defmodule AuthPlug do
   Please see `README.md` for setup instructions.
   """
   # https://hexdocs.pm/plug/readme.html#the-plug-conn-struct
-  import Plug.Conn, only: [
-    assign: 3,
-    clear_session: 1,
-    configure_session: 2,
-    delete_session: 2,
-    halt: 1,
-    put_resp_header: 3,
-    resp: 3
-  ]
+  import Plug.Conn,
+    only: [
+      assign: 3,
+      clear_session: 1,
+      configure_session: 2,
+      delete_session: 2,
+      halt: 1,
+      put_resp_header: 3,
+      resp: 3
+    ]
+
   # https://hexdocs.pm/logger/Logger.html
   require Logger
 
   # Moch HTTPoison requests in Dev/Test, see: https://github.com/dwyl/elixir-auth-google/issues/35
-  @httpoison Application.get_env(:auth_plug, :httpoison_mock) && AuthPlug.HTTPoisonMock || HTTPoison
+  @httpoison (Application.get_env(:auth_plug, :httpoison_mock) && AuthPlug.HTTPoisonMock) ||
+               HTTPoison
 
   @doc """
   `init/1` initialises the options passed in and makes them
@@ -79,7 +82,6 @@ defmodule AuthPlug do
     AuthPlug.Token.create_jwt_session(conn, claims)
   end
 
-
   @doc """
   `logout/1` does exactly what you expect; logs the person out of your app.
   recieves a `conn` (Plug.Conn) and unsets the session.
@@ -90,14 +92,18 @@ defmodule AuthPlug do
     conn = update_in(conn.assigns, &Map.drop(&1, [:jwt, :person]))
 
     conn
-    |> end_session() # see below. makes REST API req to auth_url/end_session
-    |> delete_session(:jwt) # hexdocs.pm/plug/Plug.Conn.html#delete_session/2,
-    |> clear_session() # hexdocs.pm/plug/Plug.Conn.html#clear_session/1
-    |> configure_session(drop: true) # stackoverflow.com/questions/30999176
+    # see below. makes REST API req to auth_url/end_session
+    |> end_session()
+    # hexdocs.pm/plug/Plug.Conn.html#delete_session/2,
+    |> delete_session(:jwt)
+    # hexdocs.pm/plug/Plug.Conn.html#clear_session/1
+    |> clear_session()
+    #  stackoverflow.com/questions/30999176
+    |> configure_session(drop: true)
     |> assign(:state, "logout")
     |> resp(200, "logged out")
   end
-  
+
   # `parse_body_response/1` parses the REST HTTP response
   # so your app can use the resulting JSON.
   defp parse_body_response({:ok, response}) do
@@ -124,9 +130,9 @@ defmodule AuthPlug do
     claims = Useful.atomize_map_keys(claims_strs)
 
     # Make the actual HTTP Requet to auth_url/end_session/etc:
-    {:ok, response} = 
+    {:ok, response} =
       "#{auth_url}/end_session/#{client_id}/#{claims.sid}/"
-      |> @httpoison.get()
+      |> @httpoison.post('')
       |> parse_body_response()
 
     conn

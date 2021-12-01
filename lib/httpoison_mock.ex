@@ -5,9 +5,9 @@ defmodule AuthPlug.HTTPoisonMock do
   """
 
   @doc """
-  get/1 using a dummy _url to test body decoding.
+  post/2 using a dummy _url to test body decoding.
   """
-  def get(_url) do
-    {:ok, %{body: Jason.encode!(%{ message: "session ended" })}}
+  def post(_url, _body) do
+    {:ok, %{body: Jason.encode!(%{message: "session ended"})}}
   end
 end
