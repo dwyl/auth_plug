@@ -106,11 +106,12 @@ defmodule AuthPlugTest do
       jwt = AuthPlug.Token.generate_jwt!(data)
 
       # Call the Plug with "/logout" path expect logout/1 to be called.
-      conn = conn(:get, "/logout?jwt=#{jwt}") 
-        |> init_test_session(%{}) 
+      conn =
+        conn(:get, "/logout?jwt=#{jwt}")
+        |> init_test_session(%{})
         # |> put_session(:jwt, jwt)
         |> AuthPlug.Token.create_jwt_session(data)
-        |> AuthPlug.logout() 
+        |> AuthPlug.logout()
 
       assert conn.status == 200
       assert conn.resp_body == "logged out"
@@ -119,17 +120,28 @@ defmodule AuthPlugTest do
 
     @tag endpoint: "/logout"
     test "end_session/1 should end the session on auth_url/end_session", %{conn: conn} do
-
       data = %{email: "alexa@dwyl.com", name: "Alice", id: 1, app_id: 1, sid: 234}
       jwt = AuthPlug.Token.generate_jwt!(data)
 
-      conn = conn
-      |> init_test_session(%{}) 
-      |> put_session(:jwt, jwt)
-      |> AuthPlug.end_session() 
+      conn =
+        conn
+        |> init_test_session(%{})
+        |> put_session(:jwt, jwt)
+        |> AuthPlug.end_session()
 
       assert conn.status == 200
       assert conn.resp_body == "session ended"
+    end
+
+    @tag endpoint: "/"
+    test "get_auth_url", %{conn: conn} do
+      conn = AuthPlug.call(conn, %{})
+      auth_url = "https://dwylauth.herokuapp.com"
+      url1 = "#{auth_url}?referer=https://www.example.com/&auth_client_id="
+      url2 = "#{auth_url}?referer=https://www.example.com/redirect_here&auth_client_id="
+
+      assert AuthPlug.get_auth_url(conn) =~ url1
+      assert AuthPlug.get_auth_url(conn, "/redirect_here") =~ url2
     end
   end
 
