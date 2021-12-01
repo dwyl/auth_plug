@@ -156,7 +156,7 @@ to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:auth_plug, "~> 1.4.7"}
+    {:auth_plug, "~> 1.4.8"}
   ]
 end
 ```
