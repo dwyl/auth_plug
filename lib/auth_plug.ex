@@ -56,14 +56,7 @@ defmodule AuthPlug do
 
   # redirect to auth_url with referer to resume once authenticated:
   defp redirect_to_auth(conn) do
-    baseurl = AuthPlug.Helpers.get_baseurl_from_conn(conn)
-    auth_url = AuthPlug.Token.auth_url()
-
-    to =
-      auth_url <>
-        "?referer=" <>
-        URI.encode(baseurl <> conn.request_path) <>
-        "&auth_client_id=" <> AuthPlug.Token.client_id()
+    to = get_auth_url(conn)
 
     # gotta tell the browser to temporarily redirect to the auth_url with 302
     status = 302
@@ -137,5 +130,24 @@ defmodule AuthPlug do
 
     conn
     |> resp(200, response.message)
+  end
+
+  @doc """
+  `get_auth_url/2` returns a string representing
+  the auth url.
+  """
+  def get_auth_url(conn, redirect_to \\ nil) do
+    auth_url = AuthPlug.Token.auth_url()
+    request_path = redirect_to || conn.request_path
+
+    referer =
+      conn
+      |> AuthPlug.Helpers.get_baseurl_from_conn()
+      |> Kernel.<>(request_path)
+      |> URI.encode()
+
+    client_id = AuthPlug.Token.client_id()
+
+    "#{auth_url}?referer=#{referer}&auth_client_id=#{client_id}"
   end
 end
