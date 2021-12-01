@@ -136,10 +136,9 @@ defmodule AuthPlugTest do
     @tag endpoint: "/"
     test "get_auth_url", %{conn: conn} do
       conn = AuthPlug.call(conn, %{})
-      url1 = "https://dwylauth.herokuapp.com?referer=https://www.example.com/&auth_client_id="
-
-      url2 =
-        "https://dwylauth.herokuapp.com?referer=https://www.example.com/redirect_here&auth_client_id="
+      auth_url = "https://dwylauth.herokuapp.com"
+      url1 = "#{auth_url}?referer=https://www.example.com/&auth_client_id="
+      url2 = "#{auth_url}?referer=https://www.example.com/redirect_here&auth_client_id="
 
       assert AuthPlug.get_auth_url(conn) =~ url1
       assert AuthPlug.get_auth_url(conn, "/redirect_here") =~ url2
