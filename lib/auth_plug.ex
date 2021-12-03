@@ -135,6 +135,20 @@ defmodule AuthPlug do
   @doc """
   `get_auth_url/2` returns a string representing
   the auth url.
+  The first parameter is `conn`,
+  the second is optional and represents
+  the endpoint in your application where the auth application will
+  redirect to after authentication.
+  By default the second parameter value is `conn.request_path` which represents
+  the current path.
+
+  ## Examples
+
+  iex> AuthPlug.get_auth_url(conn)
+  "https://dwylauth.herokuapp.com/?referer=https://www.example.com/&auth_client_id=123123"
+
+  iex> AuthPlug.get_auth_url(conn, "/mypage)
+  "https://dwylauth.herokuapp.com/?referer=https://www.example.com/mypage&auth_client_id=123123"
   """
   def get_auth_url(conn, redirect_to \\ nil) do
     auth_url = AuthPlug.Token.auth_url()
