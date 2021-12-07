@@ -94,7 +94,6 @@ defmodule AuthPlug do
     #  stackoverflow.com/questions/30999176
     |> configure_session(drop: true)
     |> assign(:state, "logout")
-    |> resp(200, "logged out")
   end
 
   # `parse_body_response/1` parses the REST HTTP response

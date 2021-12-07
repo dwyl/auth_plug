@@ -114,7 +114,6 @@ defmodule AuthPlugTest do
         |> AuthPlug.logout()
 
       assert conn.status == 200
-      assert conn.resp_body == "logged out"
       assert conn.assigns == %{state: "logout"}
     end
 
