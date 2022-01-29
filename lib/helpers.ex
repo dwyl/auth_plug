@@ -3,6 +3,9 @@ defmodule AuthPlug.Helpers do
   `get_baseurl_from_conn/1` derives the base URL from the conn struct
   e.g: http://localhost:4000 or https://app.dwyl.com
   """
+
+  require Logger
+
   @spec get_baseurl_from_conn(Map) :: String.t()
   def get_baseurl_from_conn(%{host: h, port: p}) when h == "localhost" do
     "http://#{h}:#{p}"
@@ -37,7 +40,7 @@ defmodule AuthPlug.Helpers do
     key = AuthPlug.Token.api_key()
     # coveralls-ignore-start
     if is_nil(key) do # ignoring cause :api_key is hard-coded in test.exs
-      raise "No AUTH_API_KEY set, find out how at: https://git.io/JJ6sS"
+      Logger.error("No AUTH_API_KEY set, find out how at: https://git.io/JJ6sS")
     end
     # coveralls-ignore-stop
     key
