@@ -51,7 +51,7 @@ defmodule AuthPlug.MixProject do
       {:plug, "~> 1.12.1"},
 
       # Decoding JSON data: https://hex.pm/packages/jason
-      {:jason, "~> 1.2.2"},
+      {:jason, "~> 1.3.0"},
 
       # Track coverage: github.com/parroty/excoveralls
       {:excoveralls, "~> 0.14.3", only: :test},
