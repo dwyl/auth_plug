@@ -4,7 +4,7 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "1.4.10",
+      version: "1.4.11",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -51,7 +51,7 @@ defmodule AuthPlug.MixProject do
       {:plug, "~> 1.12.1"},
 
       # Decoding JSON data: https://hex.pm/packages/jason
-      {:jason, "~> 1.2.2"},
+      {:jason, "~> 1.2"},
 
       # Track coverage: github.com/parroty/excoveralls
       {:excoveralls, "~> 0.14.3", only: :test},
