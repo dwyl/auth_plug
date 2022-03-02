@@ -48,7 +48,7 @@ defmodule AuthPlug.MixProject do
       {:joken, "~> 2.4.1"},
 
       # Plug helper functions: github.com/elixir-plug/plug
-      {:plug, "~> 1.12.1"},
+      {:plug, "~> 1.13.3"},
 
       # Decoding JSON data: https://hex.pm/packages/jason
       {:jason, "~> 1.2"},
@@ -63,7 +63,7 @@ defmodule AuthPlug.MixProject do
       {:useful, "~> 0.4.0"},
 
       # For publishing Hex.docs:
-      {:ex_doc, "~> 0.25.3", only: :dev},
+      {:ex_doc, "~> 0.28.2", only: :dev},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev], runtime: false}
     ]
