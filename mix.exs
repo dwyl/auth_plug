@@ -45,7 +45,7 @@ defmodule AuthPlug.MixProject do
       {:httpoison, "~> 1.8.0"},
 
       # JWT sign/verify: github.com/joken-elixir/joken
-      {:joken, "~> 2.4.1"},
+      {:joken, "~> 2.5.0"},
 
       # Plug helper functions: github.com/elixir-plug/plug
       {:plug, "~> 1.13.4"},
