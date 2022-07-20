@@ -63,7 +63,7 @@ defmodule AuthPlug.MixProject do
       {:plug_cowboy, "~> 2.5.2", only: [:dev, :test]},
 
       # See: https://github.com/dwyl/useful
-      {:useful, "~> 1.0.0"},
+      {:useful, "~> 1.0.8"},
 
       # For publishing Hex.docs:
       {:ex_doc, "~> 0.28.2", only: :dev},
