@@ -4,7 +4,7 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "1.4.13",
+      version: "1.4.14",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -53,6 +53,9 @@ defmodule AuthPlug.MixProject do
       # Decoding JSON data: https://hex.pm/packages/jason
       {:jason, "~> 1.3"},
 
+      # Check/get Environment Variables: https://github.com/dwyl/envar
+      {:envar, "~> 1.0.8"},
+
       # Track coverage: github.com/parroty/excoveralls
       {:excoveralls, "~> 0.14.3", only: :test},
 
@@ -60,7 +63,7 @@ defmodule AuthPlug.MixProject do
       {:plug_cowboy, "~> 2.5.2", only: [:dev, :test]},
 
       # See: https://github.com/dwyl/useful
-      {:useful, "~> 1.0.0"},
+      {:useful, "~> 1.0.8"},
 
       # For publishing Hex.docs:
       {:ex_doc, "~> 0.28.2", only: :dev},

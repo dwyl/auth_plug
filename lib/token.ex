@@ -24,7 +24,7 @@ defmodule AuthPlug.Token do
    see: https://github.com/dwyl/auth/issues/42#issuecomment-620247243
   """
   def api_key do
-    Application.fetch_env!(:auth_plug, :api_key)
+    Envar.get("AUTH_API_KEY", Application.fetch_env!(:auth_plug, :api_key))
   end
 
   #  The regex group the 3 part of the env (id, secret and auth_url)
