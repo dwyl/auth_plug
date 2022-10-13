@@ -48,7 +48,7 @@ defmodule AuthPlug.MixProject do
       {:joken, "~> 2.5.0"},
 
       # Plug helper functions: github.com/elixir-plug/plug
-      {:plug, "~> 1.13.3", override: true},
+      {:plug, "~> 1.13.3"},
 
       # Decoding JSON data: https://hex.pm/packages/jason
       {:jason, "~> 1.3"},
