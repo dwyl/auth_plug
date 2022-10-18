@@ -77,7 +77,7 @@ defmodule AuthPlug.MixProject do
       files:
         ~w(lib/auth_plug.ex lib/auth_plug_optional.ex lib/helpers.ex lib/httpoison_mock.ex lib/token.ex LICENSE mix.exs README.md),
       name: "auth_plug",
-      licenses: ["GNU GPL v2.0"],
+      licenses: ["GPL-2.0-or-later"],
       maintainers: ["dwyl"],
       links: %{"GitHub" => "https://github.com/dwyl/auth_plug"}
     ]
