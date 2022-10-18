@@ -4,7 +4,7 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "1.4.18",
+      version: "1.4.19",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -51,7 +51,7 @@ defmodule AuthPlug.MixProject do
       {:plug, "~> 1.13"},
 
       # Decoding JSON data: https://hex.pm/packages/jason
-      {:jason, "~> 1.4"},
+      {:jason, "~> 1.0"},
 
       # Check/get Environment Variables: https://github.com/dwyl/envar
       {:envar, "~> 1.0.8"},
