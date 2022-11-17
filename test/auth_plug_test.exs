@@ -114,7 +114,7 @@ defmodule AuthPlugTest do
         |> AuthPlug.logout()
 
       assert conn.status == 200
-      assert conn.assigns == %{state: "logout"}
+      assert conn.assigns == %{state: "logout", loggedin: false}
     end
 
     @tag endpoint: "/logout"
@@ -135,7 +135,7 @@ defmodule AuthPlugTest do
     @tag endpoint: "/"
     test "get_auth_url", %{conn: conn} do
       conn = AuthPlug.call(conn, %{})
-      auth_url = "https://dwylauth.herokuapp.com"
+      auth_url = "https://authdemo.fly.dev"
       url1 = "#{auth_url}?referer=https://www.example.com/&auth_client_id="
       url2 = "#{auth_url}?referer=https://www.example.com/redirect_here&auth_client_id="
 

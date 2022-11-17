@@ -81,7 +81,7 @@ defmodule AuthPlug do
   This is super-useful in testing as we can easily reset a session.
   """
   def logout(conn) do
-    # https://stackoverflow.com/questions/42325996/delete-assigns
+    # stackoverflow.com/questions/42325996/delete-assigns
     conn = update_in(conn.assigns, &Map.drop(&1, [:jwt, :person]))
 
     conn
@@ -94,6 +94,7 @@ defmodule AuthPlug do
     #  stackoverflow.com/questions/30999176
     |> configure_session(drop: true)
     |> assign(:state, "logout")
+    |> assign(:loggedin, false)
   end
 
   # `parse_body_response/1` parses the REST HTTP response

@@ -150,7 +150,7 @@ to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:auth_plug, "~> 1.4"}
+    {:auth_plug, "~> 1.5"}
   ]
 end
 ```
@@ -166,7 +166,8 @@ mix deps.get
 
 ## 2. Get Your `AUTH_API_KEY` 🔑
 
-Visit: https://dwylauth.herokuapp.com
+Visit: 
+[https://authdemo.fly.dev/](https://authdemo.fly.dev/apps/new)
 and create a **New App**.
 Once you have an App,
 you can export an `AUTH_API_KEY` environment variable.
@@ -314,6 +315,7 @@ Try it: http://auth-plug-example.herokuapp.com/optional
 
 <br />
 
+
 ## Documentation
 
 Function docs are available at:
@@ -322,7 +324,41 @@ https://hexdocs.pm/auth_plug. <br />
 As always, we attempt to comment our code as much as possible,
 but if _anything_ is unclear,
 please open an issue:
-https://github.com/dwyl/auth_plug/issues
+[github.com/dwyl/**auth_plug/issues**](https://github.com/dwyl/auth_plug/issues)
+
+
+## Development
+
+If you want to _contribute_ to this project,
+that's _great_! 
+
+Please ensure you create an issue 
+to discuss your idea/plan
+_before_ working on a feature/update
+to avoid any wasted effort. 
+
+### Clone
+
+```sh
+git clone git@github.com:dwyl/auth_plug.git
+```
+
+Create a `.env` file:
+
+```sh
+cp .env_sample .env
+source .env
+```
+
+Run the test with coverage:
+
+```sh
+mix c
+```
+
+
+<br />
+
 
 ### Available information
 
