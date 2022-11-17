@@ -19,7 +19,7 @@ defmodule AuthPlug do
   require Logger
 
   # Moch HTTPoison requests in Dev/Test, see: https://github.com/dwyl/elixir-auth-google/issues/35
-  @httpoison (Application.get_env(:auth_plug, :httpoison_mock) && AuthPlug.HTTPoisonMock) ||
+  @httpoison (Application.compile_env(:auth_plug, :httpoison_mock) && AuthPlug.HTTPoisonMock) ||
                HTTPoison
 
   @doc """
@@ -106,11 +106,11 @@ defmodule AuthPlug do
   end
 
   @doc """
-  `end_session/1` makes an HTTP Request to the auth_url 
+  `end_session/1` makes an HTTP Request to the auth_url
   to end the session. This in turn makes the update on the auth app
   to update the session.end so the owner of the "consumer" app
   knows when the person logged out.
-  `end_session/1` is invoked by `AuthPlug.logout/1` (above) 
+  `end_session/1` is invoked by `AuthPlug.logout/1` (above)
   which will likely be the function called in practice.
   """
   def end_session(conn) do

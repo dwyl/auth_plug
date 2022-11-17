@@ -8,8 +8,12 @@ all your authentication/authorization needs.
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/dwyl/auth_plug/Elixir%20CI?label=build&style=flat-square)
 [![codecov.io](https://img.shields.io/codecov/c/github/dwyl/auth_plug/master.svg?style=flat-square)](http://codecov.io/github/dwyl/auth_plug?branch=main)
 [![Hex.pm](https://img.shields.io/hexpm/v/auth_plug?color=brightgreen&style=flat-square)](https://hex.pm/packages/auth_plug)
-[![Libraries.io dependency status](https://img.shields.io/librariesio/release/hex/auth_plug?logoColor=brightgreen&style=flat-square)](https://libraries.io/hex/auth_plug)
 [![HitCount](http://hits.dwyl.com/dwyl/auth_plug.svg)](http://hits.dwyl.com/dwyl/auth_plug)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/dwyl/auth_plug/issues)
+
+<!--
+[![Libraries.io dependency status](https://img.shields.io/librariesio/release/hex/auth_plug?logoColor=brightgreen&style=flat-square)](https://libraries.io/hex/auth_plug)
+-->
 </div>
 <br />
 
@@ -22,12 +26,12 @@ in the fewest steps and least code.
 We did too. So we built `auth_plug`.
 -->
 
-***Frustrated*** by the **complexity**
+**_Frustrated_** by the **complexity**
 and **incomplete docs/tests**
 in **_existing_ auth solutions**,
 we built **`auth_plug`** to **simplify** our lives. <br />
 
-We needed a way to ***minimise***
+We needed a way to **_minimise_**
 the steps
 and **code** required
 to add auth to our app(s).
@@ -38,9 +42,6 @@ with only **5 lines** of config/code
 and **_one_ environment variable**.
 
 ![true](https://user-images.githubusercontent.com/194400/80473192-b1f73500-893d-11ea-87c1-edf4fec53da2.jpg)
-
-
-
 
 <!-- revisit or remove this section
 ### Pain 😧
@@ -101,9 +102,7 @@ to help _everyone understand_ how it works.
 As with _all_ our code,
 it's meant to be as beginner-friendly as possible.
 If you get stuck or have any questions,
-please [***ask***!](https://github.com/dwyl/auth_plug/issues)
-
-
+please [**_ask_**!](https://github.com/dwyl/auth_plug/issues)
 
 ## Who? 👥
 
@@ -115,12 +114,9 @@ that _anyone_ can use.
 If after reading through this you feel that
 this is something you would like to have
 in your own Elixir/Phoenix project,
-[***tell us***!](https://github.com/dwyl/auth_plug/issues)
-
+[**_tell us_**!](https://github.com/dwyl/auth_plug/issues)
 
 # How? 💡
-
-
 
 _Before_ you attempt to use the **`auth_plug`**,
 try the Heroku example version so you know what to expect: <br />
@@ -140,8 +136,6 @@ with a JWT session.
 For more detail on how the `Auth` service works,
 please see: https://github.com/dwyl/auth
 
-
-
 If you get stuck during setup,
 clone and run our fully working example:
 https://github.com/dwyl/auth_plug_example#how
@@ -156,10 +150,11 @@ to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:auth_plug, "~> 1.4.14"}
+    {:auth_plug, "~> 1.4"}
   ]
 end
 ```
+
 Once you've saved the `mix.exs` file,
 download the dependency with:
 
@@ -189,14 +184,16 @@ export AUTH_API_KEY=2cfxNaWUwJBq1F4nPndoEHZJ5Y/2cfxNadrhMZk3iaT1L5k6Wt67c9ScbGNP
 ```
 
 The run the following command in your terminal:
+
 ```
 source .env
 ```
-That will export the environment variable AUTH_API_KEY.
 
+That will export the environment variable AUTH_API_KEY.
 
 Remember to add `.env` to your [`.gitignore`](https://github.com/dwyl/auth_plug/blob/1ebb60938487da7e740a79b2a4639b29f2ba44ac/.gitignore#L52) file.
 e.g:
+
 ```
 echo ".env" >> .gitignore
 ```
@@ -228,8 +225,7 @@ Immediately below this add the following lines of code:
 ```
 
 > E.g:
-[`/lib/app_web/router.ex#L23-L29`](https://github.com/dwyl/auth_plug_example/blob/8ce0f10e656b94a93b8f02af240b3897ce23c006/lib/app_web/router.ex#L23-L29)
-
+> [`/lib/app_web/router.ex#L23-L29`](https://github.com/dwyl/auth_plug_example/blob/8ce0f10e656b94a93b8f02af240b3897ce23c006/lib/app_web/router.ex#L23-L29)
 
 #### _Explanation_
 
@@ -237,12 +233,12 @@ There are two parts to this code:
 
 1. Create a new pipeline called `:auth` which will execute the `AuthPlug`.
 2. Create a new scope where we `pipe_through`
-both the `:browser` and `:auth` pipelines.
+   both the `:browser` and `:auth` pipelines.
 
 This means that the `"/admin"` route is protected by `AuthPlug`.
 
 > **Note**: Ensure the route you are protecting works _without_ `AuthPlug`.
-If in doubt simply comment out the line `pipe_through :auth` to check.
+> If in doubt simply comment out the line `pipe_through :auth` to check.
 
 <br />
 
@@ -293,7 +289,6 @@ pipeline :authoptional, do: plug(AuthPlugOptional, %{})
 e.g:
 [`/lib/app_web/router.ex#L13`](https://github.com/dwyl/auth_plug_example/blob/f4c79e540ed8ef2d4c587647b31e93fec9855f59/lib/app_web/router.ex#L13)
 
-
 Then add the following line to your main router scope:
 
 ```elixir
@@ -303,23 +298,19 @@ pipe_through :authoptional
 e.g:
 [`/lib/app_web/router.ex#L17`](https://github.com/dwyl/auth_plug_example/blob/f4c79e540ed8ef2d4c587647b31e93fec9855f59/lib/app_web/router.ex#L17)
 
-
 That's it now you can check for `conn.assigns.person` in your templates
 and display relevant info/actions to the person if they are logged in.
 
 ```html
-<%= if Map.has_key?(@conn.assigns, :person) do %>
-  Hello <%= @conn.assigns.person.givenName %>!
-<% end %>
+<%= if Map.has_key?(@conn.assigns, :person) do %> Hello <%=
+@conn.assigns.person.givenName %>! <% end %>
 ```
 
 e.g:
 [`/lib/app_web/templates/page/optional.html.eex#L2-L3`](https://github.com/dwyl/auth_plug_example/blob/f4c79e540ed8ef2d4c587647b31e93fec9855f59/lib/app_web/templates/page/optional.html.eex#L2-L3)
 
-
 <br />
 Try it: http://auth-plug-example.herokuapp.com/optional
-
 
 <br />
 
@@ -351,7 +342,6 @@ person :: %{
   aud, exp, iat, iss
 }
 ```
-
 
 ## Recommended / Relevant Reading
 

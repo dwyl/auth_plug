@@ -4,7 +4,7 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "1.4.14",
+      version: "1.4.21",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -16,6 +16,7 @@ defmodule AuthPlug.MixProject do
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,
+        "coveralls.json": :test,
         "coveralls.post": :test,
         "coveralls.html": :test,
         c: :test
@@ -45,13 +46,13 @@ defmodule AuthPlug.MixProject do
       {:httpoison, "~> 1.8.0"},
 
       # JWT sign/verify: github.com/joken-elixir/joken
-      {:joken, "~> 2.5.0"},
+      {:joken, "~> 2.5"},
 
       # Plug helper functions: github.com/elixir-plug/plug
-      {:plug, "~> 1.14.0"},
+      {:plug, "~> 1.10"},
 
       # Decoding JSON data: https://hex.pm/packages/jason
-      {:jason, "~> 1.3"},
+      {:jason, "~> 1.0"},
 
       # Check/get Environment Variables: https://github.com/dwyl/envar
       {:envar, "~> 1.0.8"},
@@ -77,7 +78,7 @@ defmodule AuthPlug.MixProject do
       files:
         ~w(lib/auth_plug.ex lib/auth_plug_optional.ex lib/helpers.ex lib/httpoison_mock.ex lib/token.ex LICENSE mix.exs README.md),
       name: "auth_plug",
-      licenses: ["GNU GPL v2.0"],
+      licenses: ["GPL-2.0-or-later"],
       maintainers: ["dwyl"],
       links: %{"GitHub" => "https://github.com/dwyl/auth_plug"}
     ]
