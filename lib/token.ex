@@ -190,6 +190,7 @@ defmodule AuthPlug.Token do
     claims = AuthPlug.Helpers.strip_struct_metadata(claims)
 
     conn
+    |> assign(:loggedin, true)
     |> assign(:person, claims)
     |> assign(:jwt, jwt)
     |> put_session(:jwt, jwt)

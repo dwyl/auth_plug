@@ -23,7 +23,7 @@ defmodule AuthPlugOptionalTest do
       # AuthPlugOptional does NOT set the HTTP status code:
       assert conn.status == nil
       # nothing is set on conn.assigns
-      assert conn.assigns == %{}
+      assert conn.assigns == %{loggedin: false}
     end
 
     @tag endpoint: "/optional"

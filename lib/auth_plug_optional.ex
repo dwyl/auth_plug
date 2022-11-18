@@ -7,6 +7,7 @@ defmodule AuthPlugOptional do
   Please see `README.md` for for optional auth usage.
   """
   require Logger
+  import Plug.Conn, only: [ assign: 3 ]
 
   @doc """
   `init/1` returns options unmodified
@@ -31,6 +32,8 @@ defmodule AuthPlugOptional do
       # Don't do anything as there is no valid JWT and Auth is Optional
       {:error, _reason} ->
         conn
+        # github.com/dwyl/auth_plug/issues/83
+        |> assign(:loggedin, false)
     end
   end
 end
