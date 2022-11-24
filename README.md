@@ -362,7 +362,7 @@ mix c
 
 ### Available information
 
-By default using the dwylauth.herokuapp.com authentication service,
+By default using the dwylauth.herokuagit pp.com authentication service,
 `auth_plug` makes the following information available in `conn.assigns`:
 
 ```
