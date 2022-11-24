@@ -27,11 +27,13 @@ defmodule AuthPlug.Token do
     Envar.get("AUTH_API_KEY", Application.fetch_env!(:auth_plug, :api_key))
   end
 
-  #  The regex group the 3 part of the env (id, secret and auth_url)
-  #  - (.*) match any characters multiple time
-  #  - \/ escape the /
-
-  defp split_env() do
+  @doc """
+  This regex splits the 3 parts of the `AUTH_API_KEY` (id, secret and auth_url)
+  e.g:
+  - (.*) match any characters multiple time
+  - \/ escapes the forwardslash /
+  """
+  def split_env() do
     Regex.run(~r/^(.*)\/(.*)\/(.*)$/, api_key())
   end
 
