@@ -1,4 +1,6 @@
 defmodule AuthPlug do
+  import Phoenix.LiveView, only: [assign_new: 3]
+
   @moduledoc """
   `AuthPlug` handles all our auth needs in just a handful of lines of code.
   Please see `README.md` for setup instructions.
@@ -95,6 +97,28 @@ defmodule AuthPlug do
     |> configure_session(drop: true)
     |> assign(:state, "logout")
     |> assign(:loggedin, false)
+  end
+
+  @doc """
+  `assign_jwt_to_socket/2` assigns a 'person' object containing information
+  about the authenticated user to the socket
+  in case the jwt parse is successful.
+  It raises an error if jwt is not valid.
+  This function is especially handy with Liveview.
+  """
+  def assign_jwt_to_socket(jwt, socket) do
+    claims =
+      jwt
+      |> AuthPlug.Token.verify_jwt!()
+      |> AuthPlug.Helpers.strip_struct_metadata()
+      |> Useful.atomize_map_keys()
+
+    socket =
+      socket
+      |> assign_new(:person, fn -> claims end)
+      |> assign_new(:loggedin, fn -> true end)
+
+    socket
   end
 
   # `parse_body_response/1` parses the REST HTTP response
