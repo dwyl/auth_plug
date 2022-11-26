@@ -269,7 +269,7 @@ please
 [open an issue](https://github.com/dwyl/auth_plug/issues),
 we are here to help!
 
-# _Optional_ Auth
+## _Optional_ Auth
 
 The use case shown above is protecting an endpoint
 that you don't want people to see if they haven't authenticated.
@@ -315,8 +315,48 @@ Try it: http://auth-plug-example.herokuapp.com/optional
 
 <br />
 
+## Using with Liveview
 
-## Documentation
+If you are using Liveview,
+having socket assigns with this info
+is useful for conditional rendering.
+For this, you can use the 
+`assign_jwt_to_socket/2` function
+to add the `jwt` information to the socket.
+
+This will add a `person` object with information
+about the authenticated user. 
+Here is the assigns should look like
+after calling this function.
+
+```elixir
+socket #=> #Phoenix.LiveView.Socket<
+  id: 123,
+  ...
+  assigns: %{
+    __changed__: %{loggedin: true, person: true},
+    loggedin: true,
+    person: %{
+      aud: "Joken",
+      email: "person@dwyl.com",
+      exp: 1701020233,
+      iat: 1669483233,
+      iss: "Joken",
+      jti: "2slj49u49a3f3896l8000083",
+      nbf: 1669483233,
+      session: 1,
+      username: "username",
+      givenName: "Test Smith",
+      username: "dwyl_username"
+    }
+  },
+  transport_pid: nil,
+  ...
+>
+```
+
+
+# Documentation
 
 Function docs are available at:
 https://hexdocs.pm/auth_plug. <br />
@@ -327,7 +367,7 @@ please open an issue:
 [github.com/dwyl/**auth_plug/issues**](https://github.com/dwyl/auth_plug/issues)
 
 
-## Development
+# Development
 
 If you want to _contribute_ to this project,
 that's _great_! 
@@ -337,7 +377,7 @@ to discuss your idea/plan
 _before_ working on a feature/update
 to avoid any wasted effort. 
 
-### Clone
+## Clone
 
 ```sh
 git clone git@github.com:dwyl/auth_plug.git
@@ -360,7 +400,7 @@ mix c
 <br />
 
 
-### Available information
+## Available information
 
 By default using the dwylauth.herokuapp.com authentication service,
 `auth_plug` makes the following information available in `conn.assigns`:
@@ -379,7 +419,7 @@ person :: %{
 }
 ```
 
-## Recommended / Relevant Reading
+# Recommended / Relevant Reading
 
 If you are new to Elixir Plug,
 we recommend following:
