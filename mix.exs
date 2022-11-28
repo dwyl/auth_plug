@@ -4,7 +4,7 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "1.5.0",
+      version: "1.5.1",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -54,9 +54,9 @@ defmodule AuthPlug.MixProject do
       # Decoding JSON data: https://hex.pm/packages/jason
       {:jason, "~> 1.0"},
 
-      # For Liveview socket assignments
-      # see https://github.com/dwyl/auth_plug/issues/86
-      {:phoenix_live_view, "~> 0.17.5"},
+      # For Liveview Socket assignments
+      # see: github.com/dwyl/auth_plug/issues/86
+      {:phoenix_live_view, "~> 0.17.5", only: [:dev, :test]},
 
       # Check/get Environment Variables: https://github.com/dwyl/envar
       {:envar, "~> 1.1.0"},
@@ -80,7 +80,7 @@ defmodule AuthPlug.MixProject do
   defp package() do
     [
       files:
-        ~w(lib/auth_plug.ex lib/auth_plug_optional.ex lib/helpers.ex lib/httpoison_mock.ex lib/token.ex LICENSE mix.exs README.md),
+        ~w(lib/auth_plug.ex lib/auth_plug_optional.ex lib/auth_plug_helpers.ex lib/httpoison_mock.ex lib/token.ex LICENSE mix.exs README.md),
       name: "auth_plug",
       licenses: ["GPL-2.0-or-later"],
       maintainers: ["dwyl"],

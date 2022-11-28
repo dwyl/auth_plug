@@ -157,7 +157,7 @@ defmodule AuthPlugTest do
     assert conn.assigns.person.email == "person@dwyl.com"
   end
 
-  test "Adding assigns to socket from JWT" do
+  test "Assigns JWT to socket" do
     data = %{
       email: "person@dwyl.com",
       session: 1,
@@ -166,10 +166,11 @@ defmodule AuthPlugTest do
     jwt = Token.generate_jwt!(data)
 
     socket = %Phoenix.LiveView.Socket{}
-    socket = AuthPlug.assign_jwt_to_socket(jwt, socket)
+    socket = socket
+    |> AuthPlug.assign_jwt_to_socket(&Phoenix.LiveView.assign_new/3, jwt)
 
-    assert socket.assigns.person.email == "person@dwyl.com"
-    assert socket.assigns.person.username == "dwyl_username"
+    assert socket.assigns.person.email == data.email
+    assert socket.assigns.person.username == data.username
     assert socket.assigns.loggedin == true
   end
 end
