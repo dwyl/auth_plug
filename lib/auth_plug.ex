@@ -1,6 +1,4 @@
 defmodule AuthPlug do
-  import Phoenix.LiveView, only: [assign_new: 3]
-
   @moduledoc """
   `AuthPlug` handles all our auth needs in just a handful of lines of code.
   Please see `README.md` for setup instructions.
@@ -79,7 +77,7 @@ defmodule AuthPlug do
 
   @doc """
   `logout/1` does exactly what you expect; logs the person out of your app.
-  recieves a `conn` (Plug.Conn) and unsets the session.
+  receives a `conn` (Plug.Conn) and unsets the session.
   This is super-useful in testing as we can easily reset a session.
   """
   def logout(conn) do
@@ -100,13 +98,17 @@ defmodule AuthPlug do
   end
 
   @doc """
-  `assign_jwt_to_socket/2` assigns a 'person' object containing information
-  about the authenticated user to the socket
+  `assign_jwt_to_socket/3` assigns a 'person' object containing information
+  about the authenticated person to the socket
   in case the jwt parse is successful.
   It raises an error if jwt is not valid.
-  This function is especially handy with Liveview.
+  This function is especially handy with LiveView.
+  Invoke this as:
+  socket = socket
+    |> AuthPlug.assign_jwt_to_socket(&Phoenix.LiveView.assign_new/3, jwt)
+  `socket` is the first argument to `assign_jwt_to_socket/3` so it's chainable.
   """
-  def assign_jwt_to_socket(jwt, socket) do
+  def assign_jwt_to_socket(socket, assign_new, jwt) do
     claims =
       jwt
       |> AuthPlug.Token.verify_jwt!()
@@ -115,8 +117,10 @@ defmodule AuthPlug do
 
     socket =
       socket
-      |> assign_new(:person, fn -> claims end)
-      |> assign_new(:loggedin, fn -> true end)
+      # Pass function by reference in Elixir:
+      # stackoverflow.com/a/22562288/1148249
+      |> assign_new.(:person, fn -> claims end)
+      |> assign_new.(:loggedin, fn -> true end)
 
     socket
   end

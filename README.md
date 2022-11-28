@@ -17,6 +17,27 @@ all your authentication/authorization needs.
 </div>
 <br />
 
+- [`auth_plug`](#auth_plug)
+  - [Why? 🤷](#why-)
+  - [What? 🔐](#what-)
+  - [Who? 👥](#who-)
+- [How? 💡](#how-)
+  - [1. Installation 📝](#1-installation-)
+  - [2. Get Your `AUTH_API_KEY` 🔑](#2-get-your-auth_api_key-)
+    - [2.1 Save it as an Environment Variable](#21-save-it-as-an-environment-variable)
+  - [3. Add `AuthPlug` to Your `router.ex` file to Protect a Route 🔒](#3-add-authplug-to-your-routerex-file-to-protect-a-route-)
+      - [_Explanation_](#explanation)
+  - [4. Attempt to view the protected route to test the authentication! 👩‍💻](#4-attempt-to-view-the-protected-route-to-test-the-authentication-)
+  - [That's it!! 🎉](#thats-it-)
+  - [_Optional_ Auth](#optional-auth)
+  - [Using with Liveview](#using-with-liveview)
+- [Documentation](#documentation)
+- [Development](#development)
+  - [Clone](#clone)
+  - [Available information](#available-information)
+- [Recommended / Relevant Reading](#recommended--relevant-reading)
+
+
 ## Why? 🤷
 
 <!--
@@ -315,17 +336,23 @@ Try it: http://auth-plug-example.herokuapp.com/optional
 
 <br />
 
-## Using with Liveview
+## Using with `LiveView`
 
-If you are using Liveview,
+If you are using **`LiveView`**,
 having socket assigns with this info
 is useful for conditional rendering.
 For this, you can use the 
-`assign_jwt_to_socket/2` function
-to add the `jwt` information to the socket.
+`assign_jwt_to_socket/3` function
+to add the `jwt` information to the socket,
+e.g:
+
+```elixir
+socket = socket
+  |> AuthPlug.assign_jwt_to_socket(&Phoenix.LiveView.assign_new/3, jwt)
+```
 
 This will add a `person` object with information
-about the authenticated user. 
+about the authenticated person. 
 Here is the assigns should look like
 after calling this function.
 

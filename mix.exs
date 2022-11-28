@@ -54,9 +54,9 @@ defmodule AuthPlug.MixProject do
       # Decoding JSON data: https://hex.pm/packages/jason
       {:jason, "~> 1.0"},
 
-      # For Liveview socket assignments
-      # see https://github.com/dwyl/auth_plug/issues/86
-      {:phoenix_live_view, "~> 0.17.5"},
+      # For Liveview Socket assignments
+      # see: github.com/dwyl/auth_plug/issues/86
+      {:phoenix_live_view, "~> 0.17.5", only: [:dev, :test]},
 
       # Check/get Environment Variables: https://github.com/dwyl/envar
       {:envar, "~> 1.1.0"},
