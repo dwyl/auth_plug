@@ -30,7 +30,7 @@ all your authentication/authorization needs.
   - [4. Attempt to view the protected route to test the authentication! 👩‍💻](#4-attempt-to-view-the-protected-route-to-test-the-authentication-)
   - [That's it!! 🎉](#thats-it-)
   - [_Optional_ Auth](#optional-auth)
-  - [Using with Liveview](#using-with-liveview)
+  - [Using with `LiveView`](#using-with-liveview)
 - [Documentation](#documentation)
 - [Development](#development)
   - [Clone](#clone)
@@ -382,6 +382,10 @@ socket #=> #Phoenix.LiveView.Socket<
 >
 ```
 
+For an _example_ of this in action,
+please see:
+
+
 
 # Documentation
 
@@ -429,7 +433,9 @@ mix c
 
 ## Available information
 
-By default using the dwylauth.herokuagit pp.com authentication service,
+By default using the 
+[`auth`](https://github.com/dwyl/auth)
+authentication service,
 `auth_plug` makes the following information available in `conn.assigns`:
 
 ```

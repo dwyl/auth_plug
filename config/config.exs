@@ -30,5 +30,3 @@ config :auth_plug,
   api_key: System.get_env("AUTH_API_KEY")
 
 if Mix.env() == :test, do: import_config("#{Mix.env()}.exs")
-
-config :phoenix, :json_library, Jason
