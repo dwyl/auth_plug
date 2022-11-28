@@ -80,7 +80,7 @@ defmodule AuthPlug.MixProject do
   defp package() do
     [
       files:
-        ~w(lib/auth_plug.ex lib/auth_plug_optional.ex lib/helpers.ex lib/httpoison_mock.ex lib/token.ex LICENSE mix.exs README.md),
+        ~w(lib/auth_plug.ex lib/auth_plug_optional.ex lib/auth_plug_helpers.ex lib/httpoison_mock.ex lib/token.ex LICENSE mix.exs README.md),
       name: "auth_plug",
       licenses: ["GPL-2.0-or-later"],
       maintainers: ["dwyl"],
