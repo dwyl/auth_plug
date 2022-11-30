@@ -167,7 +167,7 @@ defmodule AuthPlugTest do
 
     socket = %Phoenix.LiveView.Socket{}
     socket = socket
-    |> AuthPlug.assign_jwt_to_socket(&Phoenix.LiveView.assign_new/3, jwt)
+    |> AuthPlug.assign_jwt_to_socket(&Phoenix.Component.assign_new/3, jwt)
 
     assert socket.assigns.person.email == data.email
     assert socket.assigns.person.username == data.username
