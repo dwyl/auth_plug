@@ -31,6 +31,7 @@ all your authentication/authorization needs.
   - [That's it!! 🎉](#thats-it-)
   - [_Optional_ Auth](#optional-auth)
   - [Using with `LiveView`](#using-with-liveview)
+  - [Using with an `API`](#using-with-an-api)
 - [Documentation](#documentation)
 - [Development](#development)
   - [Clone](#clone)
@@ -382,8 +383,56 @@ socket #=> #Phoenix.LiveView.Socket<
 >
 ```
 
-For an _example_ of this in action,
-please see:
+## Using with an `API`
+
+Although you'll probably use this package
+in scopes that are piped through
+`:browser` pipelines,
+it can still be used in APIs - 
+using a pipeline that only accepts `json` requests.
+Like so:
+
+```elixir
+  pipeline :api do
+    plug :accepts, ["json"]
+  end
+
+  scope "/api", AppWeb do
+    pipe_through [:api]
+
+    resources "/items", ItemController, only: [:create, :update]
+  end
+```
+
+You may create a pipeline using `auth_plug`,
+either be it for normal or optional authentication.
+However, this pipeline 
+**has to to use the [`fetch_session`](https://hexdocs.pm/plug/Plug.Conn.html#fetch_session/2) plug**
+for `auth_plug` to work.
+
+For example,
+if you wanted to pipe your API scope 
+inside your `router.ex` file
+with `:authOptional`...
+
+```elixir
+  scope "/api", AppWeb do
+    pipe_through [:api, :authOptional]
+
+    resources "/items", ItemController, only: [:create, :update]
+  end
+```
+
+it should be defined as such:
+
+```elixir
+  pipeline :authOptional do
+    plug :fetch_session
+    plug(AuthPlugOptional)
+  end
+```
+
+
 
 
 
