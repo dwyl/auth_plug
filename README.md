@@ -36,6 +36,7 @@ all your authentication/authorization needs.
 - [Development](#development)
   - [Clone](#clone)
   - [Available information](#available-information)
+- [Testing / CI](#testing--ci)
 - [Recommended / Relevant Reading](#recommended--relevant-reading)
 
 
@@ -479,7 +480,6 @@ mix c
 
 <br />
 
-
 ## Available information
 
 By default using the 
@@ -500,6 +500,31 @@ person :: %{
   aud, exp, iat, iss
 }
 ```
+
+<br />
+
+# Testing / CI
+
+If you are using `GitHub CI`
+to _test_ your Auth Controller code
+that invokes any of the `AuthPlug.Token` functions - 
+and you should be ... -
+then you will need to make the 
+`AUTH_API_KEY` accessible to `@dependabot`.
+
+Visit: `https://github.com/{org}/{project}/settings/secrets/dependabot`
+e.g: https://github.com/dwyl/mvp/settings/secrets/dependabot
+
+And add the `AUTH_API_KEY` environment variable, 
+e.g: 
+
+![github-settings-dependabot-secrets](https://user-images.githubusercontent.com/194400/213398407-7f66ed6e-a7bd-4920-b4c0-27a635c6d98d.png)
+
+Thanks to: [@danielabar](https://github.com/danielabar)
+for her excellent/succinct post on this topic:
+[danielabaron.me/blog/dependabot-secrets](https://danielabaron.me/blog/dependabot-secrets/)
+
+<br />
 
 # Recommended / Relevant Reading
 
