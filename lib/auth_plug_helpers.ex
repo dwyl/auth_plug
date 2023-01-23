@@ -43,6 +43,7 @@ defmodule AuthPlug.Helpers do
     if is_nil(key) do
       Logger.error("No AUTH_API_KEY set, find out how at: https://git.io/JJ6sS")
     end
+
     # coveralls-ignore-stop
     key
   end

@@ -30,7 +30,7 @@ defmodule AuthPlugHelpersTest do
     # assert_raise RuntimeError,
     #   "No AUTH_API_KEY set, find out how at: https://git.io/JJ6sS",
     #   fn ->
-        check_environment_vars()
+    check_environment_vars()
     #   end
     # # see: til.hashrocket.com/posts/0b1f205523-assert-an-exception-is-raised
 

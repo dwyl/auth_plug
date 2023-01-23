@@ -8,6 +8,6 @@ defmodule AuthPlug.HTTPoisonMock do
   post/2 using a dummy _url to test body decoding.
   """
   def post(_url, _body) do
-    {:ok, %{body: Jason.encode!(%{message: "session ended"})}}
+    {:ok, %{status_code: 200, body: Jason.encode!(%{message: "session ended"})}}
   end
 end

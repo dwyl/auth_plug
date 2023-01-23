@@ -7,7 +7,7 @@ defmodule AuthPlugOptional do
   Please see `README.md` for for optional auth usage.
   """
   require Logger
-  import Plug.Conn, only: [ assign: 3 ]
+  import Plug.Conn, only: [assign: 3]
 
   @doc """
   `init/1` returns options unmodified

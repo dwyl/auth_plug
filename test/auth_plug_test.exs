@@ -163,11 +163,14 @@ defmodule AuthPlugTest do
       session: 1,
       username: "dwyl_username"
     }
+
     jwt = Token.generate_jwt!(data)
 
     socket = %Phoenix.LiveView.Socket{}
-    socket = socket
-    |> AuthPlug.assign_jwt_to_socket(&Phoenix.Component.assign_new/3, jwt)
+
+    socket =
+      socket
+      |> AuthPlug.assign_jwt_to_socket(&Phoenix.Component.assign_new/3, jwt)
 
     assert socket.assigns.person.email == data.email
     assert socket.assigns.person.username == data.username
