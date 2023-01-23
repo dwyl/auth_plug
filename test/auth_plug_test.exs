@@ -176,4 +176,15 @@ defmodule AuthPlugTest do
     assert socket.assigns.person.username == data.username
     assert socket.assigns.loggedin == true
   end
+
+  test "End session auth url" do
+    {status, _message} = AuthPlug.end_session_auth("wrong-auth-url")
+    assert status == 400
+
+    {status, _message} = AuthPlug.end_session_auth("wrong-post-endpoint")
+    assert status == 404
+
+    {status, _message} = AuthPlug.end_session_auth("/end-session")
+    assert status == 200
+  end
 end

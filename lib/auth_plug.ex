@@ -134,6 +134,22 @@ defmodule AuthPlug do
     {:ok, Useful.atomize_map_keys(str_key_map)}
   end
 
+  # Send query to auth app to end session.
+  # Returns tuple with status code and message
+  def end_session_auth(auth_url) do
+    with {:ok, response} <- @httpoison.post(auth_url, ''),
+         {:status_code, 200} <- {:status_code, response.status_code} do
+      {:ok, res} = parse_body_response(response)
+      {200, res.message}
+    else
+      {:status_code, status_code} ->
+        {status_code, "status code: #{status_code}"}
+
+      {:error, _httpoison_error} ->
+        {400, "The request to the auth app failed"}
+    end
+  end
+
   @doc """
   `end_session/1` makes an HTTP Request to the auth_url
   to end the session. This in turn makes the update on the auth app
@@ -150,25 +166,10 @@ defmodule AuthPlug do
     {:ok, claims_strs} = AuthPlug.Token.verify_jwt(jwt)
     claims = Useful.atomize_map_keys(claims_strs)
 
-    # Make the actual HTTP Requet to auth_url/end_session/etc:
-    with {:ok, response} <-
-           "#{auth_url}/end_session/#{client_id}/#{claims.sid}/"
-           |> @httpoison.post(''),
-         {:status_code, 200} <- {:status_code, response.status_code} do
-      {:ok, res} = parse_body_response(response)
-      resp(conn, 200, res.message)
-    else
-      {:status_code, status_code} -> resp(conn, status_code, "status code: #{status_code}")
-      {:error, _httpoison_error} -> resp(conn, 400, "The request to the auth app failed")
-    end
+    {status_code, message} =
+      end_session_auth("#{auth_url}/end_session/#{client_id}/#{claims.sid}/")
 
-    # {:ok, response} =
-    #   "#{auth_url}/end_session/#{client_id}/#{claims.sid}/"
-    #   |> @httpoison.post('')
-    #   |> parse_body_response()
-
-    # conn
-    # |> resp(200, response.message)
+    resp(conn, status_code, message)
   end
 
   @doc """
