@@ -117,7 +117,7 @@ defmodule AuthPlug do
 
     socket =
       socket
-      # Pass function by reference in Elixir:
+      #  Pass function by reference in Elixir:
       # stackoverflow.com/a/22562288/1148249
       |> assign_new.(:person, fn -> claims end)
       |> assign_new.(:loggedin, fn -> true end)
@@ -127,11 +127,27 @@ defmodule AuthPlug do
 
   # `parse_body_response/1` parses the REST HTTP response
   # so your app can use the resulting JSON.
-  defp parse_body_response({:ok, response}) do
+  defp parse_body_response(response) do
     body = Map.get(response, :body)
     {:ok, str_key_map} = Jason.decode(body)
 
     {:ok, Useful.atomize_map_keys(str_key_map)}
+  end
+
+  # Send query to auth app to end session.
+  # Returns tuple with status code and message
+  def end_session_auth(auth_url) do
+    with {:ok, response} <- @httpoison.post(auth_url, ''),
+         {:status_code, 200} <- {:status_code, response.status_code} do
+      {:ok, res} = parse_body_response(response)
+      {200, res.message}
+    else
+      {:status_code, status_code} ->
+        {status_code, "status code: #{status_code}"}
+
+      {:error, _httpoison_error} ->
+        {400, "The request to the auth app failed"}
+    end
   end
 
   @doc """
@@ -150,14 +166,10 @@ defmodule AuthPlug do
     {:ok, claims_strs} = AuthPlug.Token.verify_jwt(jwt)
     claims = Useful.atomize_map_keys(claims_strs)
 
-    # Make the actual HTTP Requet to auth_url/end_session/etc:
-    {:ok, response} =
-      "#{auth_url}/end_session/#{client_id}/#{claims.sid}/"
-      |> @httpoison.post('')
-      |> parse_body_response()
+    {status_code, message} =
+      end_session_auth("#{auth_url}/end_session/#{client_id}/#{claims.sid}/")
 
-    conn
-    |> resp(200, response.message)
+    resp(conn, status_code, message)
   end
 
   @doc """

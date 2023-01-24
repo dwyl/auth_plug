@@ -163,14 +163,28 @@ defmodule AuthPlugTest do
       session: 1,
       username: "dwyl_username"
     }
+
     jwt = Token.generate_jwt!(data)
 
     socket = %Phoenix.LiveView.Socket{}
-    socket = socket
-    |> AuthPlug.assign_jwt_to_socket(&Phoenix.Component.assign_new/3, jwt)
+
+    socket =
+      socket
+      |> AuthPlug.assign_jwt_to_socket(&Phoenix.Component.assign_new/3, jwt)
 
     assert socket.assigns.person.email == data.email
     assert socket.assigns.person.username == data.username
     assert socket.assigns.loggedin == true
+  end
+
+  test "End session auth url" do
+    {status, _message} = AuthPlug.end_session_auth("wrong-auth-url")
+    assert status == 400
+
+    {status, _message} = AuthPlug.end_session_auth("wrong-post-endpoint")
+    assert status == 404
+
+    {status, _message} = AuthPlug.end_session_auth("/end-session")
+    assert status == 200
   end
 end

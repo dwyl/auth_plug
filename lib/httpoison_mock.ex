@@ -7,7 +7,15 @@ defmodule AuthPlug.HTTPoisonMock do
   @doc """
   post/2 using a dummy _url to test body decoding.
   """
+  def post("wrong-auth-url", _body) do
+    {:error, "no app there"}
+  end
+
+  def post("wrong-post-endpoint", _body) do
+    {:ok, %{status_code: 404, body: Jason.encode!(%{message: "not found"})}}
+  end
+
   def post(_url, _body) do
-    {:ok, %{body: Jason.encode!(%{message: "session ended"})}}
+    {:ok, %{status_code: 200, body: Jason.encode!(%{message: "session ended"})}}
   end
 end
