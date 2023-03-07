@@ -62,7 +62,7 @@ defmodule AuthPlug.MixProject do
       {:envar, "~> 1.1.0"},
 
       # Track coverage: github.com/parroty/excoveralls
-      {:excoveralls, "~> 0.15.0", only: :test},
+      {:excoveralls, "~> 0.16.0", only: :test},
 
       # See: github.com/dwyl/auth_plug_example
       {:plug_cowboy, "~> 2.6.0", only: [:dev, :test]},
