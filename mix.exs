@@ -43,7 +43,7 @@ defmodule AuthPlug.MixProject do
   defp deps do
     [
       # Httpoison for outbound HTTP Requests: hex.pm/packages/httpoison
-      {:httpoison, "~> 2.1.0"},
+      {:httpoison, "~> 2.2.0"},
 
       # JWT sign/verify: github.com/joken-elixir/joken
       {:joken, "~> 2.5"},
