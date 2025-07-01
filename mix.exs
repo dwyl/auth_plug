@@ -71,7 +71,7 @@ defmodule AuthPlug.MixProject do
       {:useful, "~> 1.15.0"},
 
       # For publishing Hex.docs:
-      {:ex_doc, "~> 0.37.1", only: :dev},
+      {:ex_doc, "~> 0.38.2", only: :dev},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev], runtime: false}
     ]
