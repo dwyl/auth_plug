@@ -56,7 +56,7 @@ defmodule AuthPlug.MixProject do
 
       # For Liveview Socket assignments
       # see: github.com/dwyl/auth_plug/issues/86
-      {:phoenix_live_view, "~> 1.0.0", only: [:dev, :test]},
+      {:phoenix_live_view, "~> 1.1.2", only: [:dev, :test]},
 
       # Check/get Environment Variables: https://github.com/dwyl/envar
       {:envar, "~> 1.1.0"},
