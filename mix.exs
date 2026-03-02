@@ -65,7 +65,7 @@ defmodule AuthPlug.MixProject do
       {:excoveralls, "~> 0.18.0", only: :test},
 
       # See: github.com/dwyl/auth_plug_example
-      {:plug_cowboy, "~> 2.7.0", only: [:dev, :test]},
+      {:plug_cowboy, "~> 2.8.0", only: [:dev, :test]},
 
       # See: https://github.com/dwyl/useful
       {:useful, "~> 1.15.0"},
