@@ -12,14 +12,20 @@ defmodule AuthPlug.MixProject do
       deps: deps(),
       package: package(),
       description: "Turnkey Auth Plug lets you protect any route in an Elixir/Phoenix App.",
-      test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [
+      test_coverage: [tool: ExCoveralls]
+    ]
+  end
+
+  def cli do
+    [
+      preferred_envs: [
+        c: :test,
         coveralls: :test,
         "coveralls.detail": :test,
-        "coveralls.json": :test,
         "coveralls.post": :test,
         "coveralls.html": :test,
-        c: :test
+        docs: :docs,
+        t: :test
       ]
     ]
   end
