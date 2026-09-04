@@ -37,4 +37,8 @@ defmodule AuthPlugHelpersTest do
     # restore the environment variable:
     System.put_env("AUTH_API_KEY", key)
   end
+
+  test "get_baseurl_from_auth_api_key/0 does exactly what it says" do
+    assert get_baseurl_from_auth_api_key() == "authdemo.fly.dev"
+  end
 end

@@ -1,2 +1,2 @@
-Envar.require_env_file('.env_sample')
+Envar.require_env_file(~c".env_sample")
 ExUnit.start()

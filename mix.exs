@@ -67,6 +67,9 @@ defmodule AuthPlug.MixProject do
       # Check/get Environment Variables: https://github.com/dwyl/envar
       {:envar, "~> 1.1.0"},
 
+      # Link: github.com/dwyl/link
+      {:link, "~> 1.1.0"},
+
       # Track coverage: github.com/parroty/excoveralls
       {:excoveralls, "~> 0.18.0", only: :test},
 

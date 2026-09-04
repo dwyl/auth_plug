@@ -1,4 +1,4 @@
-import Mix.Config
+import Config
 
 config :auth_plug,
   api_key:

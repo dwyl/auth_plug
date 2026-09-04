@@ -1,11 +1,10 @@
 defmodule AuthPlug.Helpers do
+  require Logger
+
   @doc """
   `get_baseurl_from_conn/1` derives the base URL from the conn struct
   e.g: http://localhost:4000 or https://app.dwyl.com
   """
-
-  require Logger
-
   @spec get_baseurl_from_conn(Map) :: String.t()
   def get_baseurl_from_conn(%{host: h, port: p}) when h == "localhost" do
     "http://#{h}:#{p}"
@@ -46,5 +45,16 @@ defmodule AuthPlug.Helpers do
 
     # coveralls-ignore-stop
     key
+  end
+
+  @doc """
+  `get_baseurl_from_auth_api_key/0` returns the base url from
+  the AUTH_API_KEY environment variable.
+  """
+  def get_baseurl_from_auth_api_key do
+    check_environment_vars()
+    AuthPlug.Token.api_key()
+    |> String.split("/")
+    |> List.last()
   end
 end
