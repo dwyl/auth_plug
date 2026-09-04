@@ -433,10 +433,6 @@ it should be defined as such:
   end
 ```
 
-
-
-
-
 # Documentation
 
 Function docs are available at:

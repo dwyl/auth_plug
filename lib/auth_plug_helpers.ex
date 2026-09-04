@@ -50,9 +50,15 @@ defmodule AuthPlug.Helpers do
   @doc """
   `get_baseurl_from_auth_api_key/0` returns the base url from
   the AUTH_API_KEY environment variable.
+
+  ## Examples
+
+    iex> AuthPlug.Helpers.get_baseurl_from_auth_api_key()
+    "authdemo.fly.dev"
   """
   def get_baseurl_from_auth_api_key do
     check_environment_vars()
+
     AuthPlug.Token.api_key()
     |> String.split("/")
     |> List.last()
