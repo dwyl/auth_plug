@@ -60,7 +60,7 @@ defmodule AuthPlug.MixProject do
       # Decoding JSON data: https://hex.pm/packages/jason
       {:jason, "~> 1.0"},
 
-      # For Liveview Socket assignments
+      # For LiveView Socket assignments
       # see: github.com/dwyl/auth_plug/issues/86
       {:phoenix_live_view, "~> 1.2.5", only: [:dev, :test]},
 
