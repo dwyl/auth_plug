@@ -8,26 +8,26 @@ on:
 
 jobs:
   build:
-    name: Build and test
+    name: ✨ Build and test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7 # github.com/actions/checkout
-    - name: Set up Elixir
+    - name: 💧 Set up Elixir
       uses: erlef/setup-beam@v1
       with:
         elixir-version: '1.19.x' # Define the elixir version [required]
-        otp-version: '28.0.1' # Define the OTP version [required]
-    - name: Restore dependencies cache
+        otp-version: '28.1.x'    # Define the OTP version [required]
+    - name: 📂 Restore dependencies cache
       uses: actions/cache@v4
       with:
         path: deps
         key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
         restore-keys: ${{ runner.os }}-mix-
 
-    - name: Install dependencies
+    - name: ⬇️ Install dependencies
       run: mix deps.get
 
-    - name: Run Tests
+    - name: ✅ Run Tests
       run: mix coveralls.json 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -40,5 +40,5 @@ jobs:
     - name: 🔍 Lint the code
       run: mix credo --all --strict
 
-    - name: Upload coverage to Codecov
+    - name: 💯 Upload coverage to Codecov
       uses: codecov/codecov-action@v1
