@@ -4,8 +4,8 @@ defmodule AuthPlug.MixProject do
   def project do
     [
       app: :auth_plug,
-      version: "1.5.2",
-      elixir: "~> 1.12",
+      version: "1.6.0",
+      elixir: "~> 1.18",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -20,6 +20,7 @@ defmodule AuthPlug.MixProject do
     [
       preferred_envs: [
         c: :test,
+        ci: :test,
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
@@ -60,12 +61,15 @@ defmodule AuthPlug.MixProject do
       # Decoding JSON data: https://hex.pm/packages/jason
       {:jason, "~> 1.0"},
 
-      # For Liveview Socket assignments
+      # For LiveView Socket assignments
       # see: github.com/dwyl/auth_plug/issues/86
       {:phoenix_live_view, "~> 1.2.5", only: [:dev, :test]},
 
       # Check/get Environment Variables: https://github.com/dwyl/envar
       {:envar, "~> 1.1.0"},
+
+      # Link: github.com/dwyl/link
+      {:link, "~> 1.1.0"},
 
       # Track coverage: github.com/parroty/excoveralls
       {:excoveralls, "~> 0.18.0", only: :test},
@@ -96,7 +100,8 @@ defmodule AuthPlug.MixProject do
 
   defp aliases do
     [
-      c: ["coveralls.html"]
+      c: ["coveralls.html"],
+      ci: ["coveralls.json"]
     ]
   end
 end

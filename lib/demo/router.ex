@@ -5,6 +5,7 @@ defmodule AuthPlug.Router do
   import Plug.Conn
   use Plug.Router
   use Plug.ErrorHandler
+  require Logger
 
   plug(Plug.Logger, log: :debug)
   plug(:match)
@@ -45,9 +46,9 @@ defmodule AuthPlug.Router do
   end
 
   def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
-    IO.inspect(kind, label: :kind)
-    IO.inspect(reason, label: :reason)
-    IO.inspect(stack, label: :stack)
+    Logger.info(kind)
+    Logger.info(reason)
+    Logger.info(stack)
     send_resp(conn, conn.status, "Something went wrong")
   end
 end

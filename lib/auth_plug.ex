@@ -137,7 +137,7 @@ defmodule AuthPlug do
   # Send query to auth app to end session.
   # Returns tuple with status code and message
   def end_session_auth(auth_url) do
-    with {:ok, response} <- @httpoison.post(auth_url, ''),
+    with {:ok, response} <- @httpoison.post(auth_url, ~c""),
          {:status_code, 200} <- {:status_code, response.status_code} do
       {:ok, res} = parse_body_response(response)
       {200, res.message}

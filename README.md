@@ -173,7 +173,7 @@ to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:auth_plug, "~> 1.5"}
+    {:auth_plug, "~> 1.6"}
   ]
 end
 ```
@@ -432,10 +432,6 @@ it should be defined as such:
     plug(AuthPlugOptional)
   end
 ```
-
-
-
-
 
 # Documentation
 
