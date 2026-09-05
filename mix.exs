@@ -20,6 +20,7 @@ defmodule AuthPlug.MixProject do
     [
       preferred_envs: [
         c: :test,
+        ci: :test,
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
@@ -99,7 +100,8 @@ defmodule AuthPlug.MixProject do
 
   defp aliases do
     [
-      c: ["coveralls.html"]
+      c: ["coveralls.html"],
+      ci: ["coveralls.json"]
     ]
   end
 end

@@ -18,7 +18,7 @@ jobs:
         elixir-version: '1.19.x' # Define the elixir version [required]
         otp-version: '28.1.x'    # Define the OTP version [required]
     - name: 📂 Restore dependencies cache
-      uses: actions/cache@v4
+      uses: actions/cache@v6   # github.com/actions/cache
       with:
         path: deps
         key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
@@ -28,7 +28,7 @@ jobs:
       run: mix deps.get
 
     - name: ✅ Run Tests
-      run: mix coveralls.json 
+      run: mix ci --warnings-as-errors
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         MIX_ENV: test
