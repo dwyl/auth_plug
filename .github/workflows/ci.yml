@@ -11,11 +11,11 @@ jobs:
     name: Build and test
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v7 # github.com/actions/checkout
     - name: Set up Elixir
       uses: erlef/setup-beam@v1
       with:
-        elixir-version: '1.18.4' # Define the elixir version [required]
+        elixir-version: '1.19.x' # Define the elixir version [required]
         otp-version: '28.0.1' # Define the OTP version [required]
     - name: Restore dependencies cache
       uses: actions/cache@v4
