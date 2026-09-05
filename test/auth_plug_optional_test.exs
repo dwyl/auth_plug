@@ -1,6 +1,6 @@
 defmodule AuthPlugOptionalTest do
   use ExUnit.Case, async: true
-  use Plug.Test
+  import Plug.Test
   alias AuthPlug.Token
   @opts AuthPlugOptional.init(%{})
 
