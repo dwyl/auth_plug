@@ -1,4 +1,5 @@
 defmodule AuthPlug.Application do
+  @moduledoc "Sample Application for  showing easy setup of auth_plug"
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   use Application

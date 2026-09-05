@@ -33,7 +33,7 @@ defmodule AuthPlug.Token do
   - (.*) match any characters multiple time
   - \/ escapes the forwardslash /
   """
-  def split_env() do
+  def split_env do
     Regex.run(~r/^(.*)\/(.*)\/(.*)$/, api_key())
   end
 
@@ -161,7 +161,7 @@ defmodule AuthPlug.Token do
         Map.get(query, "jwt")
 
       # Check for JWT in Headers:
-      Enum.count(get_req_header(conn, "authorization")) > 0 ->
+      !Enum.empty?(get_req_header(conn, "authorization")) ->
         conn.req_headers
         |> List.keyfind("authorization", 0, "")
         |> get_token_from_header()

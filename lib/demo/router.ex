@@ -45,9 +45,11 @@ defmodule AuthPlug.Router do
   end
 
   def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
+    # credo:disable-for-lines:3
     IO.inspect(kind, label: :kind)
     IO.inspect(reason, label: :reason)
     IO.inspect(stack, label: :stack)
+    # We *want* these debug IO.inspects (or Refactor with Logger)
     send_resp(conn, conn.status, "Something went wrong")
   end
 end
