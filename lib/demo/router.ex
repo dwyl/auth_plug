@@ -52,4 +52,3 @@ defmodule AuthPlug.Router do
     send_resp(conn, conn.status, "Something went wrong")
   end
 end
-[]
