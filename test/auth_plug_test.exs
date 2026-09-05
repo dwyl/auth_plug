@@ -1,6 +1,6 @@
 defmodule AuthPlugTest do
   use ExUnit.Case, async: true
-  import Plug.Test
+  import Plug.{Conn, Test}
   alias AuthPlug.Token
 
   test "Plug init function doesn't change params" do
